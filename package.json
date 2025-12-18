@@ -1,19 +1,31 @@
 {
   "name": "es-vanguard",
-  "module": "index.ts",
   "type": "module",
   "private": true,
+  "workspaces": {
+    "packages": [
+      "apps/*",
+      "packages/*"
+    ],
+    "catalog": {
+      "@t3-oss/env-core": "^0.13.8",
+      "neverthrow": "^8.2.0",
+      "typescript": "^5.9.3",
+      "zod": "^4.1.13"
+    },
+    "catalogs": {
+      "types": {
+        "@types/bun": "^1.3.4"
+      }
+    }
+  },
   "scripts": {
     "format": "bunx prettier . --write",
     "format:check": "bunx prettier . --check"
   },
   "devDependencies": {
-    "@types/bun": "latest",
     "lefthook": "2.0.12",
     "prettier": "3.7.4",
     "prettier-plugin-curly": "0.4.1"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
   }
 }
