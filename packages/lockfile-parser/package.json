@@ -7,10 +7,12 @@
   },
   "dependencies": {
     "neverthrow": "catalog:",
+    "semver": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
     "@types/bun": "catalog:types",
+    "@types/semver": "catalog:types",
     "typescript": "catalog:"
   }
 }
