@@ -1,0 +1,16 @@
+{
+  "name": "@es-vanguard/lockfile-parser",
+  "type": "module",
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "neverthrow": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/bun": "catalog:types",
+    "typescript": "catalog:"
+  }
+}
