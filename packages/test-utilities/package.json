@@ -2,6 +2,9 @@
   "name": "@es-vanguard/test-utilities",
   "type": "module",
   "private": true,
+  "exports": {
+    "./constants": "./src/constants.ts"
+  },
   "scripts": {
     "start": "bun run src/index.ts",
     "type-check": "tsc --noEmit"

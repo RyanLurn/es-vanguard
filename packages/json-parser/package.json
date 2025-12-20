@@ -12,6 +12,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@es-vanguard/test-utilities": "workspace:*",
     "@es-vanguard/typescript-config": "workspace:*",
     "@types/bun": "catalog:types",
     "typescript": "catalog:"

@@ -1,7 +1,10 @@
 import { safeJsonParse } from "@/index";
 import { SchemaError } from "@standard-schema/utils";
 import { expect, test, describe } from "bun:test";
-import { githubBlobJsonUrls, githubBlobNotJsonUrls } from "tests/constants";
+import {
+  npmLockfileUrls,
+  pnpmLockfileUrls,
+} from "@es-vanguard/test-utilities/constants";
 import { fetchRemoteLockfile } from "tests/helpers";
 import * as z from "zod";
 
@@ -20,7 +23,7 @@ const WrongNpmLockfileSchema = z.object({
 });
 
 describe("Zod compliance", async () => {
-  for (const url of githubBlobJsonUrls) {
+  for (const url of npmLockfileUrls) {
     const lockfileText = await fetchRemoteLockfile(url, true);
 
     test(`Parse valid json content from ${url} with valid schema`, async () => {
@@ -47,7 +50,7 @@ describe("Zod compliance", async () => {
     });
   }
 
-  for (const url of githubBlobNotJsonUrls) {
+  for (const url of pnpmLockfileUrls) {
     const lockfileText = await fetchRemoteLockfile(url, true);
 
     test(`Parse invalid json content from ${url}`, async () => {
