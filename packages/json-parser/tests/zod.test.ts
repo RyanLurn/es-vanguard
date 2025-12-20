@@ -19,10 +19,9 @@ const WrongNpmLockfileSchema = z.object({
   packages: z.record(z.string(), z.record(z.string(), z.any())),
 });
 
-console.log("[Test] Starting Zod compliance tests");
 describe("Zod compliance", async () => {
   for (const url of githubBlobJsonUrls) {
-    const lockfileText = await fetchRemoteLockfile(url);
+    const lockfileText = await fetchRemoteLockfile(url, true);
 
     test(`Parse valid json content from ${url} with valid schema`, async () => {
       const parsedJsonResult = await safeJsonParse({
@@ -49,7 +48,7 @@ describe("Zod compliance", async () => {
   }
 
   for (const url of githubBlobNotJsonUrls) {
-    const lockfileText = await fetchRemoteLockfile(url);
+    const lockfileText = await fetchRemoteLockfile(url, true);
 
     test(`Parse invalid json content from ${url}`, async () => {
       const parsedJsonResult = await safeJsonParse({
