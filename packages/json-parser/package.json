@@ -1,0 +1,17 @@
+{
+  "name": "@es-vanguard/json-parser",
+  "type": "module",
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "neverthrow": "catalog:",
+    "@standard-schema/spec": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/bun": "catalog:types",
+    "typescript": "catalog:"
+  }
+}
