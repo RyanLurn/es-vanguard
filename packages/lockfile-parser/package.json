@@ -11,6 +11,8 @@
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@es-vanguard/json-parser": "workspace:*",
+    "@es-vanguard/test-utilities": "workspace:*",
     "@es-vanguard/typescript-config": "workspace:*",
     "@types/bun": "catalog:types",
     "@types/semver": "catalog:types",
