@@ -1,7 +1,7 @@
 import { join } from "node:path";
 import { mkdir } from "node:fs/promises";
 import { err, ok, type Result } from "neverthrow";
-import { fetchGithubContent } from "@/fetch-github-content";
+import { fetchGithubContent } from "#fetch-github-content.ts";
 
 // Store cache in the package root: packages/test-utilities/.cache
 const CACHE_DIR = join(import.meta.dir, "../.cache");

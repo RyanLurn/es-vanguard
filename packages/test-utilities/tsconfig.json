@@ -1,11 +1,5 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "@es-vanguard/typescript-config/base.json",
-  "compilerOptions": {
-    // Path aliases
-    "paths": {
-      "@/*": ["./src/*"]
-    }
-  },
   "include": ["src/**/*"]
 }

@@ -2,8 +2,13 @@
   "name": "@es-vanguard/test-utilities",
   "type": "module",
   "private": true,
+  "imports": {
+    "#*": "./src/*"
+  },
   "exports": {
-    "./constants": "./src/constants.ts"
+    "./constants": "./src/constants.ts",
+    "./fetch-github-content": "./src/fetch-github-content.ts",
+    "./get-github-content": "./src/get-github-content.ts"
   },
   "scripts": {
     "start": "bun run src/index.ts",

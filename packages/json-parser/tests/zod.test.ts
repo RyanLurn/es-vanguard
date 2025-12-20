@@ -5,7 +5,7 @@ import {
   npmLockfileUrls,
   pnpmLockfileUrls,
 } from "@es-vanguard/test-utilities/constants";
-import { fetchRemoteLockfile } from "tests/helpers";
+import { getGithubContent } from "@es-vanguard/test-utilities/get-github-content";
 import * as z from "zod";
 
 const NpmLockfileSchema = z.object({
@@ -24,7 +24,15 @@ const WrongNpmLockfileSchema = z.object({
 
 describe("Zod compliance", async () => {
   for (const url of npmLockfileUrls) {
-    const lockfileText = await fetchRemoteLockfile(url, true);
+    const getContentResult = await getGithubContent({
+      githubBlobUrl: url,
+      enableLogging: true,
+    });
+
+    if (getContentResult.isErr()) {
+      throw getContentResult.error;
+    }
+    const lockfileText = getContentResult.value;
 
     test(`Parse valid json content from ${url} with valid schema`, async () => {
       const parsedJsonResult = await safeJsonParse({
@@ -51,7 +59,15 @@ describe("Zod compliance", async () => {
   }
 
   for (const url of pnpmLockfileUrls) {
-    const lockfileText = await fetchRemoteLockfile(url, true);
+    const getContentResult = await getGithubContent({
+      githubBlobUrl: url,
+      enableLogging: true,
+    });
+
+    if (getContentResult.isErr()) {
+      throw getContentResult.error;
+    }
+    const lockfileText = getContentResult.value;
 
     test(`Parse invalid json content from ${url}`, async () => {
       const parsedJsonResult = await safeJsonParse({
