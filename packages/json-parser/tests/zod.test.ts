@@ -22,64 +22,79 @@ const WrongNpmLockfileSchema = z.object({
   packages: z.record(z.string(), z.record(z.string(), z.any())),
 });
 
-describe("Zod compliance", async () => {
-  for (const url of npmLockfileUrls) {
-    const getContentResult = await getGithubContent({
-      githubBlobUrl: url,
-      enableLogging: true,
-    });
-
-    if (getContentResult.isErr()) {
-      throw getContentResult.error;
-    }
-    const lockfileText = getContentResult.value;
-
-    test(`Parse valid json content from ${url} with valid schema`, async () => {
-      const parsedJsonResult = await safeJsonParse({
-        text: lockfileText,
-        schema: NpmLockfileSchema,
-        enableLogging: true,
+describe("Zod compliance", () => {
+  // Group 1: Valid JSON Files (NPM)
+  // We use describe.each because we want to run MULTIPLE tests for each URL
+  describe.each(npmLockfileUrls)("File: %s", (url) => {
+    test("Parse with valid schema (Success)", async () => {
+      // 1. Fetch inside the test (Leverages cache)
+      const contentResult = await getGithubContent({
+        githubBlobUrl: url,
+        enableLogging: false, // Keep logs clean
       });
 
-      expect(parsedJsonResult.isOk()).toBe(true);
+      if (contentResult.isErr()) {
+        throw contentResult.error;
+      }
+      const text = contentResult.value;
+
+      // 2. Test Logic
+      const result = await safeJsonParse({
+        text,
+        schema: NpmLockfileSchema,
+      });
+
+      expect(result.isOk()).toBe(true);
     });
 
-    test(`Parse valid json content from ${url} with invalid schema`, async () => {
-      const parsedJsonResult = await safeJsonParse({
-        text: lockfileText,
+    test("Parse with invalid schema (SchemaError)", async () => {
+      const contentResult = await getGithubContent({
+        githubBlobUrl: url,
+        enableLogging: false,
+      });
+
+      if (contentResult.isErr()) {
+        throw contentResult.error;
+      }
+      const text = contentResult.value;
+
+      const result = await safeJsonParse({
+        text,
         schema: WrongNpmLockfileSchema,
       });
 
-      expect(parsedJsonResult.isErr()).toBe(true);
-
-      if (parsedJsonResult.isErr()) {
-        expect(parsedJsonResult.error instanceof SchemaError).toBe(true);
+      expect(result.isErr()).toBe(true);
+      if (result.isErr()) {
+        expect(result.error).toBeInstanceOf(SchemaError);
       }
     });
-  }
+  });
 
-  for (const url of pnpmLockfileUrls) {
-    const getContentResult = await getGithubContent({
-      githubBlobUrl: url,
-      enableLogging: true,
-    });
+  // Group 2: Invalid JSON Files (PNPM - YAML)
+  // We use test.each because we only have ONE test per URL
+  test.each(pnpmLockfileUrls)(
+    "Fails to parse non-JSON from %s",
+    async (url) => {
+      const contentResult = await getGithubContent({
+        githubBlobUrl: url,
+        enableLogging: false,
+      });
 
-    if (getContentResult.isErr()) {
-      throw getContentResult.error;
-    }
-    const lockfileText = getContentResult.value;
+      if (contentResult.isErr()) {
+        throw contentResult.error;
+      }
+      const text = contentResult.value;
 
-    test(`Parse invalid json content from ${url}`, async () => {
-      const parsedJsonResult = await safeJsonParse({
-        text: lockfileText,
+      const result = await safeJsonParse({
+        text,
         schema: NpmLockfileSchema,
       });
 
-      expect(parsedJsonResult.isErr()).toBe(true);
-
-      if (parsedJsonResult.isErr()) {
-        expect(parsedJsonResult.error instanceof SyntaxError).toBe(true);
+      // Should fail at JSON.parse step
+      expect(result.isErr()).toBe(true);
+      if (result.isErr()) {
+        expect(result.error).toBeInstanceOf(SyntaxError);
       }
-    });
-  }
+    }
+  );
 });
