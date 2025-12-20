@@ -11,6 +11,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@es-vanguard/typescript-config": "workspace:*",
     "@types/bun": "catalog:types",
     "@types/semver": "catalog:types",
     "typescript": "catalog:"
