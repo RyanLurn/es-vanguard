@@ -36,6 +36,9 @@
         "typescript": "catalog:",
       },
     },
+    "packages/typescript-config": {
+      "name": "@es-vanguard/typescript-config",
+    },
   },
   "catalog": {
     "@standard-schema/spec": "^1.1.0",
@@ -56,6 +59,8 @@
     "@es-vanguard/json-parser": ["@es-vanguard/json-parser@workspace:packages/json-parser"],
 
     "@es-vanguard/lockfile-parser": ["@es-vanguard/lockfile-parser@workspace:packages/lockfile-parser"],
+
+    "@es-vanguard/typescript-config": ["@es-vanguard/typescript-config@workspace:packages/typescript-config"],
 
     "@rollup/rollup-linux-x64-gnu": ["@rollup/rollup-linux-x64-gnu@4.53.5", "", { "os": "linux", "cpu": "x64" }, "sha512-Pg6E+oP7GvZ4XwgRJBuSXZjcqpIW3yCBhK4BcsANvb47qMvAbCjR6E+1a/U2WXz1JJxp9/4Dno3/iSJLcm5auw=="],
 
