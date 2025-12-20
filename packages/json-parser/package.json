@@ -8,6 +8,7 @@
   "dependencies": {
     "neverthrow": "catalog:",
     "@standard-schema/spec": "catalog:",
+    "@standard-schema/utils": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {

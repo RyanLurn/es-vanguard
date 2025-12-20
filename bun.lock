@@ -14,6 +14,7 @@
       "name": "@es-vanguard/json-parser",
       "dependencies": {
         "@standard-schema/spec": "catalog:",
+        "@standard-schema/utils": "catalog:",
         "neverthrow": "catalog:",
         "zod": "catalog:",
       },
@@ -38,6 +39,7 @@
   },
   "catalog": {
     "@standard-schema/spec": "^1.1.0",
+    "@standard-schema/utils": "^0.3.0",
     "@t3-oss/env-core": "^0.13.8",
     "neverthrow": "^8.2.0",
     "semver": "^7.7.3",
@@ -58,6 +60,8 @@
     "@rollup/rollup-linux-x64-gnu": ["@rollup/rollup-linux-x64-gnu@4.53.5", "", { "os": "linux", "cpu": "x64" }, "sha512-Pg6E+oP7GvZ4XwgRJBuSXZjcqpIW3yCBhK4BcsANvb47qMvAbCjR6E+1a/U2WXz1JJxp9/4Dno3/iSJLcm5auw=="],
 
     "@standard-schema/spec": ["@standard-schema/spec@1.1.0", "", {}, "sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w=="],
+
+    "@standard-schema/utils": ["@standard-schema/utils@0.3.0", "", {}, "sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g=="],
 
     "@types/bun": ["@types/bun@1.3.5", "", { "dependencies": { "bun-types": "1.3.5" } }, "sha512-RnygCqNrd3srIPEWBd5LFeUYG7plCoH2Yw9WaZGyNmdTEei+gWaHqydbaIRkIkcbXwhBT94q78QljxN0Sk838w=="],
 
