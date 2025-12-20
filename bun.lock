@@ -38,6 +38,18 @@
         "typescript": "catalog:",
       },
     },
+    "packages/test-utilities": {
+      "name": "@es-vanguard/test-utilities",
+      "dependencies": {
+        "neverthrow": "catalog:",
+        "zod": "catalog:",
+      },
+      "devDependencies": {
+        "@es-vanguard/typescript-config": "workspace:*",
+        "@types/bun": "catalog:types",
+        "typescript": "catalog:",
+      },
+    },
     "packages/typescript-config": {
       "name": "@es-vanguard/typescript-config",
     },
@@ -61,6 +73,8 @@
     "@es-vanguard/json-parser": ["@es-vanguard/json-parser@workspace:packages/json-parser"],
 
     "@es-vanguard/lockfile-parser": ["@es-vanguard/lockfile-parser@workspace:packages/lockfile-parser"],
+
+    "@es-vanguard/test-utilities": ["@es-vanguard/test-utilities@workspace:packages/test-utilities"],
 
     "@es-vanguard/typescript-config": ["@es-vanguard/typescript-config@workspace:packages/typescript-config"],
 
