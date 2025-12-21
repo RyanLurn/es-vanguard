@@ -56,6 +56,21 @@
     "packages/typescript-config": {
       "name": "@es-vanguard/typescript-config",
     },
+    "packages/yaml-parser": {
+      "name": "@es-vanguard/yaml-parser",
+      "dependencies": {
+        "@standard-schema/spec": "catalog:",
+        "@standard-schema/utils": "catalog:",
+        "neverthrow": "catalog:",
+        "zod": "catalog:",
+      },
+      "devDependencies": {
+        "@es-vanguard/test-utilities": "workspace:*",
+        "@es-vanguard/typescript-config": "workspace:*",
+        "@types/bun": "catalog:types",
+        "typescript": "catalog:",
+      },
+    },
   },
   "catalog": {
     "@standard-schema/spec": "^1.1.0",
@@ -80,6 +95,8 @@
     "@es-vanguard/test-utilities": ["@es-vanguard/test-utilities@workspace:packages/test-utilities"],
 
     "@es-vanguard/typescript-config": ["@es-vanguard/typescript-config@workspace:packages/typescript-config"],
+
+    "@es-vanguard/yaml-parser": ["@es-vanguard/yaml-parser@workspace:packages/yaml-parser"],
 
     "@rollup/rollup-linux-x64-gnu": ["@rollup/rollup-linux-x64-gnu@4.53.5", "", { "os": "linux", "cpu": "x64" }, "sha512-Pg6E+oP7GvZ4XwgRJBuSXZjcqpIW3yCBhK4BcsANvb47qMvAbCjR6E+1a/U2WXz1JJxp9/4Dno3/iSJLcm5auw=="],
 
