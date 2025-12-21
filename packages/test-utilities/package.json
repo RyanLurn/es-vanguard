@@ -1,21 +1,26 @@
 {
-  "name": "@es-vanguard/lockfile-parser",
+  "name": "@es-vanguard/test-utilities",
   "type": "module",
+  "private": true,
+  "imports": {
+    "#*": "./src/*"
+  },
+  "exports": {
+    "./constants": "./src/constants.ts",
+    "./fetch-github-content": "./src/fetch-github-content.ts",
+    "./get-github-content": "./src/get-github-content.ts"
+  },
   "scripts": {
     "start": "bun run src/index.ts",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "neverthrow": "catalog:",
-    "semver": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@es-vanguard/json-parser": "workspace:*",
-    "@es-vanguard/test-utilities": "workspace:*",
     "@es-vanguard/typescript-config": "workspace:*",
     "@types/bun": "catalog:types",
-    "@types/semver": "catalog:types",
     "typescript": "catalog:"
   }
 }
