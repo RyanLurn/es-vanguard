@@ -1,7 +1,12 @@
+import { InputsSchema } from "@/helpers/schemas";
+import {
+  DEFAULT_BASE,
+  DEFAULT_HEAD,
+  DEFAULT_PACKAGE_MANAGER,
+  DEFAULT_RUNTIME,
+} from "@/lib/constants";
 import { parseArgs } from "util";
-
-const DEFAULT_BASE = "main";
-const DEFAULT_HEAD = "HEAD";
+import * as z from "zod";
 
 function parseInputs({ enableLogging = false }: { enableLogging?: boolean }) {
   try {
@@ -18,19 +23,35 @@ function parseInputs({ enableLogging = false }: { enableLogging?: boolean }) {
           short: "h",
           default: DEFAULT_HEAD,
         },
+        runtime: {
+          type: "string",
+          short: "r",
+          default: DEFAULT_RUNTIME,
+        },
+        "package-manager": {
+          type: "string",
+          short: "p",
+          default: DEFAULT_PACKAGE_MANAGER,
+        },
       },
       strict: true,
       allowPositionals: true,
     });
 
+    const validatedValues = InputsSchema.parse(values);
+
     if (enableLogging) {
-      console.log("Received inputs:", values);
+      console.log("Received inputs:", validatedValues);
     }
 
-    return values;
+    return validatedValues;
   } catch (error) {
     if (error instanceof TypeError) {
       console.error("Invalid input arguments.");
+    }
+    if (error instanceof z.ZodError) {
+      console.error("Invalid input arguments:");
+      console.error(z.prettifyError(error));
     }
     console.error(error);
     process.exit(1);
