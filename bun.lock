@@ -10,6 +10,18 @@
         "prettier-plugin-curly": "0.4.1",
       },
     },
+    "apps/cli": {
+      "name": "@es-vanguard/cli",
+      "dependencies": {
+        "neverthrow": "catalog:",
+        "zod": "catalog:",
+      },
+      "devDependencies": {
+        "@es-vanguard/typescript-config": "workspace:*",
+        "@types/bun": "catalog:types",
+        "typescript": "catalog:",
+      },
+    },
     "packages/json-parser": {
       "name": "@es-vanguard/json-parser",
       "dependencies": {
@@ -88,6 +100,8 @@
     },
   },
   "packages": {
+    "@es-vanguard/cli": ["@es-vanguard/cli@workspace:apps/cli"],
+
     "@es-vanguard/json-parser": ["@es-vanguard/json-parser@workspace:packages/json-parser"],
 
     "@es-vanguard/lockfile-parser": ["@es-vanguard/lockfile-parser@workspace:packages/lockfile-parser"],
