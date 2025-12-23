@@ -1,6 +1,5 @@
 import type { PmOption } from "@/helpers/validate/pm";
 
-const DEFAULT_BRANCHES = ["main", "master"];
 const SUPPORTED_PMS = ["npm", "yarn", "pnpm", "deno", "bun"] as const;
 
 const DEFAULT_CWD = ".";
@@ -11,7 +10,6 @@ const DEFAULT_PM_OPTION: PmOption = "auto";
 export {
   SUPPORTED_PMS,
   DEFAULT_CWD,
-  DEFAULT_BRANCHES,
   DEFAULT_BASE,
   DEFAULT_HEAD,
   DEFAULT_PM_OPTION,

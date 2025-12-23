@@ -1,6 +1,6 @@
 import type { Inputs } from "@/helpers/parse-inputs";
 import type { GitRepoPath } from "@/helpers/validate/cwd";
-import { DEFAULT_BASE, DEFAULT_BRANCHES, DEFAULT_HEAD } from "@/lib/constants";
+import { DEFAULT_BASE, DEFAULT_HEAD } from "@/lib/constants";
 import { $ } from "bun";
 import { err, ok, type Result } from "neverthrow";
 import * as z from "zod";
@@ -65,21 +65,28 @@ async function validateBranchInputs({
   let checkHeadResult: Result<GitBranch, Error>;
 
   if (baseInput === DEFAULT_BASE) {
-    for (const branch of DEFAULT_BRANCHES) {
-      const result = await checkBranchExists({
+    const checkMainResult = await checkBranchExists({
+      gitRepoPath,
+      branchInput: "main",
+    });
+
+    if (checkMainResult.isOk()) {
+      checkBaseResult = checkMainResult;
+    } else {
+      const checkMasterResult = await checkBranchExists({
         gitRepoPath,
-        branchInput: branch,
+        branchInput: "master",
       });
-      if (result.isOk()) {
-        checkBaseResult = result;
-        break;
+
+      if (checkMasterResult.isOk()) {
+        checkBaseResult = checkMasterResult;
+      } else {
+        const errorMessage =
+          "Could not auto-detect the repo's default branch. Please manually specify the base branch.";
+        console.error(errorMessage);
+        checkBaseResult = err(new Error(errorMessage));
       }
     }
-
-    const errorMessage =
-      "Could not auto-detect the repo's default branch. Please manually specify the base branch.";
-    console.error(errorMessage);
-    checkBaseResult = err(new Error(errorMessage));
   } else {
     checkBaseResult = await checkBranchExists({
       gitRepoPath,
