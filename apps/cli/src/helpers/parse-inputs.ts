@@ -1,12 +1,10 @@
-import { InputsSchema } from "@/helpers/schemas";
 import {
   DEFAULT_BASE,
   DEFAULT_CWD,
   DEFAULT_HEAD,
-  DEFAULT_PM,
+  DEFAULT_PM_OPTION,
 } from "@/lib/constants";
 import { parseArgs } from "util";
-import * as z from "zod";
 
 async function parseInputs({
   enableLogging = false,
@@ -33,27 +31,21 @@ async function parseInputs({
         },
         pm: {
           type: "string",
-          default: DEFAULT_PM,
+          default: DEFAULT_PM_OPTION,
         },
       },
       strict: true,
       allowPositionals: true,
     });
 
-    const validatedValues = await InputsSchema.parseAsync(values);
-
     if (enableLogging) {
-      console.log("Received inputs:", validatedValues);
+      console.log("Received inputs:", values);
     }
 
-    return validatedValues;
+    return values;
   } catch (error) {
     if (error instanceof TypeError) {
       console.error("Invalid input arguments.");
-    }
-    if (error instanceof z.ZodError) {
-      console.error("Invalid input arguments:");
-      console.error(z.prettifyError(error));
     }
     console.error(error);
     process.exit(1);
