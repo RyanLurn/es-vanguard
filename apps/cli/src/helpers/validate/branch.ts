@@ -1,31 +1,60 @@
+import type { GitRepoPath } from "@/helpers/validate/cwd";
+import { DEFAULT_HEAD } from "@/lib/constants";
 import { $ } from "bun";
 import { err, ok, type Result } from "neverthrow";
+import * as z from "zod";
 
-async function validateGitBranch({
-  cwd,
-  branchName,
+const GitBranchSchema = z.string().brand<"GitBranch">();
+
+type GitBranch = z.infer<typeof GitBranchSchema>;
+
+async function validateBranchInput({
+  gitRepoPath,
+  branchInput,
 }: {
-  cwd: string;
-  branchName: string;
-}): Promise<Result<string, Error>> {
+  gitRepoPath: GitRepoPath;
+  branchInput: string;
+}): Promise<Result<GitBranch, Error>> {
   try {
+    if (branchInput === DEFAULT_HEAD) {
+      return getCurrentBranch({ gitRepoPath });
+    }
+
     const { exitCode } =
-      await $`git show-ref --verify --quiet refs/heads/${branchName}`
-        .cwd(cwd)
+      await $`git show-ref --verify --quiet refs/heads/${branchInput}`
+        .cwd(gitRepoPath)
         .nothrow();
 
     if (exitCode !== 0) {
-      const errorMessage = `Branch ${branchName} does not exist.`;
+      const errorMessage = `Input branch ${branchInput} does not exist.`;
       console.error(errorMessage);
       return err(new Error(errorMessage));
     }
 
-    return ok(branchName);
+    return ok(branchInput as GitBranch);
   } catch (error) {
-    const errorMessage = `Failed to validate branch ${branchName}.`;
+    const errorMessage = `Failed to validate branch input: ${branchInput}.`;
     console.error(errorMessage);
     return err(new Error(errorMessage));
   }
 }
 
-export { validateGitBranch };
+async function getCurrentBranch({
+  gitRepoPath,
+}: {
+  gitRepoPath: GitRepoPath;
+}): Promise<Result<GitBranch, Error>> {
+  try {
+    const result = await $`git branch --show-current`.cwd(gitRepoPath).text();
+
+    const currentBranch = result.trim() as GitBranch;
+
+    return ok(currentBranch);
+  } catch (error) {
+    const errorMessage = `Failed to get current branch.`;
+    console.error(errorMessage);
+    return err(new Error(errorMessage));
+  }
+}
+
+export { validateBranchInput, getCurrentBranch };

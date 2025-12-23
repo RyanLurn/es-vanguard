@@ -4,6 +4,7 @@ import type { DetectOptions } from "package-manager-detector";
 import { $ } from "bun";
 import * as z from "zod";
 import { SUPPORTED_PMS } from "@/lib/constants";
+import type { DirectoryPath } from "@/helpers/validate/cwd";
 
 const PmSchema = z.enum(SUPPORTED_PMS);
 const PmOptionSchema = z.enum([...SUPPORTED_PMS, "auto"]);
@@ -31,7 +32,7 @@ async function checkPm({
   cwd,
   pmOption,
 }: {
-  cwd: string;
+  cwd: DirectoryPath;
   pmOption: PmOption;
 }): Promise<Result<Pm, Error>> {
   if (pmOption === "auto") {
@@ -59,7 +60,7 @@ async function validatePmInput({
   cwd,
   pmInput,
 }: {
-  cwd: string;
+  cwd: DirectoryPath;
   pmInput: string;
 }): Promise<Result<Pm, Error>> {
   const parseResult = PmOptionSchema.safeParse(pmInput);

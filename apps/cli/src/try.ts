@@ -1,14 +1,7 @@
-import { validateGitBranch } from "@/helpers/validate/branch";
+import { parseInputs } from "@/helpers/parse-inputs";
+import { validateInputs } from "@/helpers/validate/inputs";
 
-const testCases = ["main", "cli", "invalid"];
+const inputs = await parseInputs({});
+const validatedInputs = await validateInputs(inputs);
 
-for (const testCase of testCases) {
-  const result = await validateGitBranch({
-    cwd: "D:\\Ryan Luong\\dev\\es-vanguard",
-    branchName: testCase,
-  });
-
-  if (result.isOk()) {
-    console.log(`${testCase} is valid`);
-  }
-}
+console.log(validatedInputs);
