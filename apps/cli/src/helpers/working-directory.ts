@@ -1,3 +1,4 @@
+import { DEFAULT_CWD } from "@/lib/constants";
 import { $ } from "bun";
 import { stat } from "fs/promises";
 import { err, ok, Result } from "neverthrow";
@@ -6,11 +7,11 @@ async function checkCwdExists({
   cwd,
 }: {
   cwd: string;
-}): Promise<Result<void, Error>> {
+}): Promise<Result<string, Error>> {
   try {
     const cwdStats = await stat(cwd);
     if (cwdStats.isDirectory()) {
-      return ok();
+      return ok(cwd);
     }
 
     const errorMessage = `${cwd} is not a directory on your file system.`;
@@ -28,10 +29,10 @@ async function checkGitInCwd({
   cwd,
 }: {
   cwd: string;
-}): Promise<Result<void, Error>> {
+}): Promise<Result<string, Error>> {
   try {
     await $`git status`.cwd(cwd).quiet();
-    return ok();
+    return ok(cwd);
   } catch (error) {
     if (error instanceof $.ShellError) {
       const errorMessage = `${cwd} is not a git repository.`;
@@ -46,4 +47,40 @@ async function checkGitInCwd({
   }
 }
 
-export { checkCwdExists, checkGitInCwd };
+async function validateCwd({
+  cwd,
+}: {
+  cwd: string;
+}): Promise<Result<string, Error>> {
+  try {
+    if (cwd === DEFAULT_CWD) {
+      const defaultCwd = process.cwd();
+
+      const checkGitInCwdResult = await checkGitInCwd({ cwd: defaultCwd });
+      if (checkGitInCwdResult.isErr()) {
+        return checkGitInCwdResult;
+      }
+
+      return ok(defaultCwd);
+    }
+
+    const checkCwdExistsResult = await checkCwdExists({ cwd });
+    if (checkCwdExistsResult.isErr()) {
+      return checkCwdExistsResult;
+    }
+
+    const checkGitInCwdResult = await checkGitInCwd({ cwd });
+    if (checkGitInCwdResult.isErr()) {
+      return checkGitInCwdResult;
+    }
+
+    return ok(cwd);
+  } catch (error) {
+    const errorMessage = `Unexpected error occurred while validating ${cwd}.`;
+    console.error(errorMessage);
+    console.error(error);
+    return err(new Error(errorMessage));
+  }
+}
+
+export { checkCwdExists, checkGitInCwd, validateCwd };
