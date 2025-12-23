@@ -1,6 +1,7 @@
-import type { InputsSchema } from "@/helpers/schemas";
+import type { InputsSchema, PackageManagerSchema } from "@/helpers/schemas";
 import * as z from "zod";
 
 type Inputs = z.infer<typeof InputsSchema>;
+type PackageManager = z.infer<typeof PackageManagerSchema>;
 
-export type { Inputs };
+export type { Inputs, PackageManager };

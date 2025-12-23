@@ -3,7 +3,6 @@ import {
   DEFAULT_BASE,
   DEFAULT_HEAD,
   DEFAULT_PACKAGE_MANAGER,
-  DEFAULT_RUNTIME,
 } from "@/lib/constants";
 import { parseArgs } from "util";
 import * as z from "zod";
@@ -23,14 +22,9 @@ function parseInputs({ enableLogging = false }: { enableLogging?: boolean }) {
           short: "h",
           default: DEFAULT_HEAD,
         },
-        runtime: {
-          type: "string",
-          short: "r",
-          default: DEFAULT_RUNTIME,
-        },
         "package-manager": {
           type: "string",
-          short: "p",
+          short: "pm",
           default: DEFAULT_PACKAGE_MANAGER,
         },
       },
