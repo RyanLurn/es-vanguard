@@ -18,8 +18,7 @@ async function checkCwdExists({
   try {
     const cwdStats = await stat(cwdInput);
     if (cwdStats.isDirectory()) {
-      const cwd = DirectoryPathSchema.parse(cwdInput);
-      return ok(cwd);
+      return ok(cwdInput as DirectoryPath);
     }
 
     const errorMessage = `${cwdInput} is a path to a file, not a directory.`;
@@ -40,8 +39,7 @@ async function checkGitInCwd({
 }): Promise<Result<GitRepoPath, Error>> {
   try {
     await $`git status`.cwd(cwd).quiet();
-    const gitRepoPath = GitRepoPathSchema.parse(cwd);
-    return ok(gitRepoPath);
+    return ok(cwd as GitRepoPath);
   } catch (error) {
     if (error instanceof $.ShellError) {
       const errorMessage = `${cwd} is not a git repository.`;
@@ -63,7 +61,7 @@ async function validateCwdInput({
 }): Promise<Result<GitRepoPath, Error>> {
   try {
     if (cwdInput === DEFAULT_CWD) {
-      const defaultCwd = DirectoryPathSchema.parse(process.cwd());
+      const defaultCwd = process.cwd() as DirectoryPath;
 
       const checkGitInCwdResult = await checkGitInCwd({ cwd: defaultCwd });
       if (checkGitInCwdResult.isErr()) {
