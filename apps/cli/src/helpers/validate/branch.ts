@@ -1,4 +1,3 @@
-import type { Inputs } from "@/helpers/parse-inputs";
 import type { GitRepoPath } from "@/helpers/validate/cwd";
 import { DEFAULT_BASE, DEFAULT_HEAD } from "@/lib/constants";
 import { $ } from "bun";
@@ -56,11 +55,13 @@ async function getCurrentBranch({
 
 async function validateBranchInputs({
   gitRepoPath,
-  base: baseInput,
-  head: headInput,
-}: { gitRepoPath: GitRepoPath } & Pick<Inputs, "base" | "head">): Promise<
-  Result<{ base: GitBranch; head: GitBranch }, Error>
-> {
+  baseInput,
+  headInput,
+}: {
+  gitRepoPath: GitRepoPath;
+  baseInput: string;
+  headInput: string;
+}): Promise<Result<{ base: GitBranch; head: GitBranch }, Error>> {
   let checkBaseResult: Result<GitBranch, Error>;
   let checkHeadResult: Result<GitBranch, Error>;
 

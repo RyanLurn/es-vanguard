@@ -13,8 +13,8 @@ async function validateInputs(inputs: Inputs) {
 
   const validateBranchInputsResult = await validateBranchInputs({
     gitRepoPath,
-    base: inputs.base,
-    head: inputs.head,
+    baseInput: inputs.base,
+    headInput: inputs.head,
   });
 
   const pmResult = await validatePmInput({
