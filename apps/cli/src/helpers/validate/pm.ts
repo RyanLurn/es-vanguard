@@ -6,10 +6,10 @@ import * as z from "zod";
 import { SUPPORTED_PMS } from "@/lib/constants";
 
 const PmSchema = z.enum(SUPPORTED_PMS);
-const PmInputSchema = z.enum([...SUPPORTED_PMS, "auto"]);
+const PmOptionSchema = z.enum([...SUPPORTED_PMS, "auto"]);
 
 type Pm = z.infer<typeof PmSchema>;
-type PmInput = z.infer<typeof PmInputSchema>;
+type PmOption = z.infer<typeof PmOptionSchema>;
 
 async function detectPm(options: DetectOptions): Promise<Result<Pm, Error>> {
   try {
@@ -29,26 +29,26 @@ async function detectPm(options: DetectOptions): Promise<Result<Pm, Error>> {
 
 async function checkPm({
   cwd,
-  pmInput,
+  pmOption,
 }: {
   cwd: string;
-  pmInput: PmInput;
+  pmOption: PmOption;
 }): Promise<Result<Pm, Error>> {
-  if (pmInput === "auto") {
+  if (pmOption === "auto") {
     return detectPm({ cwd });
   }
 
   try {
-    await $`${pmInput} --version`.cwd(cwd).quiet();
-    return ok(pmInput);
+    await $`${pmOption} --version`.cwd(cwd).quiet();
+    return ok(pmOption);
   } catch (error) {
     if (error instanceof $.ShellError) {
-      const errorMessage = `Could not find ${pmInput} in your system.`;
+      const errorMessage = `Could not find ${pmOption} in your system.`;
       console.error(errorMessage);
       return err(new Error(errorMessage));
     }
 
-    const errorMessage = `Unexpected error occurred while checking for ${pmInput} in your system.`;
+    const errorMessage = `Unexpected error occurred while checking for ${pmOption} in your system.`;
     console.error(errorMessage);
     console.error(error);
     return err(new Error(errorMessage));
@@ -61,8 +61,8 @@ async function validatePmInput({
 }: {
   cwd: string;
   pmInput: string;
-}): Promise<Result<PmInput, Error>> {
-  const parseResult = PmInputSchema.safeParse(pmInput);
+}): Promise<Result<Pm, Error>> {
+  const parseResult = PmOptionSchema.safeParse(pmInput);
   if (!parseResult.success) {
     const errorMessage = `Invalid package manager option: ${pmInput}`;
     console.error(errorMessage);
@@ -71,13 +71,15 @@ async function validatePmInput({
 
   const validatedPmInput = parseResult.data;
 
-  const checkPmResult = await checkPm({ cwd, pmInput: validatedPmInput });
+  const checkPmResult = await checkPm({ cwd, pmOption: validatedPmInput });
   if (checkPmResult.isErr()) {
     return checkPmResult;
   }
 
-  return ok(validatedPmInput);
+  const pm = checkPmResult.value;
+
+  return ok(pm);
 }
 
-export { detectPm, checkPm, validatePmInput, PmInputSchema, PmSchema };
-export type { PmInput, Pm };
+export { detectPm, checkPm, validatePmInput, PmOptionSchema, PmSchema };
+export type { PmOption };
