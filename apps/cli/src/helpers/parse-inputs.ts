@@ -42,7 +42,12 @@ async function parseInputs({
       console.log("Received inputs:", values);
     }
 
-    return values;
+    return {
+      cwd: values.cwd,
+      base: values.base,
+      head: values.head,
+      pmOption: values.pm,
+    };
   } catch (error) {
     if (error instanceof TypeError) {
       console.error("Invalid input arguments.");
@@ -52,4 +57,7 @@ async function parseInputs({
   }
 }
 
+type Inputs = Awaited<ReturnType<typeof parseInputs>>;
+
 export { parseInputs };
+export type { Inputs };
