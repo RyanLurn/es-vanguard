@@ -1,5 +1,6 @@
+import type { Inputs } from "@/helpers/parse-inputs";
 import type { GitRepoPath } from "@/helpers/validate/cwd";
-import { DEFAULT_HEAD } from "@/lib/constants";
+import { DEFAULT_BASE, DEFAULT_BRANCHES, DEFAULT_HEAD } from "@/lib/constants";
 import { $ } from "bun";
 import { err, ok, type Result } from "neverthrow";
 import * as z from "zod";
@@ -8,7 +9,7 @@ const GitBranchSchema = z.string().brand<"GitBranch">();
 
 type GitBranch = z.infer<typeof GitBranchSchema>;
 
-async function validateBranchInput({
+async function checkBranchExists({
   gitRepoPath,
   branchInput,
 }: {
@@ -16,10 +17,6 @@ async function validateBranchInput({
   branchInput: string;
 }): Promise<Result<GitBranch, Error>> {
   try {
-    if (branchInput === DEFAULT_HEAD) {
-      return getCurrentBranch({ gitRepoPath });
-    }
-
     const { exitCode } =
       await $`git show-ref --verify --quiet refs/heads/${branchInput}`
         .cwd(gitRepoPath)
@@ -57,4 +54,62 @@ async function getCurrentBranch({
   }
 }
 
-export { validateBranchInput, getCurrentBranch };
+async function validateBranchInputs({
+  gitRepoPath,
+  base: baseInput,
+  head: headInput,
+}: { gitRepoPath: GitRepoPath } & Pick<Inputs, "base" | "head">): Promise<
+  Result<{ base: GitBranch; head: GitBranch }, Error>
+> {
+  let checkBaseResult: Result<GitBranch, Error>;
+  let checkHeadResult: Result<GitBranch, Error>;
+
+  if (baseInput === DEFAULT_BASE) {
+    for (const branch of DEFAULT_BRANCHES) {
+      const result = await checkBranchExists({
+        gitRepoPath,
+        branchInput: branch,
+      });
+      if (result.isOk()) {
+        checkBaseResult = result;
+        break;
+      }
+    }
+
+    const errorMessage =
+      "Could not auto-detect the repo's default branch. Please manually specify the base branch.";
+    console.error(errorMessage);
+    checkBaseResult = err(new Error(errorMessage));
+  } else {
+    checkBaseResult = await checkBranchExists({
+      gitRepoPath,
+      branchInput: baseInput,
+    });
+  }
+
+  if (headInput === DEFAULT_HEAD) {
+    checkHeadResult = await getCurrentBranch({ gitRepoPath });
+  } else {
+    checkHeadResult = await checkBranchExists({
+      gitRepoPath,
+      branchInput: headInput,
+    });
+  }
+
+  if (checkBaseResult.isErr() || checkHeadResult.isErr()) {
+    return err(new Error("Failed to validate branch inputs."));
+  }
+
+  const base = checkBaseResult.value;
+  const head = checkHeadResult.value;
+
+  if (base === head) {
+    const errorMessage = "Base and head branches cannot be the same.";
+    console.error(errorMessage);
+    return err(new Error(errorMessage));
+  }
+
+  return ok({ base, head });
+}
+
+export { checkBranchExists, getCurrentBranch, validateBranchInputs };
