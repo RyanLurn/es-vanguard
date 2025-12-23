@@ -1,8 +1,9 @@
 import { InputsSchema } from "@/helpers/schemas";
 import {
   DEFAULT_BASE,
+  DEFAULT_CWD,
   DEFAULT_HEAD,
-  DEFAULT_PACKAGE_MANAGER,
+  DEFAULT_PM,
 } from "@/lib/constants";
 import { parseArgs } from "util";
 import * as z from "zod";
@@ -12,6 +13,10 @@ function parseInputs({ enableLogging = false }: { enableLogging?: boolean }) {
     const { values } = parseArgs({
       args: Bun.argv,
       options: {
+        cwd: {
+          type: "string",
+          default: DEFAULT_CWD,
+        },
         base: {
           type: "string",
           short: "b",
@@ -22,10 +27,9 @@ function parseInputs({ enableLogging = false }: { enableLogging?: boolean }) {
           short: "h",
           default: DEFAULT_HEAD,
         },
-        "package-manager": {
+        pm: {
           type: "string",
-          short: "pm",
-          default: DEFAULT_PACKAGE_MANAGER,
+          default: DEFAULT_PM,
         },
       },
       strict: true,
