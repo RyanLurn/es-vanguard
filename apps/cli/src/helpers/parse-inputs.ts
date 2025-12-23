@@ -8,7 +8,11 @@ import {
 import { parseArgs } from "util";
 import * as z from "zod";
 
-function parseInputs({ enableLogging = false }: { enableLogging?: boolean }) {
+async function parseInputs({
+  enableLogging = false,
+}: {
+  enableLogging?: boolean;
+}) {
   try {
     const { values } = parseArgs({
       args: Bun.argv,
@@ -36,7 +40,7 @@ function parseInputs({ enableLogging = false }: { enableLogging?: boolean }) {
       allowPositionals: true,
     });
 
-    const validatedValues = InputsSchema.parse(values);
+    const validatedValues = await InputsSchema.parseAsync(values);
 
     if (enableLogging) {
       console.log("Received inputs:", validatedValues);

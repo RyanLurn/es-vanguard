@@ -14,11 +14,11 @@ async function checkCwdExists({
       return ok(cwd);
     }
 
-    const errorMessage = `${cwd} is not a directory on your file system.`;
+    const errorMessage = `${cwd} is a path to a file, not a directory.`;
     console.error(errorMessage);
     return err(new Error(errorMessage));
   } catch (error) {
-    const errorMessage = `Could not determine if ${cwd} is a directory on your file system.`;
+    const errorMessage = `${cwd} does not exist on your file system.`;
     console.error(errorMessage);
     console.error(error);
     return err(new Error(errorMessage));

@@ -1,10 +1,15 @@
+import { validateCwd } from "@/helpers/working-directory";
 import { SUPPORTED_PMS } from "@/lib/constants";
 import * as z from "zod";
 
 const PackageManagerSchema = z.enum(SUPPORTED_PMS);
+const CwdSchema = z.string().refine(async (cwd) => {
+  const validateCwdResult = await validateCwd({ cwd });
+  return validateCwdResult.isOk();
+});
 
 const InputsSchema = z.object({
-  cwd: z.string(),
+  cwd: CwdSchema,
   base: z.string(),
   head: z.string(),
   pm: z.enum([...SUPPORTED_PMS, "auto"]).catch((ctx) => {
@@ -14,4 +19,4 @@ const InputsSchema = z.object({
   }),
 });
 
-export { InputsSchema, PackageManagerSchema };
+export { InputsSchema, CwdSchema, PackageManagerSchema };
