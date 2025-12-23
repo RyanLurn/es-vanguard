@@ -1,4 +1,4 @@
-import { validateCwd } from "@/helpers/working-directory";
+import { validateCwd } from "@/helpers/validate/cwd";
 import { SUPPORTED_PMS } from "@/lib/constants";
 import * as z from "zod";
 
