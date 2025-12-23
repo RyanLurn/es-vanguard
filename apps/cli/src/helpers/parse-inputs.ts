@@ -46,7 +46,7 @@ async function parseInputs({
       cwd: values.cwd,
       base: values.base,
       head: values.head,
-      pmOption: values.pm,
+      pm: values.pm,
     };
   } catch (error) {
     if (error instanceof TypeError) {

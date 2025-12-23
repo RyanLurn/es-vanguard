@@ -19,7 +19,7 @@ async function validateInputs(inputs: Inputs) {
 
   const pmResult = await validatePmInput({
     cwd: gitRepoPath,
-    pmInput: inputs.pmOption,
+    pmInput: inputs.pm,
   });
 
   if (validateBranchInputsResult.isErr() || pmResult.isErr()) {
