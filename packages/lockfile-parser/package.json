@@ -4,7 +4,7 @@
   "scripts": {
     "start": "bun run src/index.ts",
     "type-check": "bunx tsc --noEmit",
-    "test:npm": "bun test tests/npm/schema.test.ts"
+    "test:npm": "bun test tests/npm"
   },
   "dependencies": {
     "neverthrow": "catalog:",
