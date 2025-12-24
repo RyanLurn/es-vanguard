@@ -18,7 +18,17 @@ async function detectPm(options: DetectOptions): Promise<Result<Pm, Error>> {
     if (!detectResult) {
       return err(new Error("Could not detect package manager."));
     }
-    return ok(detectResult.name);
+
+    const detectedPm =
+      detectResult.agent === "pnpm@6" ? "pnpm" : detectResult.agent;
+
+    if (detectedPm === "deno" || detectedPm === "bun") {
+      const errorMessage = `Unsupported package manager: ${detectedPm}`;
+      console.error(errorMessage);
+      return err(new Error(errorMessage));
+    }
+
+    return ok(detectedPm);
   } catch (error) {
     const errorMessage =
       "Unexpected error occurred while detecting package manager.";
@@ -83,4 +93,4 @@ async function validatePmInput({
 }
 
 export { detectPm, checkPm, validatePmInput, PmOptionSchema, PmSchema };
-export type { PmOption };
+export type { PmOption, Pm };

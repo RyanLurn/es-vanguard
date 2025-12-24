@@ -1,7 +1,4 @@
-import { parseInputs } from "@/helpers/parse-inputs";
-import { validateInputs } from "@/helpers/validate/inputs";
+import { $ } from "bun";
 
-const inputs = await parseInputs({});
-const validatedInputs = await validateInputs(inputs);
-
-console.log(validatedInputs);
+const deps = await $`bun list --json`.json();
+console.log(deps);

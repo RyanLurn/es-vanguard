@@ -1,6 +1,6 @@
 import type { PmOption } from "@/helpers/validate/pm";
 
-const SUPPORTED_PMS = ["npm", "yarn", "pnpm", "deno", "bun"] as const;
+const SUPPORTED_PMS = ["npm", "yarn", "yarn@berry", "pnpm"] as const;
 
 const DEFAULT_CWD = ".";
 const DEFAULT_BASE = "DEFAULT_BRANCH";
