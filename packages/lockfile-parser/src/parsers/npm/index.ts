@@ -1,7 +1,7 @@
 import { ok, err, type Result } from "neverthrow";
 import semver from "semver";
 import { safeJsonParse } from "@es-vanguard/json-parser";
-import { NpmLockfileSchema } from "./schema";
+import { NpmLockfileSchema } from "@/parsers/npm/schema";
 
 interface Dependency {
   name: string;
