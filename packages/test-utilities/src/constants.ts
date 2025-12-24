@@ -4,6 +4,27 @@ const npmLockfileUrls = [
   "https://github.com/axios/axios/blob/v1.x/package-lock.json",
   "https://github.com/twbs/bootstrap/blob/main/package-lock.json",
   "https://github.com/nestjs/nest/blob/master/package-lock.json",
+  "https://github.com/tj/commander.js/blob/master/package-lock.json",
+  "https://github.com/moment/moment/blob/develop/package-lock.json",
+  "https://github.com/jashkenas/underscore/blob/master/package-lock.json",
+  "https://github.com/isaacs/node-mkdirp/blob/main/package-lock.json",
+  "https://github.com/isaacs/node-glob/blob/main/package-lock.json",
+  "https://github.com/uuidjs/uuid/blob/main/package-lock.json",
+  "https://github.com/JedWatson/classnames/blob/main/package-lock.json",
+  "https://github.com/jquery/jquery/blob/main/package-lock.json",
+  "https://github.com/yeoman/generator/blob/main/package-lock.json",
+  "https://github.com/zloirock/core-js/blob/master/package-lock.json",
+  "https://github.com/cheeriojs/cheerio/blob/main/package-lock.json",
+  "https://github.com/isaacs/rimraf/blob/main/package-lock.json",
+  "https://github.com/webpack/css-loader/blob/main/package-lock.json",
+  "https://github.com/shelljs/shelljs/blob/main/package-lock.json",
+  "https://github.com/motdotla/dotenv/blob/master/package-lock.json",
+];
+
+const npmV1LockfileUrls = [
+  "https://github.com/lodash/lodash/blob/main/package-lock.json",
+  "https://github.com/petkaantonov/bluebird/blob/master/package-lock.json",
+  "https://github.com/Marak/colors.js/blob/master/package-lock.json",
 ];
 
 const yarnLockfileUrls = [
@@ -12,6 +33,9 @@ const yarnLockfileUrls = [
   "https://github.com/styled-components/styled-components/blob/main/yarn.lock",
   "https://github.com/prettier/prettier/blob/main/yarn.lock",
   "https://github.com/webpack/webpack/blob/main/yarn.lock",
+  "https://github.com/SBoudrias/Inquirer.js/blob/main/yarn.lock",
+  "https://github.com/ReactiveX/rxjs/blob/master/yarn.lock",
+  "https://github.com/babel/babel/blob/main/yarn.lock",
 ];
 
 const pnpmLockfileUrls = [
@@ -22,4 +46,9 @@ const pnpmLockfileUrls = [
   "https://github.com/sveltejs/svelte/blob/main/pnpm-lock.yaml",
 ];
 
-export { npmLockfileUrls, yarnLockfileUrls, pnpmLockfileUrls };
+export {
+  npmLockfileUrls,
+  npmV1LockfileUrls,
+  yarnLockfileUrls,
+  pnpmLockfileUrls,
+};
