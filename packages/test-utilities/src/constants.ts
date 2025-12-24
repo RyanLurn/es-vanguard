@@ -19,12 +19,25 @@ const npmLockfileUrls = [
   "https://github.com/webpack/css-loader/blob/main/package-lock.json",
   "https://github.com/shelljs/shelljs/blob/main/package-lock.json",
   "https://github.com/motdotla/dotenv/blob/master/package-lock.json",
+  "https://github.com/isaacs/minimatch/blob/main/package-lock.json",
+  "https://github.com/isaacs/node-lru-cache/blob/main/package-lock.json",
+  "https://github.com/juliangruber/brace-expansion/blob/main/package-lock.json",
+  "https://github.com/mozilla/source-map/blob/master/package-lock.json",
+  "https://github.com/isaacs/minipass/blob/main/package-lock.json",
+  "https://github.com/acornjs/acorn/blob/master/package-lock.json",
+  "https://github.com/moxystudio/node-cross-spawn/blob/master/package-lock.json",
+  "https://github.com/jsdom/webidl-conversions/blob/main/package-lock.json",
+  "https://github.com/jsdom/whatwg-url/blob/main/package-lock.json",
+  "https://github.com/jsdom/tr46/blob/main/package-lock.json",
+  "https://github.com/fb55/entities/blob/main/package-lock.json",
+  "https://github.com/paulmillr/chokidar/blob/main/package-lock.json",
 ];
 
 const npmV1LockfileUrls = [
   "https://github.com/lodash/lodash/blob/main/package-lock.json",
   "https://github.com/petkaantonov/bluebird/blob/master/package-lock.json",
   "https://github.com/Marak/colors.js/blob/master/package-lock.json",
+  "https://github.com/json5/json5/blob/main/package-lock.json",
 ];
 
 const yarnLockfileUrls = [
@@ -36,6 +49,7 @@ const yarnLockfileUrls = [
   "https://github.com/SBoudrias/Inquirer.js/blob/main/yarn.lock",
   "https://github.com/ReactiveX/rxjs/blob/master/yarn.lock",
   "https://github.com/babel/babel/blob/main/yarn.lock",
+  "https://github.com/jestjs/jest/blob/main/yarn.lock",
 ];
 
 const pnpmLockfileUrls = [
@@ -44,6 +58,9 @@ const pnpmLockfileUrls = [
   "https://github.com/angular/angular/blob/main/pnpm-lock.yaml",
   "https://github.com/vuejs/core/blob/main/pnpm-lock.yaml",
   "https://github.com/sveltejs/svelte/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/ms/blob/main/pnpm-lock.yaml",
+  "https://github.com/TooTallNate/proxy-agents/blob/main/pnpm-lock.yaml",
+  "https://github.com/postcss/postcss/blob/main/pnpm-lock.yaml",
 ];
 
 export {
