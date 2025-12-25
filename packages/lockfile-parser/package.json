@@ -5,6 +5,7 @@
     "start": "bun run src/index.ts",
     "type-check": "bunx --bun tsc --noEmit",
     "test:npm": "bun test tests/npm",
+    "test:npm:schema": "bun test tests/npm/schema.test.ts",
     "test:pnpm": "bun test tests/pnpm"
   },
   "dependencies": {

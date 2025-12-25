@@ -1,4 +1,5 @@
 import {
+  pnpmLockfileUrls,
   pnpmV5LockfileUrls,
   pnpmV6LockfileUrls,
   pnpmV9LockfileUrls,
@@ -10,13 +11,13 @@ import { PnpmLockfileFileSchema } from "@/pnpm/schemas/lockfile-file";
 import { SchemaError } from "@standard-schema/utils";
 import * as z from "zod";
 
-describe.concurrent("PNPM Lockfile v5 Schema Validation", () => {
-  beforeAll(async () => {
-    await Promise.all(
-      pnpmV5LockfileUrls.map((url) => getGithubContent({ githubBlobUrl: url }))
-    );
-  });
+beforeAll(async () => {
+  await Promise.all(
+    pnpmLockfileUrls.map((url) => getGithubContent({ githubBlobUrl: url }))
+  );
+});
 
+describe("pnpm lockfile schema validation", () => {
   test.each(pnpmV5LockfileUrls)("should fail to parse %s", async (url) => {
     const result = await getGithubContent({ githubBlobUrl: url });
     if (result.isErr()) {
@@ -34,14 +35,6 @@ describe.concurrent("PNPM Lockfile v5 Schema Validation", () => {
       const error = parseYamlResult.error;
       expect(error instanceof SchemaError).toBe(true);
     }
-  });
-});
-
-describe.concurrent("PNPM Lockfile v6 Schema Validation", () => {
-  beforeAll(async () => {
-    await Promise.all(
-      pnpmV6LockfileUrls.map((url) => getGithubContent({ githubBlobUrl: url }))
-    );
   });
 
   test.each(pnpmV6LockfileUrls)("should successfully parse %s", async (url) => {
@@ -68,14 +61,6 @@ describe.concurrent("PNPM Lockfile v6 Schema Validation", () => {
     }
 
     expect(parseYamlResult.isOk()).toBe(true);
-  });
-});
-
-describe.concurrent("PNPM Lockfile v9 Schema Validation", () => {
-  beforeAll(async () => {
-    await Promise.all(
-      pnpmV9LockfileUrls.map((url) => getGithubContent({ githubBlobUrl: url }))
-    );
   });
 
   test.each(pnpmV9LockfileUrls)("should successfully parse %s", async (url) => {
