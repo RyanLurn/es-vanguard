@@ -6,6 +6,7 @@
     "#*": "./src/*"
   },
   "exports": {
+    "./datasets/*": "./src/datasets/*",
     "./constants": "./src/constants.ts",
     "./fetch-github-content": "./src/fetch-github-content.ts",
     "./get-github-content": "./src/get-github-content.ts"

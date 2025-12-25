@@ -1,4 +1,4 @@
-import { pnpmLockfileUrls } from "#constants.ts";
+import { pnpmLockfileUrls } from "#datasets/pnpm.ts";
 import { getGithubContent } from "#get-github-content.ts";
 
 // A script to warm up the dataset local cache

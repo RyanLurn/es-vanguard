@@ -1,0 +1,128 @@
+const pnpmV5LockfileUrls = [
+  "https://github.com/vuejs/petite-vue/blob/main/pnpm-lock.yaml",
+  // From TanStack
+  "https://github.com/TanStack/bling/blob/main/pnpm-lock.yaml",
+];
+
+const pnpmV6LockfileUrls = [
+  "https://github.com/TooTallNate/proxy-agents/blob/main/pnpm-lock.yaml",
+  // From Vercel
+  "https://github.com/vercel/vercel/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/satori/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/nextjs-subscription-payments/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/next-learn/blob/main/pnpm-lock.yaml",
+  // From Vue
+  "https://github.com/vuejs/vue/blob/main/pnpm-lock.yaml",
+  "https://github.com/vuejs/vue-loader/blob/main/pnpm-lock.yaml",
+  "https://github.com/vuejs/composition-api/blob/main/pnpm-lock.yaml",
+  // From Svelte
+  "https://github.com/sveltejs/devalue/blob/main/pnpm-lock.yaml",
+  "https://github.com/sveltejs/svelte-devtools/blob/master/pnpm-lock.yaml",
+];
+
+const pnpmV9LockfileUrls = [
+  "https://github.com/pnpm/pnpm/blob/main/pnpm-lock.yaml",
+  "https://github.com/browserslist/browserslist/blob/main/pnpm-lock.yaml",
+  "https://github.com/browserslist/caniuse-lite/blob/main/pnpm-lock.yaml",
+  // From Facebook
+  "https://github.com/facebook/lexical/blob/main/pnpm-lock.yaml",
+  // From Vercel
+  "https://github.com/vercel/next.js/blob/canary/pnpm-lock.yaml",
+  "https://github.com/vercel/ms/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/ai/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/turborepo/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/swr/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/commerce/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/ai-chatbot/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/serve/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/next-forge/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/platforms/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/examples/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/streamdown/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/next-app-router-playground/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/virtual-event-starter-kit/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/little-date/blob/main/pnpm-lock.yaml",
+  // From Vue
+  "https://github.com/vuejs/core/blob/main/pnpm-lock.yaml",
+  "https://github.com/vuejs/vitepress/blob/main/pnpm-lock.yaml",
+  "https://github.com/vuejs/pinia/blob/v3/pnpm-lock.yaml",
+  "https://github.com/vuejs/language-tools/blob/master/pnpm-lock.yaml",
+  "https://github.com/vuejs/apollo/blob/v4/pnpm-lock.yaml",
+  "https://github.com/vuejs/router/blob/main/pnpm-lock.yaml",
+  "https://github.com/vuejs/create-vue/blob/main/pnpm-lock.yaml",
+  "https://github.com/vuejs/vuefire/blob/main/pnpm-lock.yaml",
+  "https://github.com/vuejs/docs/blob/main/pnpm-lock.yaml",
+  "https://github.com/vuejs/devtools/blob/main/pnpm-lock.yaml",
+  // From Nuxt
+  "https://github.com/nuxt/nuxt/blob/main/pnpm-lock.yaml",
+  "https://github.com/nuxt/ui/blob/v4/pnpm-lock.yaml",
+  "https://github.com/nuxt/content/blob/main/pnpm-lock.yaml",
+  "https://github.com/nuxt/devtools/blob/main/pnpm-lock.yaml",
+  "https://github.com/nuxt/movies/blob/main/pnpm-lock.yaml",
+  "https://github.com/nuxt/image/blob/main/pnpm-lock.yaml",
+  "https://github.com/nuxt/hackernews/blob/main/pnpm-lock.yaml",
+  "https://github.com/nuxt/icon/blob/main/pnpm-lock.yaml",
+  "https://github.com/nuxt/modules/blob/main/pnpm-lock.yaml",
+  "https://github.com/nuxt/learn.nuxt.com/blob/main/pnpm-lock.yaml",
+  "https://github.com/nuxt/eslint/blob/main/pnpm-lock.yaml",
+  "https://github.com/nuxt/fonts/blob/main/pnpm-lock.yaml",
+  "https://github.com/nuxt/scripts/blob/main/pnpm-lock.yaml",
+  "https://github.com/nuxt/nuxt.com/blob/main/pnpm-lock.yaml",
+  "https://github.com/nuxt/test-utils/blob/main/pnpm-lock.yaml",
+  "https://github.com/nuxt/nuxt.new/blob/main/pnpm-lock.yaml",
+  "https://github.com/nuxt/bridge/blob/main/pnpm-lock.yaml",
+  // From Angular
+  "https://github.com/angular/angular/blob/main/pnpm-lock.yaml",
+  "https://github.com/angular/angular-cli/blob/main/pnpm-lock.yaml",
+  "https://github.com/angular/components/blob/main/pnpm-lock.yaml",
+  // From Svelte
+  "https://github.com/sveltejs/svelte/blob/main/pnpm-lock.yaml",
+  "https://github.com/sveltejs/kit/blob/main/pnpm-lock.yaml",
+  "https://github.com/sveltejs/realworld/blob/master/pnpm-lock.yaml",
+  "https://github.com/sveltejs/svelte-preprocess/blob/main/pnpm-lock.yaml",
+  "https://github.com/sveltejs/language-tools/blob/master/pnpm-lock.yaml",
+  "https://github.com/sveltejs/vite-plugin-svelte/blob/main/pnpm-lock.yaml",
+  "https://github.com/sveltejs/cli/blob/main/pnpm-lock.yaml",
+  "https://github.com/sveltejs/eslint-plugin-svelte/blob/main/pnpm-lock.yaml",
+  "https://github.com/sveltejs/sites/blob/master/pnpm-lock.yaml",
+  "https://github.com/sveltejs/svelte.dev/blob/main/pnpm-lock.yaml",
+  // From PostCSS
+  "https://github.com/postcss/postcss/blob/main/pnpm-lock.yaml",
+  "https://github.com/postcss/autoprefixer/blob/main/pnpm-lock.yaml",
+  "https://github.com/postcss/postcss-nested/blob/main/pnpm-lock.yaml",
+  "https://github.com/postcss/postcss-100vh-fix/blob/main/pnpm-lock.yaml",
+  "https://github.com/postcss/sugarss/blob/main/pnpm-lock.yaml",
+  "https://github.com/postcss/postcss-scss/blob/main/pnpm-lock.yaml",
+  "https://github.com/postcss/postcss-js/blob/main/pnpm-lock.yaml",
+  "https://github.com/postcss/postcss-load-config/blob/main/pnpm-lock.yaml",
+  // From TanStack
+  "https://github.com/TanStack/query/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/table/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/router/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/virtual/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/form/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/db/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/ai/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/create-tsrouter-app/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/tanstack.com/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/ranger/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/store/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/pacer/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/devtools/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/config/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/select/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/persister/blob/main/pnpm-lock.yaml",
+];
+
+const pnpmLockfileUrls = [
+  ...pnpmV5LockfileUrls,
+  ...pnpmV6LockfileUrls,
+  ...pnpmV9LockfileUrls,
+];
+
+export {
+  pnpmLockfileUrls,
+  pnpmV5LockfileUrls,
+  pnpmV6LockfileUrls,
+  pnpmV9LockfileUrls,
+};
