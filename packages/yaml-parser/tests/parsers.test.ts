@@ -1,10 +1,10 @@
 import { describe, test, expect, beforeAll } from "bun:test";
 import { getGithubContent } from "@es-vanguard/test-utilities/get-github-content";
-import { pnpmLockfileUrls } from "@es-vanguard/test-utilities/constants";
+import { pnpmLockfileUrls } from "@es-vanguard/test-utilities/datasets/pnpm.ts";
 import { safeYamlParse } from "@/index";
 import * as z from "zod";
 
-describe("Bun YAML Parser vs js-yaml", () => {
+describe.concurrent("Bun YAML Parser vs js-yaml", () => {
   beforeAll(async () => {
     await Promise.all(
       pnpmLockfileUrls.map((url) => getGithubContent({ githubBlobUrl: url }))
