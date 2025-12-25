@@ -40,6 +40,19 @@ const npmV1LockfileUrls = [
   "https://github.com/json5/json5/blob/main/package-lock.json",
 ];
 
+const npmV2LockfileUrls = [
+  "https://github.com/webpack/schema-utils/blob/main/package-lock.json",
+  "https://github.com/juliangruber/balanced-match/blob/master/package-lock.json",
+];
+
+const npmV3LockfileUrls = [
+  "https://github.com/paulmillr/readdirp/blob/master/package-lock.json",
+  "https://github.com/lydell/js-tokens/blob/main/package-lock.json",
+  "https://github.com/jshttp/cookie/blob/master/package-lock.json",
+  "https://github.com/broofa/mime/blob/main/package-lock.json",
+  "https://github.com/eemeli/yaml/blob/main/package-lock.json",
+];
+
 const yarnLockfileUrls = [
   "https://github.com/yarnpkg/berry/blob/master/yarn.lock",
   "https://github.com/facebook/react/blob/main/yarn.lock",
@@ -52,20 +65,99 @@ const yarnLockfileUrls = [
   "https://github.com/jestjs/jest/blob/main/yarn.lock",
 ];
 
-const pnpmLockfileUrls = [
+const yarnV1LockfileUrls = [
+  "https://github.com/dataform-co/dataform/blob/main/yarn.lock",
+  "https://github.com/vercel/hyper/blob/canary/yarn.lock",
+  "https://github.com/vercel/pkg/blob/main/yarn.lock",
+  "https://github.com/vercel/ncc/blob/main/yarn.lock",
+  "https://github.com/vercel/styled-jsx/blob/main/yarn.lock",
+  "https://github.com/vercel/micro/blob/main/yarn.lock",
+  "https://github.com/vercel/og-image/blob/main/yarn.lock",
+  "https://github.com/vercel/release/blob/master/yarn.lock",
+  "https://github.com/vercel/hazel/blob/master/yarn.lock",
+  "https://github.com/vercel/async-retry/blob/main/yarn.lock",
+  "https://github.com/vuejs/vue-cli/blob/dev/yarn.lock",
+  "https://github.com/vuejs/vuex/blob/main/yarn.lock",
+  "https://github.com/vuejs/devtools-v6/blob/main/yarn.lock",
+  "https://github.com/vuejs/vuepress/blob/master/yarn.lock",
+  "https://github.com/vuejs/vue-router/blob/dev/yarn.lock",
+  "https://github.com/vuejs/vue-hackernews-2.0/blob/master/yarn.lock",
+  "https://github.com/vuejs/vue-class-component/blob/master/yarn.lock",
+  "https://github.com/vuejs/vetur/blob/master/yarn.lock",
+  "https://github.com/vuejs/v2.vuejs.org/blob/master/yarn.lock",
+  "https://github.com/vuejs/vue-test-utils/blob/dev/yarn.lock",
+  "https://github.com/vuejs/vue-rx/blob/master/yarn.lock",
+];
+
+const yarnV2LockfileUrls = [
+  "https://github.com/typescript-eslint/typescript-eslint/blob/main/yarn.lock",
+];
+
+const pnpmV5LockfileUrls = [
+  "https://github.com/vuejs/petite-vue/blob/main/pnpm-lock.yaml",
+];
+
+const pnpmV6LockfileUrls = [
+  "https://github.com/TooTallNate/proxy-agents/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/vercel/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/satori/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/nextjs-subscription-payments/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/next-learn/blob/main/pnpm-lock.yaml",
+  "https://github.com/vuejs/vue/blob/main/pnpm-lock.yaml",
+  "https://github.com/vuejs/vue-loader/blob/main/pnpm-lock.yaml",
+  "https://github.com/vuejs/composition-api/blob/main/pnpm-lock.yaml",
+];
+
+const pnpmV9LockfileUrls = [
   "https://github.com/pnpm/pnpm/blob/main/pnpm-lock.yaml",
   "https://github.com/vercel/next.js/blob/canary/pnpm-lock.yaml",
   "https://github.com/angular/angular/blob/main/pnpm-lock.yaml",
   "https://github.com/vuejs/core/blob/main/pnpm-lock.yaml",
   "https://github.com/sveltejs/svelte/blob/main/pnpm-lock.yaml",
   "https://github.com/vercel/ms/blob/main/pnpm-lock.yaml",
-  "https://github.com/TooTallNate/proxy-agents/blob/main/pnpm-lock.yaml",
   "https://github.com/postcss/postcss/blob/main/pnpm-lock.yaml",
+  "https://github.com/browserslist/browserslist/blob/main/pnpm-lock.yaml",
+  "https://github.com/browserslist/caniuse-lite/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/ai/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/turborepo/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/swr/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/commerce/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/ai-chatbot/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/serve/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/next-forge/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/platforms/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/examples/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/streamdown/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/next-app-router-playground/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/virtual-event-starter-kit/blob/main/pnpm-lock.yaml",
+  "https://github.com/vercel/little-date/blob/main/pnpm-lock.yaml",
+  "https://github.com/vuejs/vitepress/blob/main/pnpm-lock.yaml",
+  "https://github.com/vuejs/pinia/blob/v3/pnpm-lock.yaml",
+  "https://github.com/vuejs/language-tools/blob/master/pnpm-lock.yaml",
+  "https://github.com/vuejs/apollo/blob/v4/pnpm-lock.yaml",
+  "https://github.com/vuejs/router/blob/main/pnpm-lock.yaml",
+  "https://github.com/vuejs/create-vue/blob/main/pnpm-lock.yaml",
+  "https://github.com/vuejs/vuefire/blob/main/pnpm-lock.yaml",
+  "https://github.com/vuejs/docs/blob/main/pnpm-lock.yaml",
+  "https://github.com/vuejs/devtools/blob/main/pnpm-lock.yaml",
+];
+
+const pnpmLockfileUrls = [
+  ...pnpmV5LockfileUrls,
+  ...pnpmV6LockfileUrls,
+  ...pnpmV9LockfileUrls,
 ];
 
 export {
   npmLockfileUrls,
   npmV1LockfileUrls,
+  npmV2LockfileUrls,
+  npmV3LockfileUrls,
   yarnLockfileUrls,
+  yarnV1LockfileUrls,
+  yarnV2LockfileUrls,
   pnpmLockfileUrls,
+  pnpmV5LockfileUrls,
+  pnpmV6LockfileUrls,
+  pnpmV9LockfileUrls,
 };
