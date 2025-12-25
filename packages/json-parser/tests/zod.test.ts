@@ -1,10 +1,8 @@
 import { safeJsonParse } from "@/index";
 import { SchemaError } from "@standard-schema/utils";
 import { expect, test, describe } from "bun:test";
-import {
-  npmLockfileUrls,
-  pnpmLockfileUrls,
-} from "@es-vanguard/test-utilities/constants";
+import { npmLockfileUrls } from "@es-vanguard/test-utilities/datasets/npm.ts";
+import { pnpmLockfileUrls } from "@es-vanguard/test-utilities/datasets/pnpm.ts";
 import { getGithubContent } from "@es-vanguard/test-utilities/get-github-content";
 import * as z from "zod";
 
