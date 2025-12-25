@@ -6,6 +6,7 @@
     "type-check": "bunx --bun tsc --noEmit",
     "test:npm": "bun test tests/npm",
     "test:npm:schema": "bun test tests/npm/schema.test.ts",
+    "test:npm:parser": "bun test tests/npm/parser.test.ts",
     "test:pnpm": "bun test tests/pnpm"
   },
   "dependencies": {

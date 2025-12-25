@@ -1,18 +1,23 @@
 import { describe, test, expect, beforeAll } from "bun:test";
 import { getGithubContent } from "@es-vanguard/test-utilities/get-github-content";
-import { npmLockfileUrls } from "@es-vanguard/test-utilities/datasets/npm.ts";
+import {
+  npmV2LockfileUrls,
+  npmV3LockfileUrls,
+} from "@es-vanguard/test-utilities/datasets/npm.ts";
 import { parseNpmLockfile } from "@/npm";
 import semver from "semver";
 
-describe.concurrent("NPM Lockfile Parser Logic", () => {
+const dataset = [...npmV2LockfileUrls, ...npmV3LockfileUrls];
+
+describe("NPM Lockfile Parser Logic", () => {
   // Pre-warm the cache for all URLs to ensure tests run fast and concurrent
   beforeAll(async () => {
     await Promise.all(
-      npmLockfileUrls.map((url) => getGithubContent({ githubBlobUrl: url }))
+      dataset.map((url) => getGithubContent({ githubBlobUrl: url }))
     );
   });
 
-  test.each(npmLockfileUrls)(
+  test.each(dataset)(
     "should correctly extract dependencies from %s",
     async (url) => {
       // 1. Setup
