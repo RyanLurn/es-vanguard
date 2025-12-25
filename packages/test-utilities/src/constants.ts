@@ -128,6 +128,8 @@ const yarnV2LockfileUrls = [
 
 const pnpmV5LockfileUrls = [
   "https://github.com/vuejs/petite-vue/blob/main/pnpm-lock.yaml",
+  // From TanStack
+  "https://github.com/TanStack/bling/blob/main/pnpm-lock.yaml",
 ];
 
 const pnpmV6LockfileUrls = [
@@ -148,7 +150,6 @@ const pnpmV6LockfileUrls = [
 
 const pnpmV9LockfileUrls = [
   "https://github.com/pnpm/pnpm/blob/main/pnpm-lock.yaml",
-  "https://github.com/postcss/postcss/blob/main/pnpm-lock.yaml",
   "https://github.com/browserslist/browserslist/blob/main/pnpm-lock.yaml",
   "https://github.com/browserslist/caniuse-lite/blob/main/pnpm-lock.yaml",
   // From Facebook
@@ -213,6 +214,32 @@ const pnpmV9LockfileUrls = [
   "https://github.com/sveltejs/eslint-plugin-svelte/blob/main/pnpm-lock.yaml",
   "https://github.com/sveltejs/sites/blob/master/pnpm-lock.yaml",
   "https://github.com/sveltejs/svelte.dev/blob/main/pnpm-lock.yaml",
+  // From PostCSS
+  "https://github.com/postcss/postcss/blob/main/pnpm-lock.yaml",
+  "https://github.com/postcss/autoprefixer/blob/main/pnpm-lock.yaml",
+  "https://github.com/postcss/postcss-nested/blob/main/pnpm-lock.yaml",
+  "https://github.com/postcss/postcss-100vh-fix/blob/main/pnpm-lock.yaml",
+  "https://github.com/postcss/sugarss/blob/main/pnpm-lock.yaml",
+  "https://github.com/postcss/postcss-scss/blob/main/pnpm-lock.yaml",
+  "https://github.com/postcss/postcss-js/blob/main/pnpm-lock.yaml",
+  "https://github.com/postcss/postcss-load-config/blob/main/pnpm-lock.yaml",
+  // From TanStack
+  "https://github.com/TanStack/query/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/table/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/router/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/virtual/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/form/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/db/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/ai/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/create-tsrouter-app/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/tanstack.com/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/ranger/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/store/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/pacer/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/devtools/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/config/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/select/blob/main/pnpm-lock.yaml",
+  "https://github.com/TanStack/persister/blob/main/pnpm-lock.yaml",
 ];
 
 const pnpmLockfileUrls = [
