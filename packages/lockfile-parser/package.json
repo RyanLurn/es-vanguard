@@ -3,8 +3,8 @@
   "type": "module",
   "scripts": {
     "start": "bun run src/index.ts",
-    "type-check": "bunx tsc --noEmit",
-    "test:npm": "bun test tests/npm"
+    "type-check": "bunx --bun tsc --noEmit",
+    "test:npm": "bun run type-check && bun test tests/npm"
   },
   "dependencies": {
     "neverthrow": "catalog:",

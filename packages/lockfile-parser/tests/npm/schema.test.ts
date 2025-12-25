@@ -6,7 +6,7 @@ import {
   npmLockfileUrls,
   npmV1LockfileUrls,
 } from "@es-vanguard/test-utilities/constants";
-import { NpmLockfileSchema, type NpmLockfile } from "@/parsers/npm/schema";
+import { NpmLockfileSchema, type NpmLockfile } from "@/npm/schema";
 
 // We use describe.concurrent to run these suites in parallel
 describe.concurrent("NPM Lockfile Schema Validation", () => {

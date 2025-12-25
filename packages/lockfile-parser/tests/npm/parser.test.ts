@@ -1,7 +1,7 @@
 import { describe, test, expect, beforeAll } from "bun:test";
 import { getGithubContent } from "@es-vanguard/test-utilities/get-github-content";
 import { npmLockfileUrls } from "@es-vanguard/test-utilities/constants";
-import { parseNpmLockfile } from "@/parsers/npm";
+import { parseNpmLockfile } from "@/npm";
 import semver from "semver";
 
 describe.concurrent("NPM Lockfile Parser Logic", () => {
