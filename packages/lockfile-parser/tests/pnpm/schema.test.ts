@@ -36,7 +36,7 @@ describe("PNPM Lockfile v5 Schema Validation", () => {
       if (error instanceof SchemaError) {
         console.error("SchemaError:", z.prettifyError(error));
       } else {
-        console.error(error.message);
+        console.error(error);
       }
     }
 
@@ -70,7 +70,7 @@ describe("PNPM Lockfile v6 Schema Validation", () => {
       if (error instanceof SchemaError) {
         console.error("SchemaError:", z.prettifyError(error));
       } else {
-        console.error(error.message);
+        console.error(error);
       }
     }
 
@@ -104,7 +104,7 @@ describe("PNPM Lockfile v9 Schema Validation", () => {
       if (error instanceof SchemaError) {
         console.error("SchemaError:", z.prettifyError(error));
       } else {
-        console.error(error.message);
+        console.error(error);
       }
     }
 
