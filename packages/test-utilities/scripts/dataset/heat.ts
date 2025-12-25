@@ -1,15 +1,11 @@
+import { npmLockfileUrls } from "#datasets/npm.ts";
 import { pnpmLockfileUrls } from "#datasets/pnpm.ts";
 import { getGithubContent } from "#get-github-content.ts";
 
-// A script to warm up the dataset local cache
-for (const url of pnpmLockfileUrls) {
-  console.log(`[INFO] Warming up the cache for ${url}`);
-  const getResult = await getGithubContent({
-    githubBlobUrl: url,
-  });
-  if (getResult.isErr()) {
-    console.error(
-      `[ERROR] Failed to warm up the cache for ${url}: ${getResult.error.message}`
-    );
-  }
-}
+// A script to warm up dataset's local cache
+console.log("Warming up dataset's local cache...");
+const dataset = [...npmLockfileUrls, ...pnpmLockfileUrls];
+await Promise.all(
+  dataset.map((url) => getGithubContent({ githubBlobUrl: url }))
+);
+console.log("Done!");
