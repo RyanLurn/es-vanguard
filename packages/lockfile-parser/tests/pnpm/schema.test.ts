@@ -2,7 +2,7 @@ import {
   pnpmV5LockfileUrls,
   pnpmV6LockfileUrls,
   pnpmV9LockfileUrls,
-} from "@es-vanguard/test-utilities/constants";
+} from "@es-vanguard/test-utilities/datasets/pnpm.ts";
 import { getGithubContent } from "@es-vanguard/test-utilities/get-github-content";
 import { describe, test, expect, beforeAll } from "bun:test";
 import { safeYamlParse } from "@es-vanguard/yaml-parser";
@@ -10,7 +10,7 @@ import { PnpmLockfileFileSchema } from "@/pnpm/schemas/lockfile-file";
 import { SchemaError } from "@standard-schema/utils";
 import * as z from "zod";
 
-describe("PNPM Lockfile v5 Schema Validation", () => {
+describe.concurrent("PNPM Lockfile v5 Schema Validation", () => {
   beforeAll(async () => {
     await Promise.all(
       pnpmV5LockfileUrls.map((url) => getGithubContent({ githubBlobUrl: url }))
@@ -37,7 +37,7 @@ describe("PNPM Lockfile v5 Schema Validation", () => {
   });
 });
 
-describe("PNPM Lockfile v6 Schema Validation", () => {
+describe.concurrent("PNPM Lockfile v6 Schema Validation", () => {
   beforeAll(async () => {
     await Promise.all(
       pnpmV6LockfileUrls.map((url) => getGithubContent({ githubBlobUrl: url }))
@@ -71,7 +71,7 @@ describe("PNPM Lockfile v6 Schema Validation", () => {
   });
 });
 
-describe("PNPM Lockfile v9 Schema Validation", () => {
+describe.concurrent("PNPM Lockfile v9 Schema Validation", () => {
   beforeAll(async () => {
     await Promise.all(
       pnpmV9LockfileUrls.map((url) => getGithubContent({ githubBlobUrl: url }))

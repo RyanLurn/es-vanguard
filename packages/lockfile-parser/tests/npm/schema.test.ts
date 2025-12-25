@@ -5,7 +5,7 @@ import { getGithubContent } from "@es-vanguard/test-utilities/get-github-content
 import {
   npmLockfileUrls,
   npmV1LockfileUrls,
-} from "@es-vanguard/test-utilities/constants";
+} from "@es-vanguard/test-utilities/datasets/npm.ts";
 import { NpmLockfileSchema, type NpmLockfile } from "@/npm/schema";
 
 // We use describe.concurrent to run these suites in parallel
