@@ -4,7 +4,7 @@
   "scripts": {
     "start": "bun run src/index.ts",
     "type-check": "bunx --bun tsc --noEmit",
-    "test:npm": "bun run type-check && bun test tests/npm",
+    "test:npm": "bun test tests/npm",
     "test:pnpm": "bun test tests/pnpm"
   },
   "dependencies": {

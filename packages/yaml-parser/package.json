@@ -6,7 +6,8 @@
   },
   "scripts": {
     "type-check": "tsc --noEmit",
-    "test:parsers": "bun test tests/parsers.test.ts"
+    "test:parsers": "bun test tests/parsers.test.ts",
+    "bench": "bun run bench/index.ts"
   },
   "dependencies": {
     "neverthrow": "catalog:",
