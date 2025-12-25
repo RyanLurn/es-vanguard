@@ -29,11 +29,18 @@ export const PnpmLockfilePackageInfoSchema = z.object({
     )
     .optional(),
   bundledDependencies: z.union([z.array(z.string()), z.boolean()]).optional(),
+  /**
+   * According to the source code, if the engines field exists, it must have a node property.
+   * @see https://github.com/pnpm/pnpm/blob/main/lockfile/types/src/index.ts#L58
+   * However, from our runtime tests, it is possible for this field to exist without a node property.
+   * For example, see the concat-stream@2.0.0 package in pnpm's pnpm-lock.yaml file.
+   * @see https://github.com/pnpm/pnpm/blob/main/pnpm-lock.yaml#L12186
+   */
   engines: z
     .intersection(
       z.record(z.string(), z.string()),
       z.object({
-        node: z.string(),
+        node: z.string().optional(), // <--- This is required in the pnpm's type definitions
       })
     )
     .optional(),

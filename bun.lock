@@ -41,12 +41,14 @@
     "packages/lockfile-parser": {
       "name": "@es-vanguard/lockfile-parser",
       "dependencies": {
+        "@es-vanguard/json-parser": "workspace:*",
+        "@es-vanguard/yaml-parser": "workspace:*",
+        "@standard-schema/utils": "catalog:",
         "neverthrow": "catalog:",
         "semver": "catalog:",
         "zod": "catalog:",
       },
       "devDependencies": {
-        "@es-vanguard/json-parser": "workspace:*",
         "@es-vanguard/test-utilities": "workspace:*",
         "@es-vanguard/typescript-config": "workspace:*",
         "@types/bun": "catalog:types",

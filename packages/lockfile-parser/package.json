@@ -4,15 +4,18 @@
   "scripts": {
     "start": "bun run src/index.ts",
     "type-check": "bunx --bun tsc --noEmit",
-    "test:npm": "bun run type-check && bun test tests/npm"
+    "test:npm": "bun run type-check && bun test tests/npm",
+    "test:pnpm": "bun test tests/pnpm"
   },
   "dependencies": {
+    "@es-vanguard/json-parser": "workspace:*",
+    "@es-vanguard/yaml-parser": "workspace:*",
+    "@standard-schema/utils": "catalog:",
     "neverthrow": "catalog:",
     "semver": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@es-vanguard/json-parser": "workspace:*",
     "@es-vanguard/test-utilities": "workspace:*",
     "@es-vanguard/typescript-config": "workspace:*",
     "@types/bun": "catalog:types",
