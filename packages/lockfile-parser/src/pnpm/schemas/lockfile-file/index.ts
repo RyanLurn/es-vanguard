@@ -3,7 +3,7 @@
  * @see https://github.com/pnpm/pnpm/blob/main/lockfile/types/src/lockfileFileTypes.ts
  */
 
-import { PnpmLockfileBaseSchema } from "@/pnpm/schemas/lockfile-base";
+import { PnpmLockfileBaseSchema } from "@/pnpm/schemas/lockfile/base";
 import { PnpmLockfilePackageInfoSchema } from "@/pnpm/schemas/lockfile-file/package-info";
 import { PnpmLockfilePackageSnapshotSchema } from "@/pnpm/schemas/lockfile-file/package-snapshot";
 import { PnpmLockfileFileProjectSnapshotSchema } from "@/pnpm/schemas/lockfile-file/project-snapshot";

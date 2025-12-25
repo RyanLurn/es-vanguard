@@ -3,7 +3,7 @@
  * @see https://github.com/pnpm/pnpm/blob/main/lockfile/types/src/index.ts
  */
 
-import { PnpmLockfileResolutionSchema } from "@/pnpm/schemas/lockfile-resolution";
+import { PnpmLockfileResolutionSchema } from "@/pnpm/schemas/lockfile/resolution";
 
 import * as z from "zod";
 
