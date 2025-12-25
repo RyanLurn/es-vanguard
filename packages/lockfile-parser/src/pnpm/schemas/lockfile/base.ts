@@ -32,14 +32,7 @@ type PnpmLockfileSettings = z.infer<typeof PnpmLockfileSettingsSchema>;
 const PnpmLockfileBaseSchema = z.object({
   catalogs: PnpmCatalogSnapshotsSchema.optional(),
   ignoredOptionalDependencies: z.array(z.string()).optional(),
-  /**
-   * From pnpm's source code, the lockfileVersion is a string, not a number.
-   * @see https://github.com/pnpm/pnpm/blob/main/lockfile/types/src/index.ts#L19
-   * However, older lockfiles may have a number as the lockfileVersion.
-   * For example, see petite-vue's lockfile.
-   * @see https://github.com/vuejs/petite-vue/blob/main/pnpm-lock.yaml
-   */
-  lockfileVersion: z.union([z.string(), z.number()]),
+  lockfileVersion: z.string(),
   overrides: z.record(z.string(), z.string()).optional(),
   packageExtensionsChecksum: z.string().optional(),
   patchedDependencies: z.record(z.string(), PnpmPatchFileSchema).optional(),

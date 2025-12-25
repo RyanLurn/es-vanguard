@@ -17,7 +17,7 @@ describe("PNPM Lockfile v5 Schema Validation", () => {
     );
   });
 
-  test.each(pnpmV5LockfileUrls)("should successfully parse %s", async (url) => {
+  test.each(pnpmV5LockfileUrls)("should fail to parse %s", async (url) => {
     const result = await getGithubContent({ githubBlobUrl: url });
     if (result.isErr()) {
       throw new Error(`Failed to fetch ${url}: ${result.error.message}`);
@@ -28,19 +28,12 @@ describe("PNPM Lockfile v5 Schema Validation", () => {
       schema: PnpmLockfileFileSchema,
     });
 
+    expect(parseYamlResult.isOk()).toBe(false);
+
     if (parseYamlResult.isErr()) {
-      console.error(`Schema validation failed for ${url}`);
-
       const error = parseYamlResult.error;
-
-      if (error instanceof SchemaError) {
-        console.error("SchemaError:", z.prettifyError(error));
-      } else {
-        console.error(error);
-      }
+      expect(error instanceof SchemaError).toBe(true);
     }
-
-    expect(parseYamlResult.isOk()).toBe(true);
   });
 });
 
