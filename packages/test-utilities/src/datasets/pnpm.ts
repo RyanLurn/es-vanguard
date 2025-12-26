@@ -2,6 +2,10 @@ const pnpmV5LockfileUrls = [
   "https://github.com/vuejs/petite-vue/blob/main/pnpm-lock.yaml",
   // From TanStack
   "https://github.com/TanStack/bling/blob/main/pnpm-lock.yaml",
+  // From Web Infra
+  "https://github.com/web-infra-dev/garfish/blob/main/pnpm-lock.yaml",
+  "https://github.com/web-infra-dev/webpack-inspector/blob/main/pnpm-lock.yaml",
+  "https://github.com/web-infra-dev/electron-sprout/blob/main/pnpm-lock.yaml",
 ];
 
 const pnpmV6LockfileUrls = [
@@ -23,12 +27,21 @@ const pnpmV6LockfileUrls = [
   // From UnJS
   "https://github.com/unjs/defu/blob/main/pnpm-lock.yaml",
   "https://github.com/unjs/uqr/blob/main/pnpm-lock.yaml",
+  // From Web Infra
+  "https://github.com/web-infra-dev/reduck/blob/main/pnpm-lock.yaml", // 6.1
+  "https://github.com/web-infra-dev/swc-plugins/blob/main/pnpm-lock.yaml", // 6.1
 ];
 
 const pnpmV9LockfileUrls = [
   "https://github.com/pnpm/pnpm/blob/main/pnpm-lock.yaml",
   "https://github.com/cloudflare/workers-sdk/blob/main/pnpm-lock.yaml",
   "https://github.com/payloadcms/payload/blob/main/pnpm-lock.yaml",
+  "https://github.com/nitrojs/nitro/blob/main/pnpm-lock.yaml",
+  "https://github.com/colinhacks/zod/blob/main/pnpm-lock.yaml",
+  "https://github.com/open-circle/valibot/blob/main/pnpm-lock.yaml",
+  "https://github.com/arktypeio/arktype/blob/main/pnpm-lock.yaml",
+  "https://github.com/trpc/trpc/blob/main/pnpm-lock.yaml",
+  // From Browserslist
   "https://github.com/browserslist/browserslist/blob/main/pnpm-lock.yaml",
   "https://github.com/browserslist/caniuse-lite/blob/main/pnpm-lock.yaml",
   // From Facebook
@@ -155,6 +168,39 @@ const pnpmV9LockfileUrls = [
   "https://github.com/unjs/ungh/blob/main/pnpm-lock.yaml",
   "https://github.com/unjs/std-env/blob/main/pnpm-lock.yaml",
   "https://github.com/unjs/listhen/blob/main/pnpm-lock.yaml",
+  // From Vite
+  "https://github.com/vitejs/vite/blob/main/pnpm-lock.yaml",
+  "https://github.com/vitejs/vite-plugin-react/blob/main/pnpm-lock.yaml",
+  "https://github.com/vitejs/vite-plugin-vue/blob/main/pnpm-lock.yaml",
+  // ORMs
+  "https://github.com/drizzle-team/drizzle-orm/blob/main/pnpm-lock.yaml",
+  "https://github.com/prisma/prisma/blob/main/pnpm-lock.yaml",
+  // From Tailwind Labs
+  "https://github.com/tailwindlabs/tailwindcss/blob/main/pnpm-lock.yaml",
+  "https://github.com/tailwindlabs/tailwindcss.com/blob/main/pnpm-lock.yaml",
+  "https://github.com/tailwindlabs/tailwindcss-intellisense/blob/main/pnpm-lock.yaml",
+  // From MUI
+  "https://github.com/mui/material-ui/blob/master/pnpm-lock.yaml",
+  "https://github.com/mui/base-ui/blob/master/pnpm-lock.yaml",
+  "https://github.com/mui/mui-x/blob/master/pnpm-lock.yaml",
+  "https://github.com/mui/pigment-css/blob/master/pnpm-lock.yaml",
+  "https://github.com/mui/mui-public/blob/master/pnpm-lock.yaml",
+  // From Web Infra
+  "https://github.com/web-infra-dev/rspack/blob/main/pnpm-lock.yaml",
+  "https://github.com/web-infra-dev/midscene/blob/main/pnpm-lock.yaml",
+  "https://github.com/web-infra-dev/modern.js/blob/main/pnpm-lock.yaml",
+  "https://github.com/web-infra-dev/rsbuild/blob/main/pnpm-lock.yaml",
+  "https://github.com/web-infra-dev/rspress/blob/main/pnpm-lock.yaml",
+  "https://github.com/web-infra-dev/rsdoctor/blob/main/pnpm-lock.yaml",
+  "https://github.com/web-infra-dev/rslib/blob/main/pnpm-lock.yaml",
+  "https://github.com/web-infra-dev/rstest/blob/main/pnpm-lock.yaml",
+  "https://github.com/web-infra-dev/rslint/blob/main/pnpm-lock.yaml",
+  "https://github.com/web-infra-dev/mdx-rs/blob/main/pnpm-lock.yaml",
+  "https://github.com/web-infra-dev/rspack-resolver/blob/main/pnpm-lock.yaml",
+  "https://github.com/web-infra-dev/unport/blob/main/pnpm-lock.yaml",
+  "https://github.com/web-infra-dev/codesmith/blob/main/pnpm-lock.yaml",
+  "https://github.com/web-infra-dev/rspack-dev-server/blob/main/pnpm-lock.yaml",
+  "https://github.com/web-infra-dev/agent-browser-sdk/blob/main/pnpm-lock.yaml",
 ];
 
 const pnpmLockfileUrls = [

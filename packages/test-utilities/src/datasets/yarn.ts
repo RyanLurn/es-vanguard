@@ -55,6 +55,7 @@ const yarnV1LockfileUrls = [
 
 const yarnV2LockfileUrls = [
   "https://github.com/typescript-eslint/typescript-eslint/blob/main/yarn.lock",
+  "https://github.com/sequelize/sequelize/blob/main/yarn.lock",
   // From Poimandres
   "https://github.com/pmndrs/react-spring/blob/next/yarn.lock",
   "https://github.com/pmndrs/gltfjsx/blob/master/yarn.lock",

@@ -33,6 +33,9 @@ const npmV2LockfileUrls = [
   // From Svelte
   "https://github.com/sveltejs/svelte-loader/blob/master/package-lock.json",
   "https://github.com/sveltejs/rollup-plugin-svelte/blob/master/package-lock.json",
+  // From Tailwind Labs
+  "https://github.com/tailwindlabs/heroicons/blob/master/package-lock.json",
+  "https://github.com/tailwindlabs/tailwindcss-typography/blob/main/package-lock.json",
 ];
 
 const npmV3LockfileUrls = [
@@ -55,6 +58,7 @@ const npmV3LockfileUrls = [
   "https://github.com/moxystudio/node-cross-spawn/blob/master/package-lock.json",
   "https://github.com/fb55/entities/blob/main/package-lock.json",
   "https://github.com/paulmillr/chokidar/blob/main/package-lock.json",
+  "https://github.com/typeorm/typeorm/blob/master/package-lock.json",
   // From isaacs
   "https://github.com/isaacs/node-mkdirp/blob/main/package-lock.json",
   "https://github.com/isaacs/node-glob/blob/main/package-lock.json",
@@ -77,6 +81,12 @@ const npmV3LockfileUrls = [
   "https://github.com/angular/angularfire/blob/main/package-lock.json",
   // From Svelte
   "https://github.com/sveltejs/prettier-plugin-svelte/blob/master/package-lock.json",
+  // From Tailwind Labs
+  "https://github.com/tailwindlabs/headlessui/blob/main/package-lock.json",
+  "https://github.com/tailwindlabs/prettier-plugin-tailwindcss/blob/main/package-lock.json",
+  "https://github.com/tailwindlabs/tailwindcss-forms/blob/main/package-lock.json",
+  // From Microsoft
+  "https://github.com/microsoft/vscode/blob/main/package-lock.json",
 ];
 
 const npmLockfileUrls = [
