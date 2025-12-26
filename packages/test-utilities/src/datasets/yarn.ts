@@ -48,10 +48,16 @@ const yarnV1LockfileUrls = [
   "https://github.com/angular/flex-layout/blob/master/yarn.lock",
   "https://github.com/angular/universal/blob/main/yarn.lock",
   "https://github.com/angular/zone.js/blob/master/yarn.lock",
+  // From Poimandres
+  "https://github.com/pmndrs/react-three-fiber/blob/master/yarn.lock",
+  "https://github.com/pmndrs/use-cannon/blob/master/yarn.lock",
 ];
 
 const yarnV2LockfileUrls = [
   "https://github.com/typescript-eslint/typescript-eslint/blob/main/yarn.lock",
+  // From Poimandres
+  "https://github.com/pmndrs/react-spring/blob/next/yarn.lock",
+  "https://github.com/pmndrs/gltfjsx/blob/master/yarn.lock",
 ];
 
 export { yarnLockfileUrls, yarnV1LockfileUrls, yarnV2LockfileUrls };

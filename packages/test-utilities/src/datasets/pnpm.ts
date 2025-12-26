@@ -18,10 +18,17 @@ const pnpmV6LockfileUrls = [
   // From Svelte
   "https://github.com/sveltejs/devalue/blob/main/pnpm-lock.yaml",
   "https://github.com/sveltejs/svelte-devtools/blob/master/pnpm-lock.yaml",
+  // From Poimandres
+  "https://github.com/pmndrs/use-gesture/blob/main/pnpm-lock.yaml",
+  // From UnJS
+  "https://github.com/unjs/defu/blob/main/pnpm-lock.yaml",
+  "https://github.com/unjs/uqr/blob/main/pnpm-lock.yaml",
 ];
 
 const pnpmV9LockfileUrls = [
   "https://github.com/pnpm/pnpm/blob/main/pnpm-lock.yaml",
+  "https://github.com/cloudflare/workers-sdk/blob/main/pnpm-lock.yaml",
+  "https://github.com/payloadcms/payload/blob/main/pnpm-lock.yaml",
   "https://github.com/browserslist/browserslist/blob/main/pnpm-lock.yaml",
   "https://github.com/browserslist/caniuse-lite/blob/main/pnpm-lock.yaml",
   // From Facebook
@@ -112,6 +119,42 @@ const pnpmV9LockfileUrls = [
   "https://github.com/TanStack/config/blob/main/pnpm-lock.yaml",
   "https://github.com/TanStack/select/blob/main/pnpm-lock.yaml",
   "https://github.com/TanStack/persister/blob/main/pnpm-lock.yaml",
+  // From Remix
+  "https://github.com/remix-run/remix/blob/main/pnpm-lock.yaml",
+  "https://github.com/remix-run/react-router/blob/main/pnpm-lock.yaml",
+  // From Poimandres
+  "https://github.com/pmndrs/zustand/blob/main/pnpm-lock.yaml",
+  "https://github.com/pmndrs/jotai/blob/main/pnpm-lock.yaml",
+  "https://github.com/pmndrs/valtio/blob/main/pnpm-lock.yaml",
+  // From UnJS
+  "https://github.com/unjs/consola/blob/main/pnpm-lock.yaml",
+  "https://github.com/unjs/ofetch/blob/main/pnpm-lock.yaml",
+  "https://github.com/unjs/magic-regexp/blob/main/pnpm-lock.yaml",
+  "https://github.com/unjs/unplugin/blob/main/pnpm-lock.yaml",
+  "https://github.com/unjs/unbuild/blob/main/pnpm-lock.yaml",
+  "https://github.com/unjs/jiti/blob/main/pnpm-lock.yaml",
+  "https://github.com/unjs/unstorage/blob/main/pnpm-lock.yaml",
+  "https://github.com/unjs/magicast/blob/main/pnpm-lock.yaml",
+  "https://github.com/unjs/ipx/blob/main/pnpm-lock.yaml",
+  "https://github.com/unjs/webpackbar/blob/main/pnpm-lock.yaml",
+  "https://github.com/unjs/fontaine/blob/main/pnpm-lock.yaml",
+  "https://github.com/unjs/destr/blob/main/pnpm-lock.yaml",
+  "https://github.com/unjs/untun/blob/main/pnpm-lock.yaml",
+  "https://github.com/unjs/ufo/blob/main/pnpm-lock.yaml",
+  "https://github.com/unjs/changelogen/blob/main/pnpm-lock.yaml",
+  "https://github.com/unjs/unhead/blob/main/pnpm-lock.yaml",
+  "https://github.com/unjs/citty/blob/main/pnpm-lock.yaml",
+  "https://github.com/unjs/unpdf/blob/main/pnpm-lock.yaml",
+  "https://github.com/unjs/hookable/blob/main/pnpm-lock.yaml",
+  "https://github.com/unjs/c12/blob/main/pnpm-lock.yaml",
+  "https://github.com/unjs/unenv/blob/main/pnpm-lock.yaml",
+  "https://github.com/unjs/ohash/blob/main/pnpm-lock.yaml",
+  "https://github.com/unjs/giget/blob/main/pnpm-lock.yaml",
+  "https://github.com/unjs/unimport/blob/main/pnpm-lock.yaml",
+  "https://github.com/unjs/nypm/blob/main/pnpm-lock.yaml",
+  "https://github.com/unjs/ungh/blob/main/pnpm-lock.yaml",
+  "https://github.com/unjs/std-env/blob/main/pnpm-lock.yaml",
+  "https://github.com/unjs/listhen/blob/main/pnpm-lock.yaml",
 ];
 
 const pnpmLockfileUrls = [
