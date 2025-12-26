@@ -4,7 +4,7 @@ import { pnpmLockfileUrls } from "@es-vanguard/test-utilities/datasets/pnpm.ts";
 import { safeYamlParse } from "@/index";
 import * as z from "zod";
 
-describe.concurrent("Bun YAML Parser vs js-yaml", () => {
+describe("Bun YAML Parser vs js-yaml", () => {
   beforeAll(async () => {
     await Promise.all(
       pnpmLockfileUrls.map((url) => getGithubContent({ githubBlobUrl: url }))
