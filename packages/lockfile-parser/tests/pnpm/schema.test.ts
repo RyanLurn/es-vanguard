@@ -18,74 +18,91 @@ beforeAll(async () => {
 });
 
 describe("pnpm lockfile schema validation", () => {
-  test.each(pnpmV5LockfileUrls)("should fail to parse %s", async (url) => {
-    const result = await getGithubContent({ githubBlobUrl: url });
-    if (result.isErr()) {
-      throw new Error(`Failed to fetch ${url}: ${result.error.message}`);
-    }
+  test.each(pnpmV5LockfileUrls)(
+    "should fail to parse v5 lockfile at %s",
+    async (url) => {
+      const result = await getGithubContent({ githubBlobUrl: url });
+      if (result.isErr()) {
+        throw new Error(`Failed to fetch ${url}: ${result.error.message}`);
+      }
 
-    const parseYamlResult = await safeYamlParse({
-      text: result.value,
-      schema: PnpmLockfileFileSchema,
-    });
+      const parseYamlResult = await safeYamlParse({
+        text: result.value,
+        schema: PnpmLockfileFileSchema,
+      });
 
-    expect(parseYamlResult.isOk()).toBe(false);
+      expect(parseYamlResult.isErr()).toBe(true);
 
-    if (parseYamlResult.isErr()) {
-      const error = parseYamlResult.error;
-      expect(error instanceof SchemaError).toBe(true);
-    }
-  });
-
-  test.each(pnpmV6LockfileUrls)("should successfully parse %s", async (url) => {
-    const result = await getGithubContent({ githubBlobUrl: url });
-    if (result.isErr()) {
-      throw new Error(`Failed to fetch ${url}: ${result.error.message}`);
-    }
-
-    const parseYamlResult = await safeYamlParse({
-      text: result.value,
-      schema: PnpmLockfileFileSchema,
-    });
-
-    if (parseYamlResult.isErr()) {
-      console.error(`Schema validation failed for ${url}`);
-
-      const error = parseYamlResult.error;
-
-      if (error instanceof SchemaError) {
-        console.error("SchemaError:", z.prettifyError(error));
-      } else {
-        console.error(error);
+      if (parseYamlResult.isErr()) {
+        const error = parseYamlResult.error;
+        expect(error instanceof SchemaError).toBe(true);
       }
     }
+  );
 
-    expect(parseYamlResult.isOk()).toBe(true);
-  });
+  test.each(pnpmV6LockfileUrls)(
+    "should successfully parse v6 lockfile at %s",
+    async (url) => {
+      const result = await getGithubContent({ githubBlobUrl: url });
+      if (result.isErr()) {
+        throw new Error(`Failed to fetch ${url}: ${result.error.message}`);
+      }
 
-  test.each(pnpmV9LockfileUrls)("should successfully parse %s", async (url) => {
-    const result = await getGithubContent({ githubBlobUrl: url });
-    if (result.isErr()) {
-      throw new Error(`Failed to fetch ${url}: ${result.error.message}`);
-    }
+      const parseYamlResult = await safeYamlParse({
+        text: result.value,
+        schema: z.any(),
+      });
 
-    const parseYamlResult = await safeYamlParse({
-      text: result.value,
-      schema: PnpmLockfileFileSchema,
-    });
+      if (parseYamlResult.isErr()) {
+        throw new Error(
+          `Failed to parse ${url}: ${parseYamlResult.error.message}`
+        );
+      }
 
-    if (parseYamlResult.isErr()) {
-      console.error(`Schema validation failed for ${url}`);
+      const validateYamlResult = PnpmLockfileFileSchema.safeParse(
+        parseYamlResult.value
+      );
 
-      const error = parseYamlResult.error;
+      expect(validateYamlResult.success).toBe(true);
 
-      if (error instanceof SchemaError) {
-        console.error("SchemaError:", z.prettifyError(error));
-      } else {
-        console.error(error);
+      if (!validateYamlResult.success) {
+        console.error(`Schema validation failed for ${url} with error:`);
+        console.error(z.prettifyError(validateYamlResult.error));
       }
     }
+  );
 
-    expect(parseYamlResult.isOk()).toBe(true);
-  });
+  test.each(pnpmV9LockfileUrls)(
+    "should successfully parse v9 lockfile at %s",
+    async (url) => {
+      const result = await getGithubContent({ githubBlobUrl: url });
+      if (result.isErr()) {
+        throw new Error(`Failed to fetch ${url}: ${result.error.message}`);
+      }
+
+      const parseYamlResult = await safeYamlParse({
+        text: result.value,
+        schema: z.any(),
+      });
+
+      if (parseYamlResult.isErr()) {
+        throw new Error(
+          `Failed to parse ${url}: ${parseYamlResult.error.message}`
+        );
+      }
+
+      const validateYamlResult = PnpmLockfileFileSchema.safeParse(
+        parseYamlResult.value
+      );
+
+      expect(validateYamlResult.success).toBe(true);
+
+      if (!validateYamlResult.success) {
+        console.error(`Schema validation failed for ${url} with error:`);
+        console.error(z.prettifyError(validateYamlResult.error));
+      }
+
+      expect(validateYamlResult.data).toStrictEqual(parseYamlResult.value);
+    }
+  );
 });

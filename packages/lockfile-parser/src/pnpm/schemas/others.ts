@@ -18,6 +18,13 @@ export const PnpmDependenciesMetaSchema = z.record(
     injected: z.boolean().optional(),
     node: z.string().optional(),
     path: z.string().optional(),
+    /**
+     * This field doesn't exist in DependenciesMeta interface according to pnpm's type definitions
+     * However, in our tests, we found some edge cases where it does exist
+     * @see https://github.com/angular/angular-cli/blob/main/pnpm-lock.yaml#L18
+     * @see https://github.com/angular/angular-cli/blob/main/pnpm-lock.yaml#L20
+     */
+    built: z.boolean().optional(),
   })
 );
 export type PnpmDependenciesMeta = z.infer<typeof PnpmDependenciesMetaSchema>;

@@ -28,6 +28,7 @@ const pnpmV6LockfileUrls = [
   "https://github.com/unjs/defu/blob/main/pnpm-lock.yaml",
   "https://github.com/unjs/uqr/blob/main/pnpm-lock.yaml",
   // From Web Infra
+  "https://github.com/web-infra-dev/mdx-rs/blob/main/pnpm-lock.yaml",
   "https://github.com/web-infra-dev/reduck/blob/main/pnpm-lock.yaml", // 6.1
   "https://github.com/web-infra-dev/swc-plugins/blob/main/pnpm-lock.yaml", // 6.1
 ];
@@ -195,7 +196,6 @@ const pnpmV9LockfileUrls = [
   "https://github.com/web-infra-dev/rslib/blob/main/pnpm-lock.yaml",
   "https://github.com/web-infra-dev/rstest/blob/main/pnpm-lock.yaml",
   "https://github.com/web-infra-dev/rslint/blob/main/pnpm-lock.yaml",
-  "https://github.com/web-infra-dev/mdx-rs/blob/main/pnpm-lock.yaml",
   "https://github.com/web-infra-dev/rspack-resolver/blob/main/pnpm-lock.yaml",
   "https://github.com/web-infra-dev/unport/blob/main/pnpm-lock.yaml",
   "https://github.com/web-infra-dev/codesmith/blob/main/pnpm-lock.yaml",
