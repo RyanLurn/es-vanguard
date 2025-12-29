@@ -2,12 +2,7 @@ import { ok, err, type Result } from "neverthrow";
 import semver from "semver";
 import { safeJsonParse } from "@es-vanguard/json-parser";
 import { NpmLockfileSchema } from "@/npm/schema";
-
-interface Dependency {
-  name: string;
-  version: string;
-  path: string;
-}
+import type { Dependency } from "@/lib/types";
 
 /**
  * Extracts the package name from a path segment.
@@ -83,4 +78,3 @@ async function parseNpmLockfile(
 }
 
 export { parseNpmLockfile };
-export type { Dependency };
