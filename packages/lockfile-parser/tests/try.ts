@@ -1,26 +1,5 @@
-import { parsePnpmLockfile } from "@/pnpm";
-import { getGithubContent } from "@es-vanguard/test-utilities/get-github-content";
+import semver from "semver";
 
-const url =
-  "https://github.com/browserslist/browserslist/blob/main/pnpm-lock.yaml";
+const isValidSemverRange = semver.validRange("6.0.0") ? true : false;
 
-const contentResult = await getGithubContent({ githubBlobUrl: url });
-if (contentResult.isErr()) {
-  throw new Error(
-    `Test Setup Failed: Could not fetch ${url}. ${contentResult.error.message}`
-  );
-}
-
-const parseResult = await parsePnpmLockfile(contentResult.value);
-if (parseResult.isErr()) {
-  console.error("Parse failed:", parseResult.error);
-  process.exit(1);
-}
-
-const dependencies = parseResult.value;
-console.log("Dependencies count:", Object.keys(dependencies).length);
-console.log(
-  "First few dependencies:",
-  Object.entries(dependencies).slice(0, 5)
-);
-console.log("Sample dependency:", Object.entries(dependencies)[0]);
+console.log("Is valid semver range:", isValidSemverRange);

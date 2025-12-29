@@ -44,6 +44,12 @@ describe("pnpm lockfile parser logic", () => {
         expect(dep.name).toBeTruthy();
         expect(typeof dep.name).toBe("string");
 
+        if (semver.valid(dep.version) === null) {
+          console.error(
+            `Invalid version found: ${dep.version} for package ${dep.name} at url ${url}`
+          );
+        }
+
         // Logic Check: Version
         // The parser promises to filter out invalid semver (git deps, file deps).
         // If this fails, your filtering logic is too loose.
