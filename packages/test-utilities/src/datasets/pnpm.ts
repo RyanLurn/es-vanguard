@@ -31,6 +31,9 @@ const pnpmV6LockfileUrls = [
   "https://github.com/web-infra-dev/mdx-rs/blob/main/pnpm-lock.yaml",
   "https://github.com/web-infra-dev/reduck/blob/main/pnpm-lock.yaml", // 6.1
   "https://github.com/web-infra-dev/swc-plugins/blob/main/pnpm-lock.yaml", // 6.1
+  // From Chakra
+  "https://github.com/chakra-ui/play.chakra-ui.com/blob/main/pnpm-lock.yaml",
+  "https://github.com/chakra-ui/eslint-plugin-panda/blob/main/pnpm-lock.yaml",
 ];
 
 const pnpmV9LockfileUrls = [
@@ -43,6 +46,10 @@ const pnpmV9LockfileUrls = [
   "https://github.com/arktypeio/arktype/blob/main/pnpm-lock.yaml",
   "https://github.com/trpc/trpc/blob/main/pnpm-lock.yaml",
   "https://github.com/shadcn-ui/ui/blob/main/pnpm-lock.yaml",
+  "https://github.com/vitest-dev/vitest/blob/main/pnpm-lock.yaml",
+  "https://github.com/voidzero-dev/vibe-dashboard/blob/main/pnpm-lock.yaml",
+  "https://github.com/getsentry/sentry/blob/master/pnpm-lock.yaml",
+  "https://github.com/rolldown/tsdown/blob/main/pnpm-lock.yaml",
   // From Browserslist
   "https://github.com/browserslist/browserslist/blob/main/pnpm-lock.yaml",
   "https://github.com/browserslist/caniuse-lite/blob/main/pnpm-lock.yaml",
@@ -214,6 +221,26 @@ const pnpmV9LockfileUrls = [
   // From Nx
   "https://github.com/nrwl/nx/blob/master/pnpm-lock.yaml",
   "https://github.com/nrwl/monorepo.tools/blob/main/pnpm-lock.yaml",
+  // From SolidJS
+  "https://github.com/solidjs/solid/blob/main/pnpm-lock.yaml",
+  "https://github.com/solidjs/solid-start/blob/main/pnpm-lock.yaml",
+  "https://github.com/solidjs/solid-router/blob/main/pnpm-lock.yaml",
+  "https://github.com/solidjs/templates/blob/main/pnpm-lock.yaml",
+  "https://github.com/solidjs/vite-plugin-solid/blob/main/pnpm-lock.yaml",
+  "https://github.com/solidjs/solid-docs/blob/main/pnpm-lock.yaml",
+  "https://github.com/solidjs/signals/blob/main/pnpm-lock.yaml",
+  "https://github.com/solidjs/solid-playground/blob/master/pnpm-lock.yaml",
+  "https://github.com/solidjs/solid-testing-library/blob/main/pnpm-lock.yaml",
+  "https://github.com/solidjs/solid-site/blob/main/pnpm-lock.yaml",
+  "https://github.com/solidjs/solid-meta/blob/main/pnpm-lock.yaml",
+  // From Chakra
+  "https://github.com/chakra-ui/chakra-ui/blob/main/pnpm-lock.yaml",
+  "https://github.com/chakra-ui/panda/blob/main/pnpm-lock.yaml",
+  "https://github.com/chakra-ui/zag/blob/main/pnpm-lock.yaml",
+  // From PostHog
+  "https://github.com/PostHog/posthog/blob/master/pnpm-lock.yaml",
+  "https://github.com/PostHog/posthog.com/blob/master/pnpm-lock.yaml",
+  "https://github.com/PostHog/posthog-js/blob/main/pnpm-lock.yaml",
 ];
 
 const pnpmLockfileUrls = [

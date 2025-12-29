@@ -61,6 +61,7 @@ const npmV3LockfileUrls = [
   "https://github.com/fb55/entities/blob/main/package-lock.json",
   "https://github.com/paulmillr/chokidar/blob/main/package-lock.json",
   "https://github.com/typeorm/typeorm/blob/master/package-lock.json",
+  "https://github.com/google-gemini/gemini-cli/blob/main/package-lock.json",
   // From isaacs
   "https://github.com/isaacs/node-mkdirp/blob/main/package-lock.json",
   "https://github.com/isaacs/node-glob/blob/main/package-lock.json",

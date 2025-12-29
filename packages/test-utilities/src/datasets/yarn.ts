@@ -12,6 +12,7 @@ const yarnLockfileUrls = [
 const yarnV1LockfileUrls = [
   // From others
   "https://github.com/dataform-co/dataform/blob/main/yarn.lock",
+  "https://github.com/getsentry/sentry-javascript/blob/develop/yarn.lock",
   // From Facebook
   "https://github.com/facebook/react/blob/main/yarn.lock",
   "https://github.com/facebook/react-native/blob/main/yarn.lock",
