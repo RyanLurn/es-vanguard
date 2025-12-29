@@ -42,6 +42,7 @@ const pnpmV9LockfileUrls = [
   "https://github.com/open-circle/valibot/blob/main/pnpm-lock.yaml",
   "https://github.com/arktypeio/arktype/blob/main/pnpm-lock.yaml",
   "https://github.com/trpc/trpc/blob/main/pnpm-lock.yaml",
+  "https://github.com/shadcn-ui/ui/blob/main/pnpm-lock.yaml",
   // From Browserslist
   "https://github.com/browserslist/browserslist/blob/main/pnpm-lock.yaml",
   "https://github.com/browserslist/caniuse-lite/blob/main/pnpm-lock.yaml",
@@ -201,6 +202,18 @@ const pnpmV9LockfileUrls = [
   "https://github.com/web-infra-dev/codesmith/blob/main/pnpm-lock.yaml",
   "https://github.com/web-infra-dev/rspack-dev-server/blob/main/pnpm-lock.yaml",
   "https://github.com/web-infra-dev/agent-browser-sdk/blob/main/pnpm-lock.yaml",
+  // From Better Auth
+  "https://github.com/better-auth/better-auth/blob/canary/pnpm-lock.yaml",
+  "https://github.com/better-auth/better-fetch/blob/main/pnpm-lock.yaml",
+  "https://github.com/better-auth/better-call/blob/main/pnpm-lock.yaml",
+  "https://github.com/better-auth/utils/blob/main/pnpm-lock.yaml",
+  // From Supabase
+  "https://github.com/supabase/supabase/blob/master/pnpm-lock.yaml",
+  "https://github.com/supabase/stripe-sync-engine/blob/main/pnpm-lock.yaml",
+  "https://github.com/supabase/supabase-embedded-dashboard/blob/main/pnpm-lock.yaml",
+  // From Nx
+  "https://github.com/nrwl/nx/blob/master/pnpm-lock.yaml",
+  "https://github.com/nrwl/monorepo.tools/blob/main/pnpm-lock.yaml",
 ];
 
 const pnpmLockfileUrls = [

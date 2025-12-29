@@ -36,6 +36,8 @@ const npmV2LockfileUrls = [
   // From Tailwind Labs
   "https://github.com/tailwindlabs/heroicons/blob/master/package-lock.json",
   "https://github.com/tailwindlabs/tailwindcss-typography/blob/main/package-lock.json",
+  // From Supabase
+  "https://github.com/supabase/storage/blob/master/package-lock.json",
 ];
 
 const npmV3LockfileUrls = [
@@ -87,6 +89,11 @@ const npmV3LockfileUrls = [
   "https://github.com/tailwindlabs/tailwindcss-forms/blob/main/package-lock.json",
   // From Microsoft
   "https://github.com/microsoft/vscode/blob/main/package-lock.json",
+  // From Supabase
+  "https://github.com/supabase/supabase-js/blob/master/package-lock.json",
+  "https://github.com/supabase/postgres-meta/blob/master/package-lock.json",
+  "https://github.com/supabase/ssr/blob/main/package-lock.json",
+  "https://github.com/supabase/setup-cli/blob/main/package-lock.json",
 ];
 
 const npmLockfileUrls = [
