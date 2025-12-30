@@ -1,187 +1,161 @@
+import { ExpectedError, UnexpectedError } from "@/lib/errors";
+import {
+  SemverRangeSchema,
+  SemverSchema,
+  type Semver,
+} from "@/lib/semver-schemas";
 import type { Dependency } from "@/lib/types";
-import { PnpmLockfileFileSchema } from "@/pnpm/schemas/lockfile-file";
+import { PnpmLockfileV9Schema, type PnpmDependency } from "@/pnpm/schema";
 import { safeYamlParse } from "@es-vanguard/yaml-parser";
 import { err, ok, type Result } from "neverthrow";
-import semver from "semver";
 
-async function parsePnpmLockfile(
+export async function parsePnpmLockfile(
   content: string
 ): Promise<Result<Dependency[], Error>> {
   const parseYamlResult = await safeYamlParse({
     text: content,
-    schema: PnpmLockfileFileSchema,
+    schema: PnpmLockfileV9Schema,
   });
+
   if (parseYamlResult.isErr()) {
     return err(parseYamlResult.error);
   }
+
   const lockfile = parseYamlResult.value;
-
-  if (!lockfile.importers && !lockfile.snapshots) {
-    return ok([]);
-  }
-
   const dependencies: Dependency[] = [];
-
-  function handleAliasPackage({
-    pathPrefix,
-    name,
-    versionRange,
-  }: {
-    pathPrefix: string;
-    name: string;
-    versionRange: string;
-  }) {
-    if (semver.valid(versionRange)) {
-      return {
-        name,
-        version: versionRange,
-        path: `${pathPrefix}/${name}`,
-      };
-    }
-
-    if (versionRange.startsWith("^") || versionRange.startsWith("~")) {
-      // Handle caret and tilde prefixes by extracting the version
-      const cleanVersion = versionRange.substring(1);
-      if (semver.valid(cleanVersion)) {
-        return {
-          name,
-          version: cleanVersion,
-          path: `${pathPrefix}/${name}`,
-        };
-      }
-    }
-    return null;
-  }
-
-  if (lockfile.catalogs) {
-    for (const [catalogName, catalogDependencies] of Object.entries(
-      lockfile.catalogs
-    )) {
-      for (const [packageName, packageInfo] of Object.entries(
-        catalogDependencies
-      )) {
-        const parsePackageResult = parsePackage({
-          pathPrefix: `catalogs/${catalogName}`,
-          packageName,
-          packageSpecifier: packageInfo.specifier,
-          packageVersion: packageInfo.version,
-        });
-        if (parsePackageResult.isOk()) {
-          dependencies.push(parsePackageResult.value);
-        }
-      }
-    }
-  }
-
-  for (const [projectName, projectSnapshot] of Object.entries(
-    // @ts-expect-error
-    lockfile.importers
-  )) {
-    if (projectSnapshot.dependencies) {
-      for (const [packageName, packageInfo] of Object.entries(
-        projectSnapshot.dependencies
-      )) {
-        const parsePackageResult = parsePackage({
-          pathPrefix: `importers/${projectName}`,
-          packageName,
-          packageSpecifier: packageInfo.specifier,
-          packageVersion: packageInfo.version,
-        });
-        if (parsePackageResult.isOk()) {
-          dependencies.push(parsePackageResult.value);
-        }
-      }
-    }
-
-    if (projectSnapshot.devDependencies) {
-      for (const [packageName, packageInfo] of Object.entries(
-        projectSnapshot.devDependencies
-      )) {
-        const parsePackageResult = parsePackage({
-          pathPrefix: `importers/${projectName}`,
-          packageName,
-          packageSpecifier: packageInfo.specifier,
-          packageVersion: packageInfo.version,
-        });
-        if (parsePackageResult.isOk()) {
-          dependencies.push(parsePackageResult.value);
-        }
-      }
-    }
-
-    if (projectSnapshot.optionalDependencies) {
-      for (const [packageName, packageInfo] of Object.entries(
-        projectSnapshot.optionalDependencies
-      )) {
-        const parsePackageResult = parsePackage({
-          pathPrefix: `importers/${projectName}`,
-          packageName,
-          packageSpecifier: packageInfo.specifier,
-          packageVersion: packageInfo.version,
-        });
-        if (parsePackageResult.isOk()) {
-          dependencies.push(parsePackageResult.value);
-        }
-      }
-    }
-  }
 
   return ok(dependencies);
 }
 
-function parsePackage({
-  pathPrefix,
-  packageName,
-  packageSpecifier,
-  packageVersion,
-}: {
-  pathPrefix: string;
-  packageName: string;
-  packageSpecifier: string;
-  packageVersion: string;
-}): Result<
-  Dependency,
-  | { code: "ALIAS_PACKAGE"; name: string; versionRange: string }
-  | { code: "NOT_NPM_PACKAGE" }
+export function parsePnpmDependency({
+  name,
+  specifier,
+  version,
+}: { name: string } & PnpmDependency): Result<
+  {
+    name: string;
+    version: Semver;
+    specifier: string;
+    peerDependencies?: string;
+  },
+  UnexpectedError | ExpectedError
 > {
-  // Handling alias
-  if (packageSpecifier.startsWith("npm:")) {
-    const specifierwithoutPrefix = packageSpecifier.replace("npm:", "");
-    const lastAtIndex = specifierwithoutPrefix.lastIndexOf("@");
-    if (lastAtIndex !== -1) {
-      const name = specifierwithoutPrefix.substring(0, lastAtIndex);
-      const versionRange = specifierwithoutPrefix.substring(lastAtIndex + 1);
-      if (semver.validRange(versionRange)) {
-        return err({
-          code: "ALIAS_PACKAGE",
+  const parseSpecifierResult = SemverRangeSchema.safeParse(specifier);
+
+  if (parseSpecifierResult.success) {
+    const parseVersionResult = parsePnpmDependencyVersion(version);
+    if (parseVersionResult.isErr()) {
+      const error = new UnexpectedError(parseVersionResult.error.message, {
+        cause: parseVersionResult.error,
+        context: {
           name,
-          versionRange,
+          specifier,
+          version,
+        },
+      });
+      return err(error);
+    } else {
+      return ok({
+        ...parseVersionResult.value,
+        name,
+        specifier,
+      });
+    }
+  } else if (specifier.startsWith("npm:")) {
+    // Handle alias package
+    const npmPackage = specifier.replace("npm:", "");
+    const lastAtIndex = npmPackage.lastIndexOf("@");
+    if (lastAtIndex === -1) {
+      const error = new UnexpectedError("Unexpected npm package format", {
+        context: {
+          name,
+          specifier,
+          version,
+        },
+      });
+      return err(error);
+    } else {
+      const npmPackageName = npmPackage.substring(0, lastAtIndex);
+      const parseVersionResult = parsePnpmDependencyVersion(version);
+      if (parseVersionResult.isErr()) {
+        const error = new UnexpectedError(parseVersionResult.error.message, {
+          cause: parseVersionResult.error,
+          context: {
+            name,
+            specifier,
+            version,
+          },
+        });
+        return err(error);
+      } else {
+        return ok({
+          ...parseVersionResult.value,
+          name: npmPackageName,
+          specifier,
         });
       }
     }
-
-    return err({ code: "NOT_NPM_PACKAGE" });
+  } else {
+    const expectedError = new ExpectedError(
+      `Unsupported specifier format: ${specifier}`,
+      {
+        context: {
+          name,
+          specifier,
+          version,
+        },
+      }
+    );
+    return err(expectedError);
   }
-
-  const version = getVersionFromResolution(packageVersion);
-  if (semver.validRange(packageSpecifier) && version) {
-    return ok({
-      name: packageName,
-      version: version,
-      path: `${pathPrefix}/${packageName}`,
-    });
-  }
-
-  return err({ code: "NOT_NPM_PACKAGE" });
 }
 
-function getVersionFromResolution(resolution: string) {
-  const segments = resolution.split("(");
-  const version = segments[0];
-  if (version && semver.valid(version)) {
-    return version;
-  }
-  return null;
-}
+export function parsePnpmDependencyVersion(
+  version: string
+): Result<{ version: Semver; peerDependencies?: string }, UnexpectedError> {
+  const peerDependenciesStartIndex = version.indexOf("(");
+  if (peerDependenciesStartIndex === -1) {
+    const parseVersionResult = SemverSchema.safeParse(version);
+    if (parseVersionResult.success) {
+      return ok({
+        version: parseVersionResult.data,
+      });
+    } else {
+      const unexpectedValidationError = new UnexpectedError(
+        `Unexpected version format: ${version}`,
+        {
+          cause: parseVersionResult.error,
+          context: {
+            version,
+          },
+        }
+      );
+      return err(unexpectedValidationError);
+    }
+  } else {
+    const peerDependencies = version.substring(peerDependenciesStartIndex);
+    const versionWithoutPeers = version.substring(
+      0,
+      peerDependenciesStartIndex
+    );
+    const parseVersionResult = SemverSchema.safeParse(versionWithoutPeers);
 
-export { parsePnpmLockfile };
+    if (parseVersionResult.success) {
+      return ok({
+        version: parseVersionResult.data,
+        peerDependencies,
+      });
+    } else {
+      const unexpectedValidationError = new UnexpectedError(
+        `Unexpected version format: ${version}`,
+        {
+          cause: parseVersionResult.error,
+          context: {
+            version,
+          },
+        }
+      );
+      return err(unexpectedValidationError);
+    }
+  }
+}

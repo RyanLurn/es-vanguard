@@ -10,7 +10,8 @@
     "test:npm:parser": "bun test tests/npm/parser.test.ts",
     "test:pnpm": "bun test tests/pnpm",
     "test:pnpm:parser": "bun test tests/pnpm/parser.test.ts",
-    "test:pnpm:v9-schema": "bun test tests/pnpm/v9-schema.test.ts"
+    "test:pnpm:v9-schema": "bun test tests/pnpm/v9-schema.test.ts",
+    "test:pnpm:utils": "bun test tests/pnpm/utils"
   },
   "dependencies": {
     "@es-vanguard/json-parser": "workspace:*",
