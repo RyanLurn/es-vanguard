@@ -3,6 +3,8 @@ import { getGithubContent } from "@es-vanguard/test-utilities/get-github-content
 import { parsePnpmLockfile } from "@/pnpm";
 import semver from "semver";
 import { pnpmV9LockfileUrls } from "@es-vanguard/test-utilities/datasets/pnpm.ts";
+import { safeYamlParse } from "@es-vanguard/yaml-parser";
+import { PnpmLockfileV9Schema } from "@/pnpm/schema";
 
 describe("pnpm lockfile parser logic", () => {
   // Pre-warm the cache for all URLs to ensure tests run fast and concurrent
@@ -44,17 +46,34 @@ describe("pnpm lockfile parser logic", () => {
         expect(dep.name).toBeTruthy();
         expect(typeof dep.name).toBe("string");
 
+        // Logic Check: Version
+        // The parser promises to filter out invalid semver (git deps, file deps).
+        // If this fails, your filtering logic is too loose.
         if (semver.valid(dep.version) === null) {
           console.error(
             `Invalid version found: ${dep.version} for package ${dep.name} at url ${url}`
           );
         }
-
-        // Logic Check: Version
-        // The parser promises to filter out invalid semver (git deps, file deps).
-        // If this fails, your filtering logic is too loose.
         expect(semver.valid(dep.version)).toBeTruthy();
       }
+
+      // It should parse all dependencies inside snapshots
+      const lockfileYamlParseResult = await safeYamlParse({
+        text: contentResult.value,
+        schema: PnpmLockfileV9Schema,
+      });
+
+      if (lockfileYamlParseResult.isErr()) {
+        console.error(
+          `Yaml parse failed for ${url}:`,
+          lockfileYamlParseResult.error
+        );
+      }
+
+      const lockfileYaml = lockfileYamlParseResult._unsafeUnwrap();
+
+      const numbersOfSnapshots = Object.keys(lockfileYaml.snapshots).length;
+      expect(dependencies.length).toBe(numbersOfSnapshots);
     }
   );
 });
