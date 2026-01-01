@@ -5,6 +5,7 @@
     "start": "bun run src/index.ts",
     "type-check": "bunx --bun tsc --noEmit",
     "try": "bun run tests/try.ts",
+    "test:idea": "bun test tests/idea.test.ts",
     "test:npm": "bun test tests/npm",
     "test:npm:schema": "bun test tests/npm/schema.test.ts",
     "test:npm:parser": "bun test tests/npm/parser.test.ts",
@@ -18,6 +19,7 @@
     "@es-vanguard/yaml-parser": "workspace:*",
     "@standard-schema/utils": "catalog:",
     "neverthrow": "catalog:",
+    "npm-package-arg": "^13.0.2",
     "semver": "catalog:",
     "zod": "catalog:"
   },

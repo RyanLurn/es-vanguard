@@ -5,7 +5,13 @@ import {
   type Semver,
 } from "@/lib/semver-schemas";
 import type { Dependency } from "@/lib/types";
-import { PnpmLockfileV9Schema, type PnpmDependency } from "@/pnpm/schema";
+import {
+  PnpmLockfileV9Schema,
+  type PnpmDependency,
+  type PnpmDependencyList,
+} from "@/pnpm/schema";
+import { parsePnpmDependencyList } from "@/pnpm/utils/parse-dependency-list";
+import { parseSnapshotDependencyVersion } from "@/pnpm/utils/parse-version";
 import { safeYamlParse } from "@es-vanguard/yaml-parser";
 import { err, ok, type Result } from "neverthrow";
 
@@ -22,140 +28,175 @@ export async function parsePnpmLockfile(
   }
 
   const lockfile = parseYamlResult.value;
-  const dependencies: Dependency[] = [];
+  const directDependencies: Array<Dependency & { peerDependencies?: string }> =
+    [];
+  const dependenciesOfDependencies: Dependency[] = [];
+
+  // Parse catalogs
+  if (lockfile.catalogs) {
+    for (const [catalogName, catalogDependencyList] of Object.entries(
+      lockfile.catalogs
+    )) {
+      const parsedCatalogDependencyList = parsePnpmDependencyList(
+        `catalogs/${catalogName}`,
+        catalogDependencyList
+      );
+
+      directDependencies.push(...parsedCatalogDependencyList);
+    }
+  }
+
+  // Parse importers
+  for (const [projectName, project] of Object.entries(lockfile.importers)) {
+    // Process dependencies
+    if (project.dependencies) {
+      const parsedDependencyList = parsePnpmDependencyList(
+        `importers/${projectName}/dependencies`,
+        project.dependencies
+      );
+
+      directDependencies.push(...parsedDependencyList);
+    }
+
+    // Process devDependencies
+    if (project.devDependencies) {
+      const parsedDependencyList = parsePnpmDependencyList(
+        `importers/${projectName}/devDependencies`,
+        project.devDependencies
+      );
+
+      directDependencies.push(...parsedDependencyList);
+    }
+
+    // Process optionalDependencies
+    if (project.optionalDependencies) {
+      const parsedDependencyList = parsePnpmDependencyList(
+        `importers/${projectName}/optionalDependencies`,
+        project.optionalDependencies
+      );
+
+      directDependencies.push(...parsedDependencyList);
+    }
+  }
+
+  for (const directDependency of directDependencies) {
+    const snapshotKey = `${directDependency.name}@${directDependency.version}${directDependency.peerDependencies ?? ""}`;
+    const directDependencySnapshot = lockfile.snapshots[snapshotKey];
+
+    if (directDependencySnapshot) {
+      const { dependencies, optionalDependencies } = directDependencySnapshot;
+      for (const [name, version] of Object.entries(dependencies || {})) {
+        const parseSnapshotDependencyVersionResult =
+          parseSnapshotDependencyVersion(version);
+        if (parseSnapshotDependencyVersionResult.isErr()) {
+          console.warn(
+            "Could not parse snapshot dependency:",
+            { name, version },
+            "from snapshot:",
+            snapshotKey
+          );
+          continue;
+        }
+
+        const { name: validName, version: validVersion } =
+          parseSnapshotDependencyVersionResult.value;
+        dependenciesOfDependencies.push({
+          name: validName ?? name,
+          version: validVersion,
+          path: `${directDependency.path}/dependencies/${name}`,
+        });
+      }
+      for (const [name, version] of Object.entries(
+        optionalDependencies || {}
+      )) {
+        const parseSnapshotDependencyVersionResult =
+          parseSnapshotDependencyVersion(version);
+        if (parseSnapshotDependencyVersionResult.isErr()) {
+          console.warn(
+            "Could not parse snapshot dependency:",
+            { name, version },
+            "from snapshot:",
+            snapshotKey
+          );
+          continue;
+        }
+
+        const { name: validName, version: validVersion } =
+          parseSnapshotDependencyVersionResult.value;
+        dependenciesOfDependencies.push({
+          name: validName ?? name,
+          version: validVersion,
+          path: `${directDependency.path}/optionalDependencies/${name}`,
+        });
+      }
+    } else {
+      let foundSnapshot = false;
+      for (const [snapshotKey, snapshot] of Object.entries(
+        lockfile.snapshots
+      )) {
+        if (
+          snapshotKey.startsWith(
+            `${directDependency.name}@${directDependency.version}`
+          )
+        ) {
+          foundSnapshot = true;
+          const { dependencies, optionalDependencies } = snapshot;
+          for (const [name, version] of Object.entries(dependencies || {})) {
+            const parseSnapshotDependencyVersionResult =
+              parseSnapshotDependencyVersion(version);
+            if (parseSnapshotDependencyVersionResult.isErr()) {
+              console.warn(
+                "Could not parse snapshot dependency:",
+                { name, version },
+                "from snapshot:",
+                snapshotKey
+              );
+              continue;
+            }
+
+            const { name: validName, version: validVersion } =
+              parseSnapshotDependencyVersionResult.value;
+            dependenciesOfDependencies.push({
+              name: validName ?? name,
+              version: validVersion,
+              path: `${directDependency.path}/dependencies/${name}`,
+            });
+          }
+          for (const [name, version] of Object.entries(
+            optionalDependencies || {}
+          )) {
+            const parseSnapshotDependencyVersionResult =
+              parseSnapshotDependencyVersion(version);
+            if (parseSnapshotDependencyVersionResult.isErr()) {
+              console.warn(
+                "Could not parse snapshot dependency:",
+                { name, version },
+                "from snapshot:",
+                snapshotKey
+              );
+              continue;
+            }
+
+            const { name: validName, version: validVersion } =
+              parseSnapshotDependencyVersionResult.value;
+            dependenciesOfDependencies.push({
+              name: validName ?? name,
+              version: validVersion,
+              path: `${directDependency.path}/optionalDependencies/${name}`,
+            });
+          }
+        }
+      }
+      if (!foundSnapshot) {
+        console.warn(
+          "Could not find snapshot for direct dependency:",
+          directDependency
+        );
+      }
+    }
+  }
+
+  const dependencies = [...directDependencies, ...dependenciesOfDependencies];
 
   return ok(dependencies);
-}
-
-export function parsePnpmDependency({
-  name,
-  specifier,
-  version,
-}: { name: string } & PnpmDependency): Result<
-  {
-    name: string;
-    version: Semver;
-    specifier: string;
-    peerDependencies?: string;
-  },
-  UnexpectedError | ExpectedError
-> {
-  const parseSpecifierResult = SemverRangeSchema.safeParse(specifier);
-
-  if (parseSpecifierResult.success) {
-    const parseVersionResult = parsePnpmDependencyVersion(version);
-    if (parseVersionResult.isErr()) {
-      const error = new UnexpectedError(parseVersionResult.error.message, {
-        cause: parseVersionResult.error,
-        context: {
-          name,
-          specifier,
-          version,
-        },
-      });
-      return err(error);
-    } else {
-      return ok({
-        ...parseVersionResult.value,
-        name,
-        specifier,
-      });
-    }
-  } else if (specifier.startsWith("npm:")) {
-    // Handle alias package
-    const npmPackage = specifier.replace("npm:", "");
-    const lastAtIndex = npmPackage.lastIndexOf("@");
-    if (lastAtIndex === -1) {
-      const error = new UnexpectedError("Unexpected npm package format", {
-        context: {
-          name,
-          specifier,
-          version,
-        },
-      });
-      return err(error);
-    } else {
-      const npmPackageName = npmPackage.substring(0, lastAtIndex);
-      const parseVersionResult = parsePnpmDependencyVersion(version);
-      if (parseVersionResult.isErr()) {
-        const error = new UnexpectedError(parseVersionResult.error.message, {
-          cause: parseVersionResult.error,
-          context: {
-            name,
-            specifier,
-            version,
-          },
-        });
-        return err(error);
-      } else {
-        return ok({
-          ...parseVersionResult.value,
-          name: npmPackageName,
-          specifier,
-        });
-      }
-    }
-  } else {
-    const expectedError = new ExpectedError(
-      `Unsupported specifier format: ${specifier}`,
-      {
-        context: {
-          name,
-          specifier,
-          version,
-        },
-      }
-    );
-    return err(expectedError);
-  }
-}
-
-export function parsePnpmDependencyVersion(
-  version: string
-): Result<{ version: Semver; peerDependencies?: string }, UnexpectedError> {
-  const peerDependenciesStartIndex = version.indexOf("(");
-  if (peerDependenciesStartIndex === -1) {
-    const parseVersionResult = SemverSchema.safeParse(version);
-    if (parseVersionResult.success) {
-      return ok({
-        version: parseVersionResult.data,
-      });
-    } else {
-      const unexpectedValidationError = new UnexpectedError(
-        `Unexpected version format: ${version}`,
-        {
-          cause: parseVersionResult.error,
-          context: {
-            version,
-          },
-        }
-      );
-      return err(unexpectedValidationError);
-    }
-  } else {
-    const peerDependencies = version.substring(peerDependenciesStartIndex);
-    const versionWithoutPeers = version.substring(
-      0,
-      peerDependenciesStartIndex
-    );
-    const parseVersionResult = SemverSchema.safeParse(versionWithoutPeers);
-
-    if (parseVersionResult.success) {
-      return ok({
-        version: parseVersionResult.data,
-        peerDependencies,
-      });
-    } else {
-      const unexpectedValidationError = new UnexpectedError(
-        `Unexpected version format: ${version}`,
-        {
-          cause: parseVersionResult.error,
-          context: {
-            version,
-          },
-        }
-      );
-      return err(unexpectedValidationError);
-    }
-  }
 }
