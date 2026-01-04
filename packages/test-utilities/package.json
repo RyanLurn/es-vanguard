@@ -6,13 +6,16 @@
     "#*": "./src/*"
   },
   "exports": {
+    "./datasets/*": "./src/datasets/*",
     "./constants": "./src/constants.ts",
     "./fetch-github-content": "./src/fetch-github-content.ts",
     "./get-github-content": "./src/get-github-content.ts"
   },
   "scripts": {
     "start": "bun run src/index.ts",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "stats": "bun run scripts/dataset/stats.ts",
+    "heat": "bun run scripts/dataset/heat.ts"
   },
   "dependencies": {
     "neverthrow": "catalog:",

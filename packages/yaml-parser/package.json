@@ -5,18 +5,22 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test:parsers": "bun test tests/parsers.test.ts",
+    "bench": "bun run bench/index.ts"
   },
   "dependencies": {
     "neverthrow": "catalog:",
     "@standard-schema/spec": "catalog:",
     "@standard-schema/utils": "catalog:",
+    "js-yaml": "^4.1.1",
     "zod": "catalog:"
   },
   "devDependencies": {
     "@es-vanguard/test-utilities": "workspace:*",
     "@es-vanguard/typescript-config": "workspace:*",
     "@types/bun": "catalog:types",
+    "@types/js-yaml": "^4.0.9",
     "typescript": "catalog:"
   }
 }

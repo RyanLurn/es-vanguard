@@ -1,0 +1,19 @@
+{
+  "name": "@es-vanguard/cli",
+  "type": "module",
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "type-check": "tsc --noEmit",
+    "try": "bun run src/try.ts"
+  },
+  "dependencies": {
+    "neverthrow": "catalog:",
+    "package-manager-detector": "^1.6.0",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@es-vanguard/typescript-config": "workspace:*",
+    "@types/bun": "catalog:types",
+    "typescript": "catalog:"
+  }
+}

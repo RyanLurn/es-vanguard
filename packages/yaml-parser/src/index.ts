@@ -2,14 +2,17 @@ import { YAML } from "bun";
 import type { StandardSchemaV1 } from "@standard-schema/spec";
 import { SchemaError } from "@standard-schema/utils";
 import { err, ok, type Result } from "neverthrow";
+import jsYaml from "js-yaml";
 
 async function safeYamlParse<T extends StandardSchemaV1>({
   text,
   schema,
+  parser = "js-yaml",
   enableLogging = false,
 }: {
   text: string;
   schema: T;
+  parser?: "bun" | "js-yaml";
   enableLogging?: boolean;
 }): Promise<
   Result<StandardSchemaV1.InferOutput<T>, SyntaxError | SchemaError | Error>
@@ -17,7 +20,8 @@ async function safeYamlParse<T extends StandardSchemaV1>({
   try {
     // 1. Native Bun YAML Parse
     // Bun.YAML.parse throws a SyntaxError if the YAML is invalid
-    const yamlParseResult = YAML.parse(text);
+    const yamlParseResult =
+      parser === "bun" ? YAML.parse(text) : jsYaml.load(text);
 
     // 2. Validate against Standard Schema
     let validationResult = schema["~standard"].validate(yamlParseResult);

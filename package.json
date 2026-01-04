@@ -25,7 +25,8 @@
   },
   "scripts": {
     "format": "bunx prettier . --write",
-    "format:check": "bunx prettier . --check"
+    "format:check": "bunx prettier . --check",
+    "test:lockfile:npm": "bun run --filter @es-vanguard/lockfile-parser test:npm"
   },
   "devDependencies": {
     "lefthook": "2.0.12",

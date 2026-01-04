@@ -1,0 +1,23 @@
+[
+  "./reportPkg/",
+  "watson/ci-info#f43f6a1cefff47fb361c88cf4b943fdbcaafe540",
+  "jam",
+  "jam",
+  "jam",
+  "jam",
+  "next",
+  "../../dist",
+  "../../dist",
+  "../../dist",
+  "../../dist",
+  "../../dist",
+  "../../dist",
+  "../../dist",
+  "../../dist",
+  "../../dist",
+  "../../dist",
+  "../../dist",
+  "../../dist",
+  "./test-dep/cjs-and-esm",
+  "../compositions/src"
+]
