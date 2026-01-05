@@ -72,6 +72,18 @@
     "packages/typescript-config": {
       "name": "@es-vanguard/typescript-config",
     },
+    "packages/utils": {
+      "name": "@es-vanguard/utils",
+      "dependencies": {
+        "neverthrow": "catalog:",
+        "zod": "catalog:",
+      },
+      "devDependencies": {
+        "@es-vanguard/typescript-config": "workspace:*",
+        "@types/bun": "catalog:types",
+        "typescript": "catalog:",
+      },
+    },
     "packages/yaml-parser": {
       "name": "@es-vanguard/yaml-parser",
       "dependencies": {
@@ -131,6 +143,8 @@
     "@es-vanguard/test-utilities": ["@es-vanguard/test-utilities@workspace:packages/test-utilities"],
 
     "@es-vanguard/typescript-config": ["@es-vanguard/typescript-config@workspace:packages/typescript-config"],
+
+    "@es-vanguard/utils": ["@es-vanguard/utils@workspace:packages/utils"],
 
     "@es-vanguard/yaml-parser": ["@es-vanguard/yaml-parser@workspace:packages/yaml-parser"],
 
