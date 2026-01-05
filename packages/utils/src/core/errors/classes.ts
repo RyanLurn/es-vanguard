@@ -39,7 +39,7 @@ export class ValidationError extends CustomError {
     options: {
       cause: ZodError;
       context: {
-        inputs: unknown;
+        input: unknown;
       };
     }
   ) {
