@@ -14,7 +14,6 @@ export const NpmPackageNameSchema = z
         format: "npm-package-name",
         message: "npm package name cannot start with a period.",
       });
-      return;
     }
 
     if (value.startsWith("-")) {
@@ -23,7 +22,6 @@ export const NpmPackageNameSchema = z
         format: "npm-package-name",
         message: "npm package name cannot start with a hyphen.",
       });
-      return;
     }
 
     if (value.match(/^_/)) {
@@ -32,7 +30,6 @@ export const NpmPackageNameSchema = z
         format: "npm-package-name",
         message: "npm package name cannot start with an underscore.",
       });
-      return;
     }
 
     if (value.trim() !== value) {
@@ -41,7 +38,6 @@ export const NpmPackageNameSchema = z
         format: "npm-package-name",
         message: "npm package name cannot contain leading or trailing spaces.",
       });
-      return;
     }
 
     exclusionList.forEach((excludedName) => {
@@ -51,7 +47,6 @@ export const NpmPackageNameSchema = z
           format: "npm-package-name",
           message: `${excludedName} is not a valid package name.`,
         });
-        return;
       }
     });
 
@@ -84,7 +79,6 @@ export const NpmPackageNameSchema = z
         format: "npm-package-name",
         message: "npm package name can only contain URL-friendly characters.",
       });
-      return;
     }
   })
   .brand("npm-package-name");

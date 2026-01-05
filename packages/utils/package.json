@@ -2,7 +2,8 @@
   "name": "@es-vanguard/utils",
   "type": "module",
   "scripts": {
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test:package-name": "bun test tests/npm/package-name.test.ts"
   },
   "dependencies": {
     "neverthrow": "catalog:",
