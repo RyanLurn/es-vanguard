@@ -5,7 +5,8 @@
   "workspaces": {
     "packages": [
       "apps/*",
-      "packages/*"
+      "packages/*",
+      "services/*"
     ],
     "catalog": {
       "@t3-oss/env-core": "^0.13.8",
