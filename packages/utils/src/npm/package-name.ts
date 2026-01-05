@@ -6,34 +6,8 @@ const scopedPackagePattern = new RegExp("^(?:@([^/]+?)[/])?([^/]+?)$");
 
 export const NpmPackageNameSchema = z
   .string()
+  .min(1)
   .superRefine((value, context) => {
-    if (value === null) {
-      context.addIssue({
-        code: "invalid_format",
-        format: "npm-package-name",
-        message: "npm package name cannot be null.",
-      });
-      return;
-    }
-
-    if (value === undefined) {
-      context.addIssue({
-        code: "invalid_format",
-        format: "npm-package-name",
-        message: "npm package name cannot be undefined.",
-      });
-      return;
-    }
-
-    if (!value.length) {
-      context.addIssue({
-        code: "invalid_format",
-        format: "npm-package-name",
-        message: "npm package name cannot be empty.",
-      });
-      return;
-    }
-
     if (value.startsWith(".")) {
       context.addIssue({
         code: "invalid_format",
