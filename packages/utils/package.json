@@ -6,15 +6,18 @@
   },
   "dependencies": {
     "neverthrow": "catalog:",
+    "semver": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
     "@es-vanguard/typescript-config": "workspace:*",
     "@types/bun": "catalog:types",
+    "@types/semver": "catalog:types",
     "typescript": "catalog:"
   },
   "exports": {
     "./constants/*": "./src/core/constants/*.ts",
-    "./errors/*": "./src/core/errors/*.ts"
+    "./errors/*": "./src/core/errors/*.ts",
+    "./semver": "./src/npm/semver.ts"
   }
 }
