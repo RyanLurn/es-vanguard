@@ -1,0 +1,20 @@
+{
+  "name": "@es-vanguard/database",
+  "type": "module",
+  "scripts": {
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@t3-oss/env-core": "catalog:",
+    "drizzle-orm": "^1.0.0-beta.8-734e789",
+    "neverthrow": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@es-vanguard/typescript-config": "workspace:*",
+    "@es-vanguard/utils": "workspace:*",
+    "@types/bun": "catalog:types",
+    "drizzle-kit": "^1.0.0-beta.8-734e789",
+    "typescript": "catalog:"
+  }
+}
