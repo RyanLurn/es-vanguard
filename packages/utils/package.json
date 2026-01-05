@@ -12,5 +12,8 @@
     "@es-vanguard/typescript-config": "workspace:*",
     "@types/bun": "catalog:types",
     "typescript": "catalog:"
+  },
+  "exports": {
+    "./constants/*": "./src/core/constants/*.ts"
   }
 }
