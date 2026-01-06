@@ -21,5 +21,8 @@
     "@types/bun": "catalog:types",
     "drizzle-kit": "^1.0.0-beta.8-734e789",
     "typescript": "catalog:"
+  },
+  "exports": {
+    "./connect": "./src/connect.ts"
   }
 }
