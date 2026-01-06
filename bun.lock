@@ -123,6 +123,7 @@
     "services/manager": {
       "name": "@es-vanguard/manager",
       "dependencies": {
+        "@es-vanguard/database": "workspace:*",
         "@es-vanguard/utils": "workspace:*",
         "hono": "catalog:",
         "neverthrow": "catalog:",

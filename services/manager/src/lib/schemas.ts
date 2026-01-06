@@ -4,7 +4,11 @@ import { SemverSchema } from "@es-vanguard/utils/semver";
 
 export const WatchReportEndpointInputSchema = z.object({
   packages: z.array(
-    z.object({ name: NpmPackageNameSchema, version: SemverSchema })
+    z.object({
+      name: NpmPackageNameSchema,
+      version: SemverSchema,
+      previousVersion: SemverSchema,
+    })
   ),
 });
 export type WatchReportEndpointInput = z.infer<

@@ -1,8 +1,9 @@
 import { Hono } from "hono";
 import { MANAGER_SERVICE_DEV_PORT } from "@es-vanguard/utils/constants/ports";
 import { validator } from "hono/validator";
-import { WatchReportEndpointInputSchema } from "./lib/schemas";
+import { WatchReportEndpointInputSchema } from "@/lib/schemas";
 import { ValidationError } from "@es-vanguard/utils/errors/classes";
+import { db } from "@es-vanguard/database/connect";
 
 const app = new Hono();
 app.get("/", (c) => c.text("Hi, I'm the Manager service!"));
@@ -31,7 +32,11 @@ app.post(
     }
     return validationResult.data;
   }),
-  (c) => c.text("Watch report processed successfully!")
+  async (context) => {
+    const { packages } = context.req.valid("json");
+    // TODO: Insert packages into database
+    return context.text("Watch report processed successfully!");
+  }
 );
 
 export default {

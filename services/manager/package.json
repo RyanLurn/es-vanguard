@@ -7,6 +7,7 @@
     "try": "bun run tests/try.ts"
   },
   "dependencies": {
+    "@es-vanguard/database": "workspace:*",
     "@es-vanguard/utils": "workspace:*",
     "hono": "catalog:",
     "neverthrow": "catalog:",
