@@ -1,0 +1,25 @@
+{
+  "name": "@es-vanguard/utils",
+  "type": "module",
+  "scripts": {
+    "type-check": "tsc --noEmit",
+    "test:package-name": "bun test tests/npm/package-name.test.ts"
+  },
+  "dependencies": {
+    "neverthrow": "catalog:",
+    "semver": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@es-vanguard/typescript-config": "workspace:*",
+    "@types/bun": "catalog:types",
+    "@types/semver": "catalog:types",
+    "typescript": "catalog:"
+  },
+  "exports": {
+    "./constants/*": "./src/core/constants/*.ts",
+    "./errors/*": "./src/core/errors/*.ts",
+    "./semver": "./src/npm/semver.ts",
+    "./npm-package-name": "./src/npm/package-name.ts"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "@es-vanguard/manager",
+  "type": "module",
+  "scripts": {
+    "dev": "bun --watch run src/index.ts",
+    "type-check": "tsc --noEmit",
+    "try": "bun run tests/try.ts"
+  },
+  "dependencies": {
+    "@es-vanguard/database": "workspace:*",
+    "@es-vanguard/utils": "workspace:*",
+    "hono": "catalog:",
+    "neverthrow": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@es-vanguard/typescript-config": "workspace:*",
+    "@types/bun": "catalog:types",
+    "typescript": "catalog:"
+  }
+}

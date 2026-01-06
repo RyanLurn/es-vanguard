@@ -1,0 +1,29 @@
+{
+  "name": "@es-vanguard/database",
+  "type": "module",
+  "scripts": {
+    "type-check": "tsc --noEmit",
+    "db:check": "bunx --bun drizzle-kit check",
+    "db:generate": "bunx --bun drizzle-kit generate",
+    "db:migrate": "bunx --bun drizzle-kit migrate",
+    "db:studio": "bunx --bun drizzle-kit studio",
+    "test:insert-tasks": "bun test tests/operations/insert-tasks.test.ts"
+  },
+  "dependencies": {
+    "@es-vanguard/utils": "workspace:*",
+    "@libsql/client": "^0.15.15",
+    "@t3-oss/env-core": "catalog:",
+    "drizzle-orm": "^1.0.0-beta.8-734e789",
+    "neverthrow": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@es-vanguard/typescript-config": "workspace:*",
+    "@types/bun": "catalog:types",
+    "drizzle-kit": "^1.0.0-beta.8-734e789",
+    "typescript": "catalog:"
+  },
+  "exports": {
+    "./connect": "./src/connect.ts"
+  }
+}
