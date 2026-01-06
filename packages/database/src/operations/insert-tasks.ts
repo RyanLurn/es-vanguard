@@ -7,7 +7,7 @@ import { DrizzleQueryError } from "drizzle-orm";
 import { err, ok, type Result } from "neverthrow";
 import { LibsqlError } from "@libsql/client";
 
-type InputTask = Pick<
+export type InputTask = Pick<
   InsertTaskInputValues,
   "name" | "version" | "previousVersion" | "invoker"
 >;
