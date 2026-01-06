@@ -26,6 +26,7 @@
     "packages/database": {
       "name": "@es-vanguard/database",
       "dependencies": {
+        "@es-vanguard/utils": "workspace:*",
         "@libsql/client": "^0.15.15",
         "@t3-oss/env-core": "catalog:",
         "drizzle-orm": "^1.0.0-beta.8-734e789",
@@ -34,7 +35,6 @@
       },
       "devDependencies": {
         "@es-vanguard/typescript-config": "workspace:*",
-        "@es-vanguard/utils": "workspace:*",
         "@types/bun": "catalog:types",
         "drizzle-kit": "^1.0.0-beta.8-734e789",
         "typescript": "catalog:",
