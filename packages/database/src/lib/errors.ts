@@ -7,6 +7,7 @@ export class DatabaseQueryError extends CustomError {
     options: {
       cause: DrizzleQueryError;
       context: {
+        source: "drizzle" | "libsql";
         table: string;
         operation: "select" | "insert" | "update" | "delete" | "drizzle-query";
         input: unknown;
