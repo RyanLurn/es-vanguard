@@ -3,8 +3,22 @@ import { DEFAULT_BASE_VERSION } from "@/utils/constants";
 import { parseArgs } from "util";
 import { err, ok, Result } from "neverthrow";
 import type { Context } from "@/utils/types";
+import { ExpectedError } from "@es-vanguard/utils/errors/classes";
+import { normalizeError } from "@es-vanguard/utils/errors/normalize-error";
 
-export async function parseInputs({ context }: { context: Context }) {
+export async function parseInputs({ context }: { context: Context }): Promise<
+  Result<
+    {
+      data: {
+        name?: string | undefined;
+        target?: string | undefined;
+        base: string;
+      };
+      context: Context;
+    },
+    { error: Error; context: Context }
+  >
+> {
   const startTime = Bun.nanoseconds();
 
   try {
@@ -53,48 +67,57 @@ export async function parseInputs({ context }: { context: Context }) {
       context: newContext,
     });
   } catch (error) {
+    const endTime = Bun.nanoseconds();
     if (error instanceof TypeError) {
-      return err({
-        error: error,
-        context: {
-          parseInputs: {
-            success: false,
-            error: {
-              ...serializeError(error),
-              expected: true,
-              unknown: false,
-            },
-          },
-        },
+      const expectedError = new ExpectedError("Invalid command line inputs", {
+        cause: error,
       });
-    } else if (error instanceof Error) {
-      return err({
-        error: error,
-        context: {
-          parseInputs: {
-            success: false,
-            error: {
-              ...serializeError(error),
-              expected: false,
-              unknown: true,
+      const newContext = {
+        ...context,
+        steps: [
+          ...context.steps,
+          {
+            name: "parseInputs",
+            order: context.steps.length + 1,
+            time: {
+              start: startTime,
+              end: endTime,
+              duration: endTime - startTime,
             },
-          },
-        },
-      });
-    } else {
-      return err({
-        error: new Error("Unknown error", { cause: error }),
-        context: {
-          parseInputs: {
             success: false,
-            error: {
-              ...serializeError(new Error("Unknown error", { cause: error })),
-              expected: false,
-              unknown: true,
-            },
+            error: serializeError(expectedError),
           },
-        },
+        ],
+      };
+
+      return err({
+        error: expectedError,
+        context: newContext,
       });
     }
+
+    const normalizedError = normalizeError(error);
+    const newContext = {
+      ...context,
+      steps: [
+        ...context.steps,
+        {
+          name: "parseInputs",
+          order: context.steps.length + 1,
+          time: {
+            start: startTime,
+            end: endTime,
+            duration: endTime - startTime,
+          },
+          success: false,
+          error: serializeError(normalizedError),
+        },
+      ],
+    };
+
+    return err({
+      error: normalizedError,
+      context: newContext,
+    });
   }
 }
