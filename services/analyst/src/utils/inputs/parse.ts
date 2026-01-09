@@ -1,4 +1,4 @@
-import { serializeError, type ErrorObject } from "serialize-error";
+import { serializeError } from "serialize-error";
 import { DEFAULT_BASE_VERSION } from "@/utils/constants";
 import { parseArgs } from "util";
 import { err, ok, Result } from "neverthrow";
