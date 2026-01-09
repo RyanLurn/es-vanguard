@@ -34,10 +34,43 @@ export async function parseInputs() {
     allowPositionals: true,
   });
 
-  const validateValuesResult = InputsSchema.safeParse(values);
-  if (!validateValuesResult.success) {
-    throw new Error(`Invalid inputs: ${validateValuesResult.error.message}`);
+  const context = {
+    parseInputs: {
+      parseArgs: {
+        ...values,
+      },
+    },
+  };
+
+  const validateArgsResult = InputsSchema.safeParse(values);
+  if (!validateArgsResult.success) {
+    const invalidArgsContext = {
+      ...context,
+      parseInputs: {
+        ...context.parseInputs,
+        validateArgs: {
+          success: validateArgsResult.success,
+          errors: validateArgsResult.error.issues,
+        },
+      },
+    };
+    console.error(invalidArgsContext);
+    process.exit(1);
   }
 
-  return validateValuesResult.data;
+  const validArgsContext = {
+    ...context,
+    parseInputs: {
+      ...context.parseInputs,
+      validateArgs: {
+        success: validateArgsResult.success,
+        data: validateArgsResult.data,
+      },
+    },
+  };
+
+  return {
+    context: validArgsContext,
+    inputs: validateArgsResult.data,
+  };
 }
