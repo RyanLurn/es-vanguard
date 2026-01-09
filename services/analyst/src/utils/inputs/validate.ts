@@ -2,14 +2,16 @@ import { DEFAULT_BASE_VERSION } from "@/utils/constants";
 import type { InputValues } from "@/utils/inputs/parse";
 import type { Context } from "@/utils/types";
 import { ValidationError } from "@es-vanguard/utils/errors/classes";
+import { NpmPackageNameSchema } from "@es-vanguard/utils/npm-package-name";
+import { SemverSchema } from "@es-vanguard/utils/semver";
 import { err, ok, Result } from "neverthrow";
 import { serializeError } from "serialize-error";
 import * as z from "zod";
 
 export const ValidInputsSchema = z.strictObject({
-  name: z.string(),
-  target: z.string(),
-  base: z.string().catch(DEFAULT_BASE_VERSION),
+  name: NpmPackageNameSchema,
+  target: SemverSchema,
+  base: z.union([SemverSchema, z.literal(DEFAULT_BASE_VERSION)]),
 });
 
 export type ValidInputs = z.infer<typeof ValidInputsSchema>;
