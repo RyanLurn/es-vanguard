@@ -1,8 +1,39 @@
-import { serializeError } from "serialize-error";
+import { serializeError, type ErrorObject } from "serialize-error";
 import { DEFAULT_BASE_VERSION } from "@/utils/constants";
 import { parseArgs } from "util";
+import { err, ok, Result } from "neverthrow";
+import type { ContextErrorObject } from "@/utils/types";
 
-export async function parseInputs() {
+export async function parseInputs(): Promise<
+  Result<
+    {
+      data: {
+        name?: string | undefined;
+        target?: string | undefined;
+        base: string;
+      };
+      context: {
+        parseInputs: {
+          success: true;
+          data: {
+            name?: string | undefined;
+            target?: string | undefined;
+            base: string;
+          };
+        };
+      };
+    },
+    {
+      error: Error;
+      context: {
+        parseInputs: {
+          success: false;
+          error: ContextErrorObject;
+        };
+      };
+    }
+  >
+> {
   try {
     const { values } = parseArgs({
       args: Bun.argv,
@@ -25,58 +56,58 @@ export async function parseInputs() {
       allowPositionals: true,
     });
 
-    const successContext = {
-      parseInputs: {
-        success: true,
-        values,
+    return ok({
+      data: values,
+      context: {
+        parseInputs: {
+          success: true,
+          data: values,
+        },
       },
-    };
-
-    return {
-      inputs: values,
-      context: successContext,
-    };
+    });
   } catch (error) {
     if (error instanceof TypeError) {
-      const typeErrorContext = {
-        parseInputs: {
-          success: false,
-          error: {
-            ...serializeError(error),
-            expected: true,
-            unknown: false,
+      return err({
+        error: error,
+        context: {
+          parseInputs: {
+            success: false,
+            error: {
+              ...serializeError(error),
+              expected: true,
+              unknown: false,
+            },
           },
         },
-      };
-      console.error(typeErrorContext);
+      });
     } else if (error instanceof Error) {
-      const unexpectedErrorContext = {
-        parseInputs: {
-          success: false,
-          error: {
-            ...serializeError(error),
-            expected: false,
-            unknown: false,
+      return err({
+        error: error,
+        context: {
+          parseInputs: {
+            success: false,
+            error: {
+              ...serializeError(error),
+              expected: false,
+              unknown: true,
+            },
           },
         },
-      };
-      console.error(unexpectedErrorContext);
+      });
     } else {
-      const unknownErrorContext = {
-        parseInputs: {
-          success: false,
-          error: {
-            name: "UnknownError",
-            message: "Unknown error occurred in parseInputs function",
-            expected: false,
-            unknown: true,
+      return err({
+        error: new Error("Unknown error", { cause: error }),
+        context: {
+          parseInputs: {
+            success: false,
+            error: {
+              ...serializeError(new Error("Unknown error", { cause: error })),
+              expected: false,
+              unknown: true,
+            },
           },
         },
-      };
-      console.error(unknownErrorContext);
+      });
     }
-    process.exit(1);
   }
 }
-
-export type ParseInputsResult = Awaited<ReturnType<typeof parseInputs>>;
