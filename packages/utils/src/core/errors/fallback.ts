@@ -1,8 +1,8 @@
-import { ExoticError } from "@/core/errors/classes";
+import { ExoticError, UnexpectedError } from "@/core/errors/classes";
 
-export function normalizeError(error: unknown): Error {
+export function createFallbackError(error: unknown) {
   if (error instanceof Error) {
-    return error;
+    return new UnexpectedError(error.message, { cause: error });
   }
 
   try {
@@ -11,7 +11,7 @@ export function normalizeError(error: unknown): Error {
     try {
       return new ExoticError(String(error), { cause: error });
     } catch {
-      return new ExoticError("Could not stringify this exotic error", {
+      return new ExoticError("Could not stringify this error", {
         cause: error,
       });
     }

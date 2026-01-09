@@ -4,7 +4,7 @@ import { parseArgs } from "util";
 import { err, ok, Result } from "neverthrow";
 import type { Context } from "@/utils/types";
 import { ExpectedError } from "@es-vanguard/utils/errors/classes";
-import { normalizeError } from "@es-vanguard/utils/errors/normalize-error";
+import { createFallbackError } from "@es-vanguard/utils/errors/fallback";
 
 export async function parseInputs({ context }: { context: Context }): Promise<
   Result<
@@ -96,7 +96,7 @@ export async function parseInputs({ context }: { context: Context }): Promise<
       });
     }
 
-    const normalizedError = normalizeError(error);
+    const fallbackError = createFallbackError(error);
     const newContext = {
       ...context,
       steps: [
@@ -110,13 +110,13 @@ export async function parseInputs({ context }: { context: Context }): Promise<
             duration: endTime - startTime,
           },
           success: false,
-          error: serializeError(normalizedError),
+          error: serializeError(fallbackError),
         },
       ],
     };
 
     return err({
-      error: normalizedError,
+      error: fallbackError,
       context: newContext,
     });
   }
