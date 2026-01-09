@@ -120,6 +120,19 @@
         "typescript": "catalog:",
       },
     },
+    "services/analyst": {
+      "name": "@es-vanguard/analyst",
+      "dependencies": {
+        "@es-vanguard/utils": "workspace:*",
+        "neverthrow": "catalog:",
+        "zod": "catalog:",
+      },
+      "devDependencies": {
+        "@es-vanguard/typescript-config": "workspace:*",
+        "@types/bun": "catalog:types",
+        "typescript": "catalog:",
+      },
+    },
     "services/manager": {
       "name": "@es-vanguard/manager",
       "dependencies": {
@@ -188,6 +201,8 @@
     "@azure/msal-node": ["@azure/msal-node@3.8.4", "", { "dependencies": { "@azure/msal-common": "15.13.3", "jsonwebtoken": "^9.0.0", "uuid": "^8.3.0" } }, "sha512-lvuAwsDpPDE/jSuVQOBMpLbXuVuLsPNRwWCyK3/6bPlBk0fGWegqoZ0qjZclMWyQ2JNvIY3vHY7hoFmFmFQcOw=="],
 
     "@drizzle-team/brocli": ["@drizzle-team/brocli@0.11.0", "", {}, "sha512-hD3pekGiPg0WPCCGAZmusBBJsDqGUR66Y452YgQsZOnkdQ7ViEPKuyP4huUGEZQefp8g34RRodXYmJ2TbCH+tg=="],
+
+    "@es-vanguard/analyst": ["@es-vanguard/analyst@workspace:services/analyst"],
 
     "@es-vanguard/cli": ["@es-vanguard/cli@workspace:apps/cli"],
 
