@@ -14,7 +14,14 @@ export class ExoticError extends UnexpectedError {
   }
 }
 
-export class ValidationError extends Error {
+export class ExpectedError extends Error {
+  constructor(message: string, options?: ErrorOptions) {
+    super(message, options);
+    this.name = "ExpectedError";
+  }
+}
+
+export class ValidationError extends ExpectedError {
   issues: ZodError["issues"];
 
   constructor(zodError: ZodError) {
