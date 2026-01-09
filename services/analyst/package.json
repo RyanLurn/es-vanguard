@@ -9,6 +9,7 @@
   "dependencies": {
     "@es-vanguard/utils": "workspace:*",
     "neverthrow": "catalog:",
+    "serialize-error": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
