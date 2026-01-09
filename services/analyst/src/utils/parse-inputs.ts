@@ -1,5 +1,16 @@
 import { DEFAULT_BASE_VERSION } from "@/utils/constants";
+import { NpmPackageNameSchema } from "@es-vanguard/utils/npm-package-name";
+import { SemverSchema } from "@es-vanguard/utils/semver";
 import { parseArgs } from "util";
+import * as z from "zod";
+
+const InputsSchema = z.object({
+  name: NpmPackageNameSchema,
+  target: SemverSchema,
+  base: z.union([SemverSchema, z.literal(DEFAULT_BASE_VERSION)]),
+});
+
+export type Inputs = z.infer<typeof InputsSchema>;
 
 export async function parseInputs() {
   const { values } = parseArgs({
@@ -23,5 +34,10 @@ export async function parseInputs() {
     allowPositionals: true,
   });
 
-  return values;
+  const validateValuesResult = InputsSchema.safeParse(values);
+  if (!validateValuesResult.success) {
+    throw new Error(`Invalid inputs: ${validateValuesResult.error.message}`);
+  }
+
+  return validateValuesResult.data;
 }
