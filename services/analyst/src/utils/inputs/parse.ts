@@ -2,38 +2,11 @@ import { serializeError, type ErrorObject } from "serialize-error";
 import { DEFAULT_BASE_VERSION } from "@/utils/constants";
 import { parseArgs } from "util";
 import { err, ok, Result } from "neverthrow";
-import type { ContextErrorObject } from "@/utils/types";
+import type { Context } from "@/utils/types";
 
-export async function parseInputs(): Promise<
-  Result<
-    {
-      data: {
-        name?: string | undefined;
-        target?: string | undefined;
-        base: string;
-      };
-      context: {
-        parseInputs: {
-          success: true;
-          data: {
-            name?: string | undefined;
-            target?: string | undefined;
-            base: string;
-          };
-        };
-      };
-    },
-    {
-      error: Error;
-      context: {
-        parseInputs: {
-          success: false;
-          error: ContextErrorObject;
-        };
-      };
-    }
-  >
-> {
+export async function parseInputs({ context }: { context: Context }) {
+  const startTime = Bun.nanoseconds();
+
   try {
     const { values } = parseArgs({
       args: Bun.argv,
@@ -56,14 +29,28 @@ export async function parseInputs(): Promise<
       allowPositionals: true,
     });
 
-    return ok({
-      data: values,
-      context: {
-        parseInputs: {
+    const endTime = Bun.nanoseconds();
+    const newContext = {
+      ...context,
+      steps: [
+        ...context.steps,
+        {
+          name: "parseInputs",
+          order: context.steps.length + 1,
+          time: {
+            start: startTime,
+            end: endTime,
+            duration: endTime - startTime,
+          },
           success: true,
           data: values,
         },
-      },
+      ],
+    };
+
+    return ok({
+      data: values,
+      context: newContext,
     });
   } catch (error) {
     if (error instanceof TypeError) {
