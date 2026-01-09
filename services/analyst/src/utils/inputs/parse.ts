@@ -6,14 +6,16 @@ import type { Context } from "@/utils/types";
 import { ExpectedError } from "@es-vanguard/utils/errors/classes";
 import { createFallbackError } from "@es-vanguard/utils/errors/fallback";
 
+export type InputValues = {
+  name?: string | undefined;
+  target?: string | undefined;
+  base: string;
+};
+
 export async function parseInputs({ context }: { context: Context }): Promise<
   Result<
     {
-      data: {
-        name?: string | undefined;
-        target?: string | undefined;
-        base: string;
-      };
+      data: InputValues;
       context: Context;
     },
     { error: Error; context: Context }
