@@ -63,3 +63,19 @@ export class ServerError extends HttpError {
     this.name = "ServerError";
   }
 }
+
+export class InvalidJsonResponseBody extends ExpectedError {
+  response: SerializedResponse;
+
+  constructor({
+    response,
+    cause,
+  }: {
+    response: SerializedResponse;
+    cause: SyntaxError;
+  }) {
+    super("This response body cannot be parsed as JSON.", { cause });
+    this.name = "InvalidJsonResponseBody";
+    this.response = response;
+  }
+}
