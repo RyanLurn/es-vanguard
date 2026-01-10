@@ -5,9 +5,8 @@
     // Path aliases
     "paths": {
       "@/*": ["./src/*"],
-      "tests/*": ["./tests/*"],
-      "scripts/*": ["./scripts/*"]
+      "tests/*": ["./tests/*"]
     }
   },
-  "include": ["src/**/*", "tests/**/*", "scripts/**/*"]
+  "include": ["src/**/*", "tests/**/*"]
 }

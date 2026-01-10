@@ -2,7 +2,7 @@
   "name": "@es-vanguard/telemetry",
   "type": "module",
   "scripts": {
-    "build": "bun run scripts/build.ts && tsc --project tsconfig.build.json",
+    "compile": "tsc --project tsconfig.build.json",
     "type-check": "tsc --noEmit",
     "try": "bun run tests/try.ts"
   },
