@@ -1,33 +1,33 @@
+import { serializeHeaders } from "@/utils/serialize/headers";
 import { ExpectedError } from "@es-vanguard/telemetry/errors";
 
-export class RequestConstructionError extends ExpectedError {
-  input: RequestInfo;
-  init?: RequestInit;
+export class FetchTypeError extends ExpectedError {
+  url: string;
+  method: string;
+  headers?: Record<string, string>;
+  body?: any;
 
   constructor(
     message: string,
     {
-      input,
-      init,
+      url,
+      method,
+      headers,
+      body,
       cause,
-    }: { input: RequestInfo; init?: RequestInit; cause: TypeError }
-  ) {
-    super(message, { cause });
-    this.name = "RequestConstructionError";
-    this.input = input;
-    this.init = init;
-  }
-}
-
-export class FetchTypeError extends ExpectedError {
-  request: Request;
-
-  constructor(
-    message: string,
-    { request, cause }: { request: Request; cause: TypeError }
+    }: {
+      url: string;
+      method: string;
+      headers?: Headers | Record<string, string>;
+      body?: any;
+      cause: TypeError;
+    }
   ) {
     super(message, { cause });
     this.name = "FetchTypeError";
-    this.request = request;
+    this.url = url;
+    this.method = method;
+    this.headers = headers ? serializeHeaders(headers) : undefined;
+    this.body = body;
   }
 }
