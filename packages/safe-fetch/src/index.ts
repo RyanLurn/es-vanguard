@@ -1,30 +1,30 @@
-import { FetchError } from "@/utils/errors";
+import { ClientError, FetchError, ServerError } from "@/utils/errors";
 import { serializeHeaders } from "@/utils/serialize/headers";
 import type { StartContext, StepContext } from "@es-vanguard/telemetry/context";
 import type { SerializedRequest, SerializedResponse } from "@/utils/types";
-import { ok } from "neverthrow";
+import { err, ok } from "neverthrow";
+import { serializeError } from "serialize-error";
 
-type FetchStep = StepContext<
-  "safe-fetch",
-  { request: SerializedRequest; response?: SerializedResponse }
->;
+interface SafeFetchInputs {
+  url: string;
+  method?: string;
+  headers?: HeadersInit;
+  body?: BodyInit;
+}
+
+interface SafeFetchOutputs {
+  request: SerializedRequest;
+  response?: SerializedResponse;
+}
+
+type FetchStep = StepContext<"safe-fetch", SafeFetchOutputs>;
 
 export interface SafeFetchContext extends Omit<StartContext<string>, "steps"> {
   steps: [...StartContext<string>["steps"], FetchStep];
 }
 
 export async function safeFetch<TPrevContext extends StartContext<string>>(
-  {
-    url,
-    method = "GET",
-    headers,
-    body,
-  }: {
-    url: string;
-    method?: string;
-    headers?: HeadersInit;
-    body?: BodyInit;
-  },
+  { url, method = "GET", headers, body }: SafeFetchInputs,
   context: TPrevContext
 ) {
   const serializedRequestHeaders = headers
@@ -36,13 +36,75 @@ export async function safeFetch<TPrevContext extends StartContext<string>>(
   try {
     const response = await fetch(url, { method, headers, body });
     const endTime = Bun.nanoseconds();
+    const time = {
+      start: startTime,
+      end: endTime,
+      duration: endTime - startTime,
+    };
 
+    const status = response.status;
+    const statusText = response.statusText;
     const serializedResponseHeaders = serializeHeaders({
       headers: response.headers,
     });
+    const outputs = {
+      request: {
+        url,
+        method,
+        headers: serializedRequestHeaders,
+        body,
+      },
+      response: {
+        status,
+        statusText,
+        headers: serializedResponseHeaders,
+      },
+    };
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      if (status >= 400 && status < 500) {
+        const clientError = new ClientError(
+          `Bad fetch request. [${status}]: ${statusText}`,
+          outputs
+        );
+
+        const newContext: SafeFetchContext = {
+          ...context,
+          steps: [
+            ...context.steps,
+            {
+              name: "safe-fetch",
+              time,
+              success: false,
+              error: serializeError(clientError),
+            },
+          ],
+        };
+
+        return err({ error: clientError, context: newContext });
+      }
+
+      if (status >= 500) {
+        const serverError = new ServerError(
+          `Server error. [${status}]: ${statusText}`,
+          outputs
+        );
+
+        const newContext: SafeFetchContext = {
+          ...context,
+          steps: [
+            ...context.steps,
+            {
+              name: "safe-fetch",
+              time,
+              success: false,
+              error: serializeError(serverError),
+            },
+          ],
+        };
+
+        return err({ error: serverError, context: newContext });
+      }
     }
 
     const newContext: SafeFetchContext = {
@@ -51,25 +113,9 @@ export async function safeFetch<TPrevContext extends StartContext<string>>(
         ...context.steps,
         {
           name: "safe-fetch",
-          time: {
-            start: startTime,
-            end: endTime,
-            duration: endTime - startTime,
-          },
+          time,
           success: true,
-          data: {
-            request: {
-              url,
-              method,
-              headers: serializedRequestHeaders,
-              body,
-            },
-            response: {
-              status: response.status,
-              statusText: response.statusText,
-              headers: serializedResponseHeaders,
-            },
-          },
+          data: outputs,
         },
       ],
     };
