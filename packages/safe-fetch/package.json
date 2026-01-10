@@ -1,0 +1,18 @@
+{
+  "name": "@es-vanguard/safe-fetch",
+  "type": "module",
+  "scripts": {
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@es-vanguard/telemetry": "workspace:*",
+    "neverthrow": "catalog:",
+    "serialize-error": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@es-vanguard/typescript-config": "workspace:*",
+    "@types/bun": "catalog:types",
+    "typescript": "catalog:"
+  }
+}

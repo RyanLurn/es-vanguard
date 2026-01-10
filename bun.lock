@@ -74,6 +74,20 @@
         "typescript": "catalog:",
       },
     },
+    "packages/safe-fetch": {
+      "name": "@es-vanguard/safe-fetch",
+      "dependencies": {
+        "@es-vanguard/telemetry": "workspace:*",
+        "neverthrow": "catalog:",
+        "serialize-error": "catalog:",
+        "zod": "catalog:",
+      },
+      "devDependencies": {
+        "@es-vanguard/typescript-config": "workspace:*",
+        "@types/bun": "catalog:types",
+        "typescript": "catalog:",
+      },
+    },
     "packages/telemetry": {
       "name": "@es-vanguard/telemetry",
       "dependencies": {
@@ -229,6 +243,8 @@
     "@es-vanguard/lockfile-parser": ["@es-vanguard/lockfile-parser@workspace:packages/lockfile-parser"],
 
     "@es-vanguard/manager": ["@es-vanguard/manager@workspace:services/manager"],
+
+    "@es-vanguard/safe-fetch": ["@es-vanguard/safe-fetch@workspace:packages/safe-fetch"],
 
     "@es-vanguard/telemetry": ["@es-vanguard/telemetry@workspace:packages/telemetry"],
 
