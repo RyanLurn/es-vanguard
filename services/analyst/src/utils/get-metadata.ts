@@ -1,5 +1,13 @@
 import type { LogStep } from "@/contexts";
-import type { ValidateInputsContext } from "@/utils/inputs/validate";
+import type {
+  ValidateInputsContext,
+  ValidInputs,
+} from "@/utils/inputs/validate";
+import { createFallbackError } from "@es-vanguard/utils/errors/fallback";
+import {
+  ABBREVIATED_METADATA_ACCEPT_HEADER,
+  NPM_REGISTRY_URL,
+} from "@es-vanguard/utils/npm-constants";
 import { NpmPackageNameSchema } from "@es-vanguard/utils/npm-package-name";
 import { SemverSchema } from "@es-vanguard/utils/semver";
 import * as z from "zod";
@@ -29,4 +37,23 @@ export interface GetMetadataContext extends Omit<
   "steps"
 > {
   steps: [...ValidateInputsContext["steps"], GetMetadataStep];
+}
+
+export async function getMetadata({
+  validInputs,
+  context,
+}: {
+  validInputs: ValidInputs;
+  context: ValidateInputsContext;
+}) {
+  const startTime = Bun.nanoseconds();
+  try {
+    const response = await fetch(`${NPM_REGISTRY_URL}/${validInputs.name}`, {
+      headers: {
+        Accept: ABBREVIATED_METADATA_ACCEPT_HEADER,
+      },
+    });
+  } catch (error) {
+    const fallbackError = createFallbackError(error);
+  }
 }
