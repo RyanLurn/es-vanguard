@@ -217,7 +217,7 @@ export async function safeFetch<TPrevContext extends StartContext<string>>(
     }
 
     // Handle other unexpected errors
-    const fallbackError = createFallbackError(error);
+    const fallbackError = createFallbackError(error, serializedRequest);
     const newContext: SafeFetchContext = {
       ...context,
       steps: [
