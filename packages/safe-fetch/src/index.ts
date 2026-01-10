@@ -4,6 +4,7 @@ import type { StartContext, StepContext } from "@es-vanguard/telemetry/context";
 import type { SerializedRequest, SerializedResponse } from "@/utils/types";
 import { err, ok } from "neverthrow";
 import { serializeError } from "serialize-error";
+import { createFallbackError } from "@es-vanguard/telemetry/errors/fallback";
 
 interface SafeFetchInputs {
   url: string;
@@ -14,7 +15,7 @@ interface SafeFetchInputs {
 
 interface SafeFetchOutputs {
   request: SerializedRequest;
-  response?: SerializedResponse;
+  response: SerializedResponse;
 }
 
 type FetchStep = StepContext<"safe-fetch", SafeFetchOutputs>;
@@ -30,6 +31,12 @@ export async function safeFetch<TPrevContext extends StartContext<string>>(
   const serializedRequestHeaders = headers
     ? serializeHeaders({ headers })
     : undefined;
+  const serializedRequest = {
+    url,
+    method,
+    headers: serializedRequestHeaders,
+    body,
+  };
 
   const startTime = Bun.nanoseconds();
 
@@ -47,13 +54,8 @@ export async function safeFetch<TPrevContext extends StartContext<string>>(
     const serializedResponseHeaders = serializeHeaders({
       headers: response.headers,
     });
-    const outputs = {
-      request: {
-        url,
-        method,
-        headers: serializedRequestHeaders,
-        body,
-      },
+    const outputs: SafeFetchOutputs = {
+      request: serializedRequest,
       response: {
         status,
         statusText,
@@ -123,17 +125,48 @@ export async function safeFetch<TPrevContext extends StartContext<string>>(
     return ok({ data: response, context: newContext });
   } catch (error) {
     const endTime = Bun.nanoseconds();
+    const time = {
+      start: startTime,
+      end: endTime,
+      duration: endTime - startTime,
+    };
 
     if (error instanceof TypeError) {
       const fetchError = new FetchError(`Failed to fetch: ${url}`, {
-        request: {
-          url,
-          method,
-          headers: serializedRequestHeaders,
-          body,
-        },
+        request: serializedRequest,
         cause: error,
       });
+
+      const newContext: SafeFetchContext = {
+        ...context,
+        steps: [
+          ...context.steps,
+          {
+            name: "safe-fetch",
+            time,
+            success: false,
+            error: serializeError(fetchError),
+          },
+        ],
+      };
+
+      return err({ error: fetchError, context: newContext });
     }
+
+    const fallbackError = createFallbackError(error);
+    const newContext: SafeFetchContext = {
+      ...context,
+      steps: [
+        ...context.steps,
+        {
+          name: "safe-fetch",
+          time,
+          success: false,
+          error: serializeError(fallbackError),
+        },
+      ],
+    };
+
+    return err({ error: fallbackError, context: newContext });
   }
 }
