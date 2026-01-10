@@ -18,5 +18,5 @@ export interface StartContext<TName extends string> {
   time: {
     start: number;
   };
-  steps: [];
+  steps: StepContext<string, unknown>[];
 }

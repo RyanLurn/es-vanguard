@@ -31,7 +31,7 @@ export function serializeHeaders({
   headers,
   omit = [],
 }: {
-  headers: Headers;
+  headers: HeadersInit;
   omit?: string[];
 }): Record<string, string> {
   const result: Record<string, string> = {};
@@ -41,7 +41,9 @@ export function serializeHeaders({
     ...omit.map((key) => key.toLowerCase()),
   ]);
 
-  headers.forEach((value, key) => {
+  const headersInstance = new Headers(headers);
+
+  headersInstance.forEach((value, key) => {
     const lowerCaseKey = key.toLowerCase();
 
     if (keysToRedact.has(lowerCaseKey)) {
