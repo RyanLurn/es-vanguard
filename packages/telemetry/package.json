@@ -7,7 +7,8 @@
   },
   "dependencies": {
     "@es-vanguard/utils": "workspace:*",
-    "serialize-error": "catalog:"
+    "serialize-error": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@es-vanguard/typescript-config": "workspace:*",
