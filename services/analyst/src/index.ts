@@ -1,8 +1,8 @@
-import type { StartContext } from "@/contexts";
+import type { StartContext } from "@es-vanguard/telemetry/context";
 
 const startTime = Bun.nanoseconds();
 
-const context: StartContext = {
+const context: StartContext<"analyst"> = {
   service: "analyst" as const,
   runId: Bun.randomUUIDv7(),
   time: {

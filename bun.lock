@@ -136,6 +136,7 @@
     "services/analyst": {
       "name": "@es-vanguard/analyst",
       "dependencies": {
+        "@es-vanguard/telemetry": "workspace:*",
         "@es-vanguard/utils": "workspace:*",
         "neverthrow": "catalog:",
         "serialize-error": "catalog:",

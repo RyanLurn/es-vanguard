@@ -15,5 +15,19 @@
     "@es-vanguard/typescript-config": "workspace:*",
     "@types/bun": "catalog:types",
     "typescript": "catalog:"
+  },
+  "exports": {
+    "./errors": {
+      "default": "./dist/src/errors/classes.js",
+      "types": "./dist/src/errors/classes.d.ts"
+    },
+    "./errors/fallback": {
+      "default": "./dist/src/errors/fallback.js",
+      "types": "./dist/src/errors/fallback.d.ts"
+    },
+    "./context": {
+      "default": "./dist/src/types/context.js",
+      "types": "./dist/src/types/context.d.ts"
+    }
   }
 }
