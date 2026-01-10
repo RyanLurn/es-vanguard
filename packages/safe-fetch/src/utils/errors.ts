@@ -1,4 +1,8 @@
-import type { SerializedRequest, SerializedResponse } from "@/utils/types";
+import type {
+  ReadResponse,
+  SerializedRequest,
+  SerializedResponse,
+} from "@/utils/types";
 import { ExpectedError } from "@es-vanguard/telemetry/errors";
 import { UnexpectedError } from "@es-vanguard/telemetry/errors/fallback";
 
@@ -83,18 +87,38 @@ export class ServerError extends HttpError {
   }
 }
 
-export class InvalidJsonResponseBody extends ExpectedError {
-  response: SerializedResponse;
+export class ReadResponseError extends ExpectedError {
+  response: ReadResponse;
 
   constructor({
-    response,
     cause,
+    response,
   }: {
-    response: SerializedResponse;
+    cause: TypeError;
+    response: ReadResponse;
+  }) {
+    super("This response body has been disturbed or locked.", { cause });
+    this.name = "ReadResponseError";
+    this.response = response;
+  }
+}
+
+export class ParseJsonBodyError extends ExpectedError {
+  rawText?: string;
+  response: ReadResponse;
+
+  constructor({
+    cause,
+    rawText,
+    response,
+  }: {
     cause: SyntaxError;
+    rawText?: string;
+    response: ReadResponse;
   }) {
     super("This response body cannot be parsed as JSON.", { cause });
-    this.name = "InvalidJsonResponseBody";
+    this.name = "ParseJsonBodyError";
+    this.rawText = rawText;
     this.response = response;
   }
 }
