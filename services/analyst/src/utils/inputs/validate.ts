@@ -13,11 +13,9 @@ export const ValidInputsSchema = z.strictObject({
   target: SemverSchema,
   base: z.union([SemverSchema, z.literal(DEFAULT_BASE_VERSION)]),
 });
-
 export type ValidInputs = z.infer<typeof ValidInputsSchema>;
 
 type ValidateInputsStep = LogStep<"validate-inputs", ValidInputs>;
-
 export interface ValidateInputsContext extends Omit<
   ParseInputsContext,
   "steps"

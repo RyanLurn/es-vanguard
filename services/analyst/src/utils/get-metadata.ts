@@ -1,3 +1,5 @@
+import type { LogStep } from "@/contexts";
+import type { ValidateInputsContext } from "@/utils/inputs/validate";
 import { NpmPackageNameSchema } from "@es-vanguard/utils/npm-package-name";
 import { SemverSchema } from "@es-vanguard/utils/semver";
 import * as z from "zod";
@@ -19,5 +21,12 @@ const PackageMetadataSchema = z.looseObject({
     })
   ),
 });
-
 export type PackageMetadata = z.infer<typeof PackageMetadataSchema>;
+
+type GetMetadataStep = LogStep<"get-metadata", PackageMetadata>;
+export interface GetMetadataContext extends Omit<
+  ValidateInputsContext,
+  "steps"
+> {
+  steps: [...ValidateInputsContext["steps"], GetMetadataStep];
+}

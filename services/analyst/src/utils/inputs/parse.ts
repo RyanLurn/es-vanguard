@@ -13,7 +13,6 @@ export type InputValues = {
 };
 
 type ParseInputsStep = LogStep<"parse-inputs", InputValues>;
-
 export interface ParseInputsContext extends Omit<StartContext, "steps"> {
   steps: [ParseInputsStep];
 }
