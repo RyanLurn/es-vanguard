@@ -74,6 +74,18 @@
         "typescript": "catalog:",
       },
     },
+    "packages/telemetry": {
+      "name": "@es-vanguard/telemetry",
+      "dependencies": {
+        "@es-vanguard/utils": "workspace:*",
+        "serialize-error": "catalog:",
+      },
+      "devDependencies": {
+        "@es-vanguard/typescript-config": "workspace:*",
+        "@types/bun": "catalog:types",
+        "typescript": "catalog:",
+      },
+    },
     "packages/test-utilities": {
       "name": "@es-vanguard/test-utilities",
       "dependencies": {
@@ -215,6 +227,8 @@
     "@es-vanguard/lockfile-parser": ["@es-vanguard/lockfile-parser@workspace:packages/lockfile-parser"],
 
     "@es-vanguard/manager": ["@es-vanguard/manager@workspace:services/manager"],
+
+    "@es-vanguard/telemetry": ["@es-vanguard/telemetry@workspace:packages/telemetry"],
 
     "@es-vanguard/test-utilities": ["@es-vanguard/test-utilities@workspace:packages/test-utilities"],
 
