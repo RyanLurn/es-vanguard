@@ -1,5 +1,24 @@
 import type { SerializedRequest, SerializedResponse } from "@/utils/types";
 import { ExpectedError } from "@es-vanguard/telemetry/errors";
+import { UnexpectedError } from "@es-vanguard/telemetry/errors/fallback";
+
+export class UnexpectedHttpError extends UnexpectedError {
+  request: SerializedRequest;
+  response: SerializedResponse;
+
+  constructor(
+    message: string,
+    {
+      request,
+      response,
+    }: { request: SerializedRequest; response: SerializedResponse }
+  ) {
+    super(message);
+    this.name = "UnexpectedHttpError";
+    this.request = request;
+    this.response = response;
+  }
+}
 
 export class FetchError extends ExpectedError {
   request: SerializedRequest;
