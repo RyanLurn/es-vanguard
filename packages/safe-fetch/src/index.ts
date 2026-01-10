@@ -9,17 +9,11 @@ type FetchStep = StepContext<
   { request: SerializedRequest; response?: SerializedResponse }
 >;
 
-export interface SafeFetchContext<TPrevStepName extends string> extends Omit<
-  StartContext<TPrevStepName>,
-  "steps"
-> {
-  steps: [...StartContext<TPrevStepName>["steps"], FetchStep];
+export interface SafeFetchContext extends Omit<StartContext<string>, "steps"> {
+  steps: [...StartContext<string>["steps"], FetchStep];
 }
 
-export async function safeFetch<
-  TPrevStepName extends string,
-  TPrevContext extends StartContext<TPrevStepName>,
->(
+export async function safeFetch<TPrevContext extends StartContext<string>>(
   {
     url,
     method = "GET",
@@ -33,20 +27,25 @@ export async function safeFetch<
   },
   context: TPrevContext
 ) {
-  const startTime = Bun.nanoseconds();
   const serializedRequestHeaders = headers
     ? serializeHeaders({ headers })
     : undefined;
+
+  const startTime = Bun.nanoseconds();
 
   try {
     const response = await fetch(url, { method, headers, body });
     const endTime = Bun.nanoseconds();
 
+    const serializedResponseHeaders = serializeHeaders({
+      headers: response.headers,
+    });
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const newContext: SafeFetchContext<TPrevStepName> = {
+    const newContext: SafeFetchContext = {
       ...context,
       steps: [
         ...context.steps,
@@ -68,7 +67,7 @@ export async function safeFetch<
             response: {
               status: response.status,
               statusText: response.statusText,
-              headers: serializeHeaders({ headers: response.headers }),
+              headers: serializedResponseHeaders,
             },
           },
         },
@@ -84,7 +83,7 @@ export async function safeFetch<
         request: {
           url,
           method,
-          headers: headers ? serializeHeaders({ headers }) : undefined,
+          headers: serializedRequestHeaders,
           body,
         },
         cause: error,
