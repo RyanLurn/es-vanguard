@@ -23,6 +23,16 @@ interface SafeFetchOutputs {
   response: SerializedResponse;
 }
 
+interface TelemetryConfig<TPrevContext extends StartContext<string>> {
+  context: TPrevContext;
+  include?: {
+    requestHeaders: boolean;
+    requestBody: boolean;
+    responseHeaders: boolean;
+    responseBody: boolean;
+  };
+}
+
 type FetchStep = StepContext<"safe-fetch", SafeFetchOutputs>;
 
 export interface SafeFetchContext extends Omit<StartContext<string>, "steps"> {
@@ -31,7 +41,15 @@ export interface SafeFetchContext extends Omit<StartContext<string>, "steps"> {
 
 export async function safeFetch<TPrevContext extends StartContext<string>>(
   { url, method = "GET", headers, body }: SafeFetchInputs,
-  context: TPrevContext
+  {
+    context,
+    include = {
+      requestHeaders: false,
+      requestBody: false,
+      responseHeaders: false,
+      responseBody: false,
+    },
+  }: TelemetryConfig<TPrevContext>
 ) {
   // Serialize request data
   const serializedRequestHeaders = headers
@@ -40,8 +58,8 @@ export async function safeFetch<TPrevContext extends StartContext<string>>(
   const serializedRequest = {
     url,
     method,
-    headers: serializedRequestHeaders,
-    body,
+    headers: include.requestHeaders ? serializedRequestHeaders : undefined,
+    body: include.requestBody ? body : undefined,
   };
 
   // Start timing
@@ -71,7 +89,9 @@ export async function safeFetch<TPrevContext extends StartContext<string>>(
       response: {
         status,
         statusText,
-        headers: serializedResponseHeaders,
+        headers: include.responseHeaders
+          ? serializedResponseHeaders
+          : undefined,
       },
     };
 
