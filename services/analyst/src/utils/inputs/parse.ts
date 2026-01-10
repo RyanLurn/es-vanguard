@@ -2,9 +2,9 @@ import { serializeError } from "serialize-error";
 import { DEFAULT_BASE_VERSION } from "@/utils/constants";
 import { parseArgs } from "util";
 import { err, ok, Result } from "neverthrow";
-import type { Context } from "@/utils/types";
 import { ExpectedError } from "@es-vanguard/utils/errors/classes";
 import { createFallbackError } from "@es-vanguard/utils/errors/fallback";
+import type { LogStep, StartContext } from "@/contexts";
 
 export type InputValues = {
   name?: string | undefined;
@@ -12,13 +12,23 @@ export type InputValues = {
   base: string;
 };
 
-export async function parseInputs({ context }: { context: Context }): Promise<
+type ParseInputsStep = LogStep<"parse-inputs", InputValues>;
+
+export interface ParseInputsContext extends Omit<StartContext, "steps"> {
+  steps: [ParseInputsStep];
+}
+
+export async function parseInputs({
+  context,
+}: {
+  context: StartContext;
+}): Promise<
   Result<
     {
       data: InputValues;
-      context: Context;
+      context: ParseInputsContext;
     },
-    { error: Error; context: Context }
+    { error: Error; context: ParseInputsContext }
   >
 > {
   const startTime = Bun.nanoseconds();
@@ -46,13 +56,11 @@ export async function parseInputs({ context }: { context: Context }): Promise<
     });
 
     const endTime = Bun.nanoseconds();
-    const newContext = {
+    const newContext: ParseInputsContext = {
       ...context,
       steps: [
-        ...context.steps,
         {
-          name: "parseInputs",
-          order: context.steps.length + 1,
+          name: "parse-inputs",
           time: {
             start: startTime,
             end: endTime,
@@ -74,13 +82,11 @@ export async function parseInputs({ context }: { context: Context }): Promise<
       const expectedError = new ExpectedError("Invalid command line inputs", {
         cause: error,
       });
-      const newContext = {
+      const newContext: ParseInputsContext = {
         ...context,
         steps: [
-          ...context.steps,
           {
-            name: "parseInputs",
-            order: context.steps.length + 1,
+            name: "parse-inputs",
             time: {
               start: startTime,
               end: endTime,
@@ -99,13 +105,11 @@ export async function parseInputs({ context }: { context: Context }): Promise<
     }
 
     const fallbackError = createFallbackError(error);
-    const newContext = {
+    const newContext: ParseInputsContext = {
       ...context,
       steps: [
-        ...context.steps,
         {
-          name: "parseInputs",
-          order: context.steps.length + 1,
+          name: "parse-inputs",
           time: {
             start: startTime,
             end: endTime,

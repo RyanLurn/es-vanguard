@@ -1,14 +1,12 @@
-import type { Context } from "@/utils/types";
+import type { StartContext } from "@/contexts";
 
 const startTime = Bun.nanoseconds();
 
-const context: Context = {
+const context: StartContext = {
   service: "analyst" as const,
   runId: Bun.randomUUIDv7(),
   time: {
     start: startTime,
-    end: undefined,
-    duration: undefined,
   },
   steps: [],
 };

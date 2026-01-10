@@ -1,6 +1,6 @@
+import type { LogStep } from "@/contexts";
 import { DEFAULT_BASE_VERSION } from "@/utils/constants";
-import type { InputValues } from "@/utils/inputs/parse";
-import type { Context } from "@/utils/types";
+import type { InputValues, ParseInputsContext } from "@/utils/inputs/parse";
 import { ValidationError } from "@es-vanguard/utils/errors/classes";
 import { NpmPackageNameSchema } from "@es-vanguard/utils/npm-package-name";
 import { SemverSchema } from "@es-vanguard/utils/semver";
@@ -16,15 +16,24 @@ export const ValidInputsSchema = z.strictObject({
 
 export type ValidInputs = z.infer<typeof ValidInputsSchema>;
 
+type ValidateInputsStep = LogStep<"validate-inputs", ValidInputs>;
+
+export interface ValidateInputsContext extends Omit<
+  ParseInputsContext,
+  "steps"
+> {
+  steps: [...ParseInputsContext["steps"], ValidateInputsStep];
+}
+
 export function validateInputs({
   inputs,
   context,
 }: {
   inputs: InputValues;
-  context: Context;
+  context: ParseInputsContext;
 }): Result<
-  { data: ValidInputs; context: Context },
-  { error: ValidationError; context: Context }
+  { data: ValidInputs; context: ValidateInputsContext },
+  { error: ValidationError; context: ValidateInputsContext }
 > {
   const startTime = Bun.nanoseconds();
   const validationResult = ValidInputsSchema.safeParse(inputs);
@@ -32,13 +41,12 @@ export function validateInputs({
 
   if (!validationResult.success) {
     const validationError = new ValidationError(validationResult.error);
-    const newContext = {
+    const newContext: ValidateInputsContext = {
       ...context,
       steps: [
         ...context.steps,
         {
-          name: "validateInputs",
-          order: context.steps.length + 1,
+          name: "validate-inputs",
           time: {
             start: startTime,
             end: endTime,
@@ -56,13 +64,12 @@ export function validateInputs({
     });
   }
 
-  const newContext = {
+  const newContext: ValidateInputsContext = {
     ...context,
     steps: [
       ...context.steps,
       {
-        name: "validateInputs",
-        order: context.steps.length + 1,
+        name: "validate-inputs",
         time: {
           start: startTime,
           end: endTime,
