@@ -2,7 +2,8 @@
   "name": "@es-vanguard/safe-fetch",
   "type": "module",
   "scripts": {
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "try": "bun run tests/try.ts"
   },
   "dependencies": {
     "@es-vanguard/telemetry": "workspace:*",
