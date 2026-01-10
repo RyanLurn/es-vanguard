@@ -1,33 +1,65 @@
-import { serializeHeaders } from "@/utils/serialize/headers";
+import type { SerializedRequest, SerializedResponse } from "@/utils/types";
 import { ExpectedError } from "@es-vanguard/telemetry/errors";
 
 export class FetchTypeError extends ExpectedError {
-  url: string;
-  method: string;
-  headers?: Record<string, string>;
-  body?: any;
+  request: SerializedRequest;
 
   constructor(
     message: string,
     {
-      url,
-      method,
-      headers,
-      body,
+      request,
       cause,
     }: {
-      url: string;
-      method: string;
-      headers?: Headers | Record<string, string>;
-      body?: any;
+      request: SerializedRequest;
       cause: TypeError;
     }
   ) {
     super(message, { cause });
     this.name = "FetchTypeError";
-    this.url = url;
-    this.method = method;
-    this.headers = headers ? serializeHeaders(headers) : undefined;
-    this.body = body;
+    this.request = request;
+  }
+}
+
+export class HttpError extends ExpectedError {
+  request: SerializedRequest;
+  response: SerializedResponse;
+
+  constructor(
+    message: string,
+    {
+      request,
+      response,
+    }: { request: SerializedRequest; response: SerializedResponse }
+  ) {
+    super(message);
+    this.name = "HttpError";
+    this.request = request;
+    this.response = response;
+  }
+}
+
+export class ClientError extends HttpError {
+  constructor(
+    message: string,
+    {
+      request,
+      response,
+    }: { request: SerializedRequest; response: SerializedResponse }
+  ) {
+    super(message, { request, response });
+    this.name = "ClientError";
+  }
+}
+
+export class ServerError extends HttpError {
+  constructor(
+    message: string,
+    {
+      request,
+      response,
+    }: { request: SerializedRequest; response: SerializedResponse }
+  ) {
+    super(message, { request, response });
+    this.name = "ServerError";
   }
 }
