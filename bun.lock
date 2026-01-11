@@ -77,9 +77,7 @@
     "packages/safe-fetch": {
       "name": "@es-vanguard/safe-fetch",
       "dependencies": {
-        "@es-vanguard/telemetry": "workspace:*",
         "neverthrow": "catalog:",
-        "serialize-error": "catalog:",
         "zod": "catalog:",
       },
       "devDependencies": {

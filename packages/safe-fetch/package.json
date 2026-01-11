@@ -6,9 +6,7 @@
     "try": "bun run tests/try.ts"
   },
   "dependencies": {
-    "@es-vanguard/telemetry": "workspace:*",
     "neverthrow": "catalog:",
-    "serialize-error": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
