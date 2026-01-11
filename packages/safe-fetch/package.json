@@ -2,10 +2,12 @@
   "name": "@es-vanguard/safe-fetch",
   "type": "module",
   "scripts": {
+    "build": "tsc --project tsconfig.build.json",
     "type-check": "tsc --noEmit",
     "try": "bun run tests/try.ts"
   },
   "dependencies": {
+    "@es-vanguard/telemetry": "workspace:*",
     "neverthrow": "catalog:",
     "zod": "catalog:"
   },
