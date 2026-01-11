@@ -20,7 +20,7 @@ export async function parseJsonResponse({ response }: { response: Response }) {
     // Serialize response
     const serializedResponse = serializeResponse({ response });
 
-    // Expect error #1: The response's body is not valid JSON
+    // Expected error #1: The response's body is not valid JSON
     if (error instanceof SyntaxError) {
       const invalidJsonBodyError = new InvalidJsonBodyError({
         cause: error,
@@ -29,7 +29,7 @@ export async function parseJsonResponse({ response }: { response: Response }) {
       throw invalidJsonBodyError;
     }
 
-    // Expect error #2: The response's body could not be read
+    // Expected error #2: The response's body could not be read
     if (error instanceof TypeError) {
       const readResponseError = new ReadResponseError({
         cause: error,
@@ -38,7 +38,7 @@ export async function parseJsonResponse({ response }: { response: Response }) {
       throw readResponseError;
     }
 
-    // Unexpected error:
+    // Unexpected error fallback:
     const fallbackError = createFallbackError(error, serializedResponse);
     throw fallbackError;
   }
