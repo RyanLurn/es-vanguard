@@ -103,9 +103,9 @@ export class ReadResponseError extends ExpectedError {
   }
 }
 
-export class ParseJsonBodyError extends ExpectedError {
+export class InvalidJsonBodyError extends ExpectedError {
   rawText?: string;
-  response: ReadResponse;
+  response: SerializedResponse;
 
   constructor({
     cause,
@@ -114,10 +114,10 @@ export class ParseJsonBodyError extends ExpectedError {
   }: {
     cause: SyntaxError;
     rawText?: string;
-    response: ReadResponse;
+    response: SerializedResponse;
   }) {
     super("This response body cannot be parsed as JSON.", { cause });
-    this.name = "ParseJsonBodyError";
+    this.name = "InvalidJsonBodyError";
     this.rawText = rawText;
     this.response = response;
   }
