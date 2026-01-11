@@ -1,19 +1,12 @@
-import type { SerializedRequest, SerializedResponse } from "@/utils/types";
 import { ExpectedError } from "@es-vanguard/telemetry/errors";
 import { UnexpectedError } from "@es-vanguard/telemetry/errors/fallback";
 
 export class UnexpectedHttpError extends UnexpectedError {
-  request: SerializedRequest;
-  response: SerializedResponse;
+  request: Request;
+  response: Response;
 
-  constructor(
-    message: string,
-    {
-      request,
-      response,
-    }: { request: SerializedRequest; response: SerializedResponse }
-  ) {
-    super(message);
+  constructor({ request, response }: { request: Request; response: Response }) {
+    super("Unexpected HTTP error");
     this.name = "UnexpectedHttpError";
     this.request = request;
     this.response = response;
@@ -31,17 +24,11 @@ export class FetchError extends ExpectedError {
 }
 
 export class HttpError extends ExpectedError {
-  request: SerializedRequest;
-  response: SerializedResponse;
+  request: Request;
+  response: Response;
 
-  constructor(
-    message: string,
-    {
-      request,
-      response,
-    }: { request: SerializedRequest; response: SerializedResponse }
-  ) {
-    super(message);
+  constructor({ request, response }: { request: Request; response: Response }) {
+    super(`[${response.status}]: ${response.statusText}`);
     this.name = "HttpError";
     this.request = request;
     this.response = response;
@@ -49,27 +36,21 @@ export class HttpError extends ExpectedError {
 }
 
 export class ClientError extends HttpError {
-  constructor(
-    message: string,
-    {
+  constructor({ request, response }: { request: Request; response: Response }) {
+    super({
       request,
       response,
-    }: { request: SerializedRequest; response: SerializedResponse }
-  ) {
-    super(message, { request, response });
+    });
     this.name = "ClientError";
   }
 }
 
 export class ServerError extends HttpError {
-  constructor(
-    message: string,
-    {
+  constructor({ request, response }: { request: Request; response: Response }) {
+    super({
       request,
       response,
-    }: { request: SerializedRequest; response: SerializedResponse }
-  ) {
-    super(message, { request, response });
+    });
     this.name = "ServerError";
   }
 }

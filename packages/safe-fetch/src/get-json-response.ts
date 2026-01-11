@@ -1,61 +1,57 @@
-import { safeFetch, type SafeFetchContext } from "@/index";
+import { safeFetch } from "@/index";
 import { parseJsonResponse } from "@/parse-json-response";
-import { ClientError } from "@/utils/errors";
-import { serializeHeaders } from "@/utils/serialize/headers";
-import type { SerializedRequest } from "@/utils/types";
-import type { StartContext } from "@es-vanguard/telemetry/context";
+import {
+  ClientError,
+  FetchError,
+  HttpError,
+  InvalidJsonBodyError,
+  ReadResponseError,
+  ServerError,
+  UnexpectedHttpError,
+} from "@/utils/errors";
+import type { UnexpectedError } from "@es-vanguard/telemetry/errors/fallback";
+import { err, ok, Result } from "neverthrow";
 
-interface TelemetryConfig<TPrevContext extends StartContext<string>> {
-  context: TPrevContext;
-  include?: {
-    requestHeaders?: boolean;
-    requestBody?: boolean;
-    responseHeaders?: boolean;
-    responseBody?: boolean;
-  };
-}
-
-export async function getJsonResponse<
-  TPrevContext extends StartContext<string>,
->(
-  { url, method = "GET", headers, body }: SerializedRequest,
-  {
-    context,
-    include = {
-      requestHeaders: true,
-      requestBody: true,
-      responseHeaders: true,
-      responseBody: true,
-    },
-  }: TelemetryConfig<TPrevContext>
-) {
-  const fetchResult = await safeFetch<TPrevContext>(
-    { url, method, headers, body },
-    {
-      context,
-      include,
-    }
-  );
-
+export async function getJsonResponse(
+  request: Request
+): Promise<
+  Result<
+    any,
+    | FetchError
+    | ReadResponseError
+    | InvalidJsonBodyError
+    | HttpError
+    | UnexpectedError
+  >
+> {
+  const fetchResult = await safeFetch(request);
   if (fetchResult.isErr()) {
     return fetchResult;
   }
+  const response = fetchResult.value;
 
-  const { data: response, context: fetchContext } = fetchResult.value;
-
-  // Read response body as JSON
-  const parseJsonResult = await parseJsonResponse<SafeFetchContext>(
-    { response },
-    {
-      context: fetchContext,
-      include,
-    }
-  );
-
+  const parseJsonResult = await parseJsonResponse(response);
   if (parseJsonResult.isErr()) {
     return parseJsonResult;
   }
+  const jsonBody = parseJsonResult.value;
 
-  const { data: jsonResponse, context: parseJsonContext } =
-    parseJsonResult.value;
+  if (response.ok) {
+    return ok(jsonBody);
+  }
+
+  const status = response.status;
+
+  if (status >= 400 && status < 500) {
+    const clientError = new ClientError({ request, response });
+    return err(clientError);
+  }
+
+  if (status >= 500) {
+    const serverError = new ServerError({ request, response });
+    return err(serverError);
+  }
+
+  const unexpectedHttpError = new UnexpectedHttpError({ request, response });
+  return err(unexpectedHttpError);
 }
