@@ -75,15 +75,9 @@ export class ServerError extends HttpError {
 }
 
 export class ReadResponseError extends ExpectedError {
-  response: SerializedResponse;
+  response: Response;
 
-  constructor({
-    cause,
-    response,
-  }: {
-    cause: TypeError;
-    response: SerializedResponse;
-  }) {
+  constructor({ cause, response }: { cause: TypeError; response: Response }) {
     super("This response body has been disturbed or locked.", { cause });
     this.name = "ReadResponseError";
     this.response = response;
@@ -91,21 +85,11 @@ export class ReadResponseError extends ExpectedError {
 }
 
 export class InvalidJsonBodyError extends ExpectedError {
-  rawText?: string;
-  response: SerializedResponse;
+  response: Response;
 
-  constructor({
-    cause,
-    rawText,
-    response,
-  }: {
-    cause: SyntaxError;
-    rawText?: string;
-    response: SerializedResponse;
-  }) {
+  constructor({ cause, response }: { cause: SyntaxError; response: Response }) {
     super("This response body cannot be parsed as JSON.", { cause });
     this.name = "InvalidJsonBodyError";
-    this.rawText = rawText;
     this.response = response;
   }
 }

@@ -1,172 +1,38 @@
 import { InvalidJsonBodyError, ReadResponseError } from "@/utils/errors";
-import { serializeResponse } from "@/utils/serialize/response";
-import type { SerializedResponse } from "@/utils/types";
-import type { StartContext, StepContext } from "@es-vanguard/telemetry/context";
 import {
   createFallbackError,
   UnexpectedError,
 } from "@es-vanguard/telemetry/errors/fallback";
 import { err, ok, Result } from "neverthrow";
-import { serializeError } from "serialize-error";
 
-interface TelemetryConfig<TPrevContext extends StartContext<string>> {
-  context: TPrevContext;
-  include?: {
-    responseHeaders?: boolean;
-    responseBody?: boolean;
-  };
-}
-
-type ParseJsonResponseStep = StepContext<
-  "parse-json-response",
-  SerializedResponse
->;
-
-export interface ParseJsonResponseContext extends Omit<
-  StartContext<string>,
-  "steps"
-> {
-  steps: [...StartContext<string>["steps"], ParseJsonResponseStep];
-}
-
-export async function parseJsonResponse<
-  TPrevContext extends StartContext<string>,
->(
-  { response }: { response: Response },
-  {
-    context,
-    include = {
-      responseHeaders: true,
-      responseBody: true,
-    },
-  }: TelemetryConfig<TPrevContext>
+export async function parseJsonResponse(
+  response: Response
 ): Promise<
-  Result<
-    { data: any; context: ParseJsonResponseContext },
-    {
-      error: InvalidJsonBodyError | ReadResponseError | UnexpectedError;
-      context: ParseJsonResponseContext;
-    }
-  >
+  Result<any, InvalidJsonBodyError | ReadResponseError | UnexpectedError>
 > {
-  // Serialize response
-  const serializedResponse = serializeResponse({
-    response,
-    includeHeaders: include.responseHeaders,
-  });
-
-  // Start timing
-  const startTime = Bun.nanoseconds();
-
   try {
-    // Parse the response body as JSON
     const parsedJson = await response.json();
-
-    // End timing
-    const endTime = Bun.nanoseconds();
-    // Calculate timing
-    const time = {
-      start: startTime,
-      end: endTime,
-      duration: endTime - startTime,
-    };
-
-    // Create new context for telemetry
-    const telemetryData = {
-      ...serializedResponse,
-      parsedBody: include.responseBody ? parsedJson : undefined,
-    };
-    const newContext: ParseJsonResponseContext = {
-      ...context,
-      steps: [
-        ...context.steps,
-        {
-          name: "parse-json-response",
-          time,
-          success: true,
-          data: telemetryData,
-        },
-      ],
-    };
-
-    return ok({ data: parsedJson, context: newContext });
+    return ok(parsedJson);
   } catch (error) {
-    // End timing
-    const endTime = Bun.nanoseconds();
-    // Calculate timing
-    const time = {
-      start: startTime,
-      end: endTime,
-      duration: endTime - startTime,
-    };
-
-    // Expected error #1: The response's body is not valid JSON
     if (error instanceof SyntaxError) {
-      // Construct the error object
       const invalidJsonBodyError = new InvalidJsonBodyError({
         cause: error,
-        response: serializedResponse,
+        response,
       });
 
-      // Create new context for telemetry
-      const newContext: ParseJsonResponseContext = {
-        ...context,
-        steps: [
-          ...context.steps,
-          {
-            name: "parse-json-response",
-            time,
-            success: false,
-            error: serializeError(invalidJsonBodyError),
-          },
-        ],
-      };
-
-      return err({ error: invalidJsonBodyError, context: newContext });
+      return err(invalidJsonBodyError);
     }
 
-    // Expected error #2: The response's body could not be read
     if (error instanceof TypeError) {
-      // Construct the error object
       const readResponseError = new ReadResponseError({
         cause: error,
-        response: serializedResponse,
+        response,
       });
 
-      // Create new context for telemetry
-      const newContext: ParseJsonResponseContext = {
-        ...context,
-        steps: [
-          ...context.steps,
-          {
-            name: "parse-json-response",
-            time,
-            success: false,
-            error: serializeError(readResponseError),
-          },
-        ],
-      };
-
-      return err({ error: readResponseError, context: newContext });
+      return err(readResponseError);
     }
 
-    // Unexpected error fallback:
-    const fallbackError = createFallbackError(error, serializedResponse);
-
-    // Create new context for telemetry
-    const newContext: ParseJsonResponseContext = {
-      ...context,
-      steps: [
-        ...context.steps,
-        {
-          name: "parse-json-response",
-          time,
-          success: false,
-          error: serializeError(fallbackError),
-        },
-      ],
-    };
-
-    return err({ error: fallbackError, context: newContext });
+    const fallbackError = createFallbackError(error, response);
+    return err(fallbackError);
   }
 }
