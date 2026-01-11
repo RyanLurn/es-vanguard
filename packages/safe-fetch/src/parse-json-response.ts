@@ -12,8 +12,8 @@ import { serializeError } from "serialize-error";
 interface TelemetryConfig<TPrevContext extends StartContext<string>> {
   context: TPrevContext;
   include?: {
-    headers: boolean;
-    body: boolean;
+    responseHeaders?: boolean;
+    responseBody?: boolean;
   };
 }
 
@@ -36,13 +36,13 @@ export async function parseJsonResponse<
   {
     context,
     include = {
-      headers: false,
-      body: false,
+      responseHeaders: true,
+      responseBody: true,
     },
   }: TelemetryConfig<TPrevContext>
 ): Promise<
   Result<
-    { data: SerializedResponse; context: ParseJsonResponseContext },
+    { data: any; context: ParseJsonResponseContext },
     {
       error: InvalidJsonBodyError | ReadResponseError | UnexpectedError;
       context: ParseJsonResponseContext;
@@ -52,7 +52,7 @@ export async function parseJsonResponse<
   // Serialize response
   const serializedResponse = serializeResponse({
     response,
-    includeHeaders: include.headers,
+    includeHeaders: include.responseHeaders,
   });
 
   // Start timing
@@ -72,9 +72,9 @@ export async function parseJsonResponse<
     };
 
     // Create new context for telemetry
-    const data = {
+    const telemetryData = {
       ...serializedResponse,
-      parsedBody: include.body ? parsedJson : undefined,
+      parsedBody: include.responseBody ? parsedJson : undefined,
     };
     const newContext: ParseJsonResponseContext = {
       ...context,
@@ -84,12 +84,12 @@ export async function parseJsonResponse<
           name: "parse-json-response",
           time,
           success: true,
-          data,
+          data: telemetryData,
         },
       ],
     };
 
-    return ok({ data, context: newContext });
+    return ok({ data: parsedJson, context: newContext });
   } catch (error) {
     // End timing
     const endTime = Bun.nanoseconds();

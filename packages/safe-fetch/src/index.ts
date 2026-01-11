@@ -17,17 +17,17 @@ export interface SafeFetchContext extends Omit<StartContext<string>, "steps"> {
 interface TelemetryConfig<TPrevContext extends StartContext<string>> {
   context: TPrevContext;
   include?: {
-    requestHeaders: boolean;
-    requestBody: boolean;
+    requestHeaders?: boolean;
+    requestBody?: boolean;
   };
 }
 
-export async function safeFetch(
+export async function safeFetch<TPrevContext extends StartContext<string>>(
   { url, method = "GET", headers, body }: SerializedRequest,
   {
     context,
     include = { requestHeaders: true, requestBody: true },
-  }: TelemetryConfig<StartContext<string>>
+  }: TelemetryConfig<TPrevContext>
 ): Promise<
   Result<
     { data: Response; context: SafeFetchContext },
