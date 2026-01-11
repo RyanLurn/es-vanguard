@@ -15,5 +15,23 @@
     "@es-vanguard/typescript-config": "workspace:*",
     "@types/bun": "catalog:types",
     "typescript": "catalog:"
+  },
+  "exports": {
+    ".": {
+      "default": "./dist/src/index.js",
+      "types": "./dist/src/index.d.ts"
+    },
+    "./parse-json-response": {
+      "default": "./dist/src/parse-json-response.js",
+      "types": "./dist/src/parse-json-response.d.ts"
+    },
+    "./get-json-response": {
+      "default": "./dist/src/get-json-response.js",
+      "types": "./src/get-json-response.ts"
+    },
+    "./errors": {
+      "default": "./dist/src/utils/errors.js",
+      "types": "./dist/src/utils/errors.d.ts"
+    }
   }
 }

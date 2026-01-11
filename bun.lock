@@ -149,6 +149,7 @@
     "services/analyst": {
       "name": "@es-vanguard/analyst",
       "dependencies": {
+        "@es-vanguard/safe-fetch": "workspace:*",
         "@es-vanguard/telemetry": "workspace:*",
         "@es-vanguard/utils": "workspace:*",
         "neverthrow": "catalog:",
