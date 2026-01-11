@@ -1,8 +1,8 @@
 export interface SerializedRequest {
   url: string;
-  method: string;
+  method?: string;
   headers?: Record<string, string>;
-  body?: any;
+  body?: string | Record<string, any>;
 }
 
 export interface SerializedResponse {
