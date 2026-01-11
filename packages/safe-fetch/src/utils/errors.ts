@@ -1,8 +1,4 @@
-import type {
-  ReadResponse,
-  SerializedRequest,
-  SerializedResponse,
-} from "@/utils/types";
+import type { SerializedRequest, SerializedResponse } from "@/utils/types";
 import { ExpectedError } from "@es-vanguard/telemetry/errors";
 import { UnexpectedError } from "@es-vanguard/telemetry/errors/fallback";
 
@@ -88,14 +84,14 @@ export class ServerError extends HttpError {
 }
 
 export class ReadResponseError extends ExpectedError {
-  response: ReadResponse;
+  response: SerializedResponse;
 
   constructor({
     cause,
     response,
   }: {
     cause: TypeError;
-    response: ReadResponse;
+    response: SerializedResponse;
   }) {
     super("This response body has been disturbed or locked.", { cause });
     this.name = "ReadResponseError";
