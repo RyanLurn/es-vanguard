@@ -1,4 +1,4 @@
-import { FetchError } from "@/utils/errors";
+import { FetchError } from "#errors.js";
 import {
   createFallbackError,
   UnexpectedError,

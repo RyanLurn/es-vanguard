@@ -1,5 +1,5 @@
-import { safeFetch } from "@/index";
-import { parseJsonResponse } from "@/parse-json-response";
+import { safeFetch } from "#index.js";
+import { parseJsonResponse } from "#parse-json-response.js";
 import {
   ClientError,
   FetchError,
@@ -8,7 +8,7 @@ import {
   ReadResponseError,
   ServerError,
   UnexpectedHttpError,
-} from "@/utils/errors";
+} from "#errors.js";
 import type { UnexpectedError } from "@es-vanguard/telemetry/errors/fallback";
 import { err, ok, Result } from "neverthrow";
 

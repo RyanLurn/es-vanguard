@@ -16,6 +16,9 @@
     "@types/bun": "catalog:types",
     "typescript": "catalog:"
   },
+  "imports": {
+    "#*": "./dist/src/*"
+  },
   "exports": {
     ".": {
       "default": "./dist/src/index.js",
@@ -27,7 +30,7 @@
     },
     "./get-json-response": {
       "default": "./dist/src/get-json-response.js",
-      "types": "./src/get-json-response.ts"
+      "types": "./dist/src/get-json-response.d.ts"
     },
     "./errors": {
       "default": "./dist/src/utils/errors.js",

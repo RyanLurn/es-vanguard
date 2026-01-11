@@ -1,4 +1,4 @@
-import { InvalidJsonBodyError, ReadResponseError } from "@/utils/errors";
+import { InvalidJsonBodyError, ReadResponseError } from "#errors.js";
 import {
   createFallbackError,
   UnexpectedError,
