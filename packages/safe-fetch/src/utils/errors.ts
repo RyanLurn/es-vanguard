@@ -21,19 +21,10 @@ export class UnexpectedHttpError extends UnexpectedError {
 }
 
 export class FetchError extends ExpectedError {
-  request: SerializedRequest;
+  request: Request;
 
-  constructor(
-    message: string,
-    {
-      request,
-      cause,
-    }: {
-      request: SerializedRequest;
-      cause: TypeError;
-    }
-  ) {
-    super(message, { cause });
+  constructor({ request, cause }: { request: Request; cause: TypeError }) {
+    super(`Failed to fetch: ${request.url}`, { cause });
     this.name = "FetchError";
     this.request = request;
   }
