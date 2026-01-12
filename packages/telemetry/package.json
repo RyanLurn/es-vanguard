@@ -16,6 +16,9 @@
     "@types/bun": "catalog:types",
     "typescript": "catalog:"
   },
+  "imports": {
+    "#*": "./src/*.ts"
+  },
   "exports": {
     "./errors": {
       "default": "./dist/src/errors/classes.js",
