@@ -1,12 +1,16 @@
 import { CustomError, type CustomErrorOptions } from "#errors/classes";
 
+interface CreateFallbackErrorParams extends Pick<
+  CustomErrorOptions,
+  "context"
+> {
+  error: unknown;
+}
+
 export function createFallbackError({
   error,
   context,
-}: {
-  error: unknown;
-  context?: Pick<CustomErrorOptions, "context">;
-}) {
+}: CreateFallbackErrorParams) {
   const exoticErrorOptions: CustomErrorOptions = {
     cause: error,
     code: "EXOTIC_ERROR",

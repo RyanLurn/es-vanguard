@@ -1,1 +1,1 @@
-export const DEFAULT_BASE_VERSION = "PREVIOUS";
+export const DEFAULT_BASE_VERSION = "previous";
