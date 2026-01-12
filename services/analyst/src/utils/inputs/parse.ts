@@ -40,12 +40,15 @@ export async function parseInputs(): Promise<Result<Inputs, CustomError>> {
     return ok(values);
   } catch (error) {
     if (error instanceof TypeError) {
-      const expectedTypeError = new CustomError("Invalid input arguments.", {
-        cause: error,
-        code: "INVALID_COMMAND_LINE_ARGUMENTS",
-        expected: true,
-        context,
-      });
+      const expectedTypeError = new CustomError(
+        "Invalid or missing command-line arguments.",
+        {
+          cause: error,
+          code: "PARSE_INPUTS_ERROR",
+          expected: true,
+          context,
+        }
+      );
 
       return err(expectedTypeError);
     }
