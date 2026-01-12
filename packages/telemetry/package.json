@@ -2,7 +2,6 @@
   "name": "@es-vanguard/telemetry",
   "type": "module",
   "scripts": {
-    "build": "tsc --project tsconfig.build.json",
     "type-check": "tsc --noEmit",
     "try": "bun run tests/try.ts"
   },
@@ -20,17 +19,8 @@
     "#*": "./src/*.ts"
   },
   "exports": {
-    "./errors": {
-      "default": "./dist/src/errors/classes.js",
-      "types": "./dist/src/errors/classes.d.ts"
-    },
-    "./errors/fallback": {
-      "default": "./dist/src/errors/fallback.js",
-      "types": "./dist/src/errors/fallback.d.ts"
-    },
-    "./context": {
-      "default": "./dist/src/types/context.js",
-      "types": "./dist/src/types/context.d.ts"
-    }
+    "./errors/classes": "./src/errors/classes.ts",
+    "./errors/fallback": "./src/errors/fallback.ts",
+    "./context": "./src/types/context.ts"
   }
 }
