@@ -1,37 +1,35 @@
-export class UnexpectedError extends Error {
-  inputs: unknown;
+import { CustomError, type CustomErrorOptions } from "#errors/classes";
 
-  constructor(message: string, options?: ErrorOptions, inputs?: unknown) {
-    super(message, options);
-    this.name = "UnexpectedError";
-    this.inputs = inputs;
-  }
-}
+export function createFallbackError({
+  error,
+  context,
+}: {
+  error: unknown;
+  context?: Pick<CustomErrorOptions, "context">;
+}) {
+  const exoticErrorOptions: CustomErrorOptions = {
+    cause: error,
+    code: "EXOTIC_ERROR",
+    expected: false,
+    context,
+  };
 
-export class ExoticError extends UnexpectedError {
-  constructor(message: string, options?: ErrorOptions, inputs?: unknown) {
-    super(message, options, inputs);
-    this.name = "ExoticError";
-  }
-}
-
-export function createFallbackError(error: unknown, inputs?: unknown) {
   if (error instanceof Error) {
-    return new UnexpectedError(error.message, { cause: error }, inputs);
+    return new CustomError(error.message, {
+      ...exoticErrorOptions,
+      code: "UNEXPECTED_ERROR",
+    });
   }
 
   try {
-    return new ExoticError(JSON.stringify(error), { cause: error }, inputs);
+    return new CustomError(JSON.stringify(error), exoticErrorOptions);
   } catch {
     try {
-      return new ExoticError(String(error), { cause: error }, inputs);
+      return new CustomError(String(error), exoticErrorOptions);
     } catch {
-      return new ExoticError(
+      return new CustomError(
         "Could not stringify this error",
-        {
-          cause: error,
-        },
-        inputs
+        exoticErrorOptions
       );
     }
   }

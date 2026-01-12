@@ -1,4 +1,4 @@
-interface CustomErrorOptions extends ErrorOptions {
+export interface CustomErrorOptions extends ErrorOptions {
   code: string;
   expected: boolean;
   context?: Record<string, unknown>;
