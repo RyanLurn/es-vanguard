@@ -1,18 +1,19 @@
-import { prettifyError, type ZodError } from "zod";
-
-export class ExpectedError extends Error {
-  constructor(message: string, options?: ErrorOptions) {
-    super(message, options);
-    this.name = "ExpectedError";
-  }
+interface CustomErrorOptions extends ErrorOptions {
+  code: string;
+  expected: boolean;
+  context?: Record<string, unknown>;
 }
 
-export class ValidationError extends ExpectedError {
-  issues: ZodError["issues"];
+export class CustomError extends Error {
+  code: string;
+  expected: boolean;
+  context?: Record<string, unknown>;
 
-  constructor(zodError: ZodError) {
-    super(prettifyError(zodError), { cause: zodError });
-    this.name = "ValidationError";
-    this.issues = zodError.issues;
+  constructor(message: string, options: CustomErrorOptions) {
+    super(message, options);
+    this.name = "CustomError";
+    this.code = options.code;
+    this.expected = options.expected;
+    this.context = options.context;
   }
 }
