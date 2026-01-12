@@ -18,5 +18,8 @@
     "@es-vanguard/typescript-config": "workspace:*",
     "@types/bun": "catalog:types",
     "typescript": "catalog:"
+  },
+  "imports": {
+    "#*": "./src/*.ts"
   }
 }
