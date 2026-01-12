@@ -5,9 +5,13 @@ import {
   NPM_REGISTRY_URL,
 } from "@es-vanguard/utils/npm-constants";
 import type { NpmPackageName } from "@es-vanguard/utils/npm-package-name";
-import { err, ok } from "neverthrow";
+import { err, ok, Result } from "neverthrow";
 
-export async function fetchPackageMetadata({ name }: { name: NpmPackageName }) {
+export async function fetchPackageMetadata({
+  name,
+}: {
+  name: NpmPackageName;
+}): Promise<Result<Response, CustomError>> {
   const url = `${NPM_REGISTRY_URL}/${encodeURIComponent(name)}`;
   const fetchOptions: RequestInit = {
     method: "GET",
