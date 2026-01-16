@@ -1,13 +1,28 @@
-import {
-  ExoticError,
-  UnexpectedError,
-} from "@es-vanguard/utils/errors/classes";
+import { betterFetch, ValidationError } from "@better-fetch/fetch";
+import * as z from "zod";
 
-const unexpectedError = new UnexpectedError("Something went wrong");
-console.log(unexpectedError.name);
+try {
+  const { data: todos, error: todoError } = await betterFetch(
+    "https://jsonplaceholder.typicode.com/todos/1",
+    {
+      output: z.string(),
+    }
+  );
 
-const exoticError = new ExoticError("Something went wrong", {
-  cause: "Something went wrong",
-});
-console.log(exoticError.name);
-console.log(exoticError instanceof UnexpectedError);
+  console.log(todos);
+  console.log(todoError);
+} catch (error) {
+  console.log("Caught error:");
+  if (error instanceof z.ZodError) {
+    console.log("ZodError's issues:", error.issues);
+  } else if (error instanceof ValidationError) {
+    console.log("Validation error:");
+    console.log("Name:", error.name);
+    console.log("Message:", error.message);
+    console.log("Issues:", error.issues);
+    console.log("Stack:", error.stack);
+    console.log("Cause:", error.cause);
+  } else {
+    console.log("Unknown error:", error);
+  }
+}

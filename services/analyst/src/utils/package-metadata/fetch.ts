@@ -6,12 +6,9 @@ import {
 } from "@es-vanguard/utils/npm-constants";
 import type { NpmPackageName } from "@es-vanguard/utils/npm-package-name";
 import { err, ok, Result } from "neverthrow";
+import { betterFetch } from "@better-fetch/fetch";
 
-export async function fetchPackageMetadata({
-  name,
-}: {
-  name: NpmPackageName;
-}): Promise<Result<Response, CustomError>> {
+export async function fetchPackageMetadata({ name }: { name: NpmPackageName }) {
   const url = `${NPM_REGISTRY_URL}/${encodeURIComponent(name)}`;
   const fetchOptions: RequestInit = {
     method: "GET",
@@ -26,8 +23,11 @@ export async function fetchPackageMetadata({
   };
 
   try {
-    const response = await fetch(url, fetchOptions);
-    return ok(response);
+    const { data, error } = await betterFetch(url, fetchOptions);
+    if (error) {
+      return err(error);
+    }
+    return ok(data);
   } catch (error) {
     if (error instanceof TypeError) {
       const fetchError = new CustomError(
