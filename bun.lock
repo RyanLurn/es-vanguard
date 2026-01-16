@@ -149,6 +149,7 @@
     "services/analyst": {
       "name": "@es-vanguard/analyst",
       "dependencies": {
+        "@better-fetch/fetch": "catalog:",
         "@es-vanguard/safe-fetch": "workspace:*",
         "@es-vanguard/telemetry": "workspace:*",
         "@es-vanguard/utils": "workspace:*",
@@ -179,6 +180,7 @@
     },
   },
   "catalog": {
+    "@better-fetch/fetch": "^1.1.21",
     "@standard-schema/spec": "^1.1.0",
     "@standard-schema/utils": "^0.3.0",
     "@t3-oss/env-core": "^0.13.8",
@@ -229,6 +231,8 @@
     "@azure/msal-common": ["@azure/msal-common@15.13.3", "", {}, "sha512-shSDU7Ioecya+Aob5xliW9IGq1Ui8y4EVSdWGyI1Gbm4Vg61WpP95LuzcY214/wEjSn6w4PZYD4/iVldErHayQ=="],
 
     "@azure/msal-node": ["@azure/msal-node@3.8.4", "", { "dependencies": { "@azure/msal-common": "15.13.3", "jsonwebtoken": "^9.0.0", "uuid": "^8.3.0" } }, "sha512-lvuAwsDpPDE/jSuVQOBMpLbXuVuLsPNRwWCyK3/6bPlBk0fGWegqoZ0qjZclMWyQ2JNvIY3vHY7hoFmFmFQcOw=="],
+
+    "@better-fetch/fetch": ["@better-fetch/fetch@1.1.21", "", {}, "sha512-/ImESw0sskqlVR94jB+5+Pxjf+xBwDZF/N5+y2/q4EqD7IARUTSpPfIo8uf39SYpCxyOCtbyYpUrZ3F/k0zT4A=="],
 
     "@drizzle-team/brocli": ["@drizzle-team/brocli@0.11.0", "", {}, "sha512-hD3pekGiPg0WPCCGAZmusBBJsDqGUR66Y452YgQsZOnkdQ7ViEPKuyP4huUGEZQefp8g34RRodXYmJ2TbCH+tg=="],
 

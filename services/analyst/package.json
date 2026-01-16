@@ -10,6 +10,7 @@
     "@es-vanguard/safe-fetch": "workspace:*",
     "@es-vanguard/telemetry": "workspace:*",
     "@es-vanguard/utils": "workspace:*",
+    "@better-fetch/fetch": "catalog:",
     "neverthrow": "catalog:",
     "serialize-error": "catalog:",
     "zod": "catalog:"

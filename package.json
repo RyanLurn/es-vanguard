@@ -10,6 +10,7 @@
     ],
     "catalog": {
       "@t3-oss/env-core": "^0.13.8",
+      "@better-fetch/fetch": "^1.1.21",
       "hono": "^4.11.3",
       "neverthrow": "^8.2.0",
       "semver": "^7.7.3",
