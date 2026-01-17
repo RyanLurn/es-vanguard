@@ -4,7 +4,8 @@
   "scripts": {
     "start": "bun run src/index.ts",
     "type-check": "tsc --noEmit",
-    "try": "bun run tests/try.ts"
+    "try": "bun run tests/try.ts",
+    "test:find-dist": "bun test tests/find-dist-objects.test.ts"
   },
   "dependencies": {
     "@es-vanguard/safe-fetch": "workspace:*",
