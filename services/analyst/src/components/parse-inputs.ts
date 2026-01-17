@@ -1,7 +1,10 @@
 import { parseArgs } from "util";
 import { err, ok, Result } from "neverthrow";
 import { DEFAULT_BASE_VERSION } from "#utils/constants";
-import { createFallbackError } from "@es-vanguard/telemetry/errors/fallback";
+import {
+  serializeUnknown,
+  type SerializedFallback,
+} from "@es-vanguard/telemetry/errors/serialize-unknown";
 import { NpmPackageNameSchema } from "@es-vanguard/utils/npm-package-name";
 import { SemverSchema } from "@es-vanguard/utils/semver";
 import * as z from "zod";
@@ -13,7 +16,9 @@ export const InputsSchema = z.strictObject({
 });
 export type Inputs = z.infer<typeof InputsSchema>;
 
-export async function parseInputs() {
+export async function parseInputs(): Promise<
+  Result<Inputs, Error | SerializedFallback>
+> {
   try {
     const { values } = parseArgs({
       args: Bun.argv,
@@ -41,11 +46,11 @@ export async function parseInputs() {
 
     return ok(validationResult.data);
   } catch (error) {
-    if (error instanceof TypeError) {
+    if (error instanceof Error) {
       return err(error);
     }
 
-    const fallbackError = createFallbackError({ error });
+    const fallbackError = serializeUnknown(error);
     return err(fallbackError);
   }
 }

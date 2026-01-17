@@ -20,7 +20,7 @@
   },
   "exports": {
     "./errors/classes": "./src/errors/classes.ts",
-    "./errors/fallback": "./src/errors/fallback.ts",
+    "./errors/serialize-unknown": "./src/errors/serialize-unknown.ts",
     "./context": "./src/types/context.ts"
   }
 }
