@@ -1,14 +1,14 @@
-import { getBaseVersion } from "#utils/get-base-version";
-import type { Semver } from "@es-vanguard/utils/semver";
+import { InputsSchema } from "#components/parse-inputs";
+import { semver } from "bun";
 
-const versions = [
-  "1.0.0",
-  "1.0.1",
-  "1.0.0-alpha",
-  "1.0.0-beta",
-  "1.0.0-rc",
-] as Semver[];
-const target = "1.0.0-rc" as Semver;
+const name = "react";
+const target = "          19.2.3";
+const base = "previous      ";
 
-const base = getBaseVersion({ target, base: "previous", versions });
-console.log(base);
+const parseResult = InputsSchema.safeParse({
+  name,
+  target,
+  base,
+});
+
+console.log(parseResult);

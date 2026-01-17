@@ -8,12 +8,30 @@ import {
 import { NpmPackageNameSchema } from "@es-vanguard/utils/npm-package-name";
 import { SemverSchema } from "@es-vanguard/utils/semver";
 import * as z from "zod";
+import { semver } from "bun";
 
-export const InputsSchema = z.strictObject({
-  name: NpmPackageNameSchema,
-  target: SemverSchema,
-  base: z.union([SemverSchema, z.literal(DEFAULT_BASE_VERSION)]),
-});
+export const InputsSchema = z
+  .strictObject({
+    name: NpmPackageNameSchema.trim(),
+    target: SemverSchema.trim(),
+    base: z.union([SemverSchema.trim(), z.literal(DEFAULT_BASE_VERSION)]),
+  })
+  .refine(
+    ({ target, base }) => {
+      if (base === "previous") {
+        return true;
+      }
+      if (semver.order(target, base) === 1) {
+        // This means target is > base in term of semver
+        return true;
+      }
+      return false;
+    },
+    {
+      error: "Base version must be less than target version",
+      path: ["base"],
+    }
+  );
 export type Inputs = z.infer<typeof InputsSchema>;
 
 export async function parseInputs(): Promise<
