@@ -15,6 +15,13 @@ import { SemverSchema } from "@es-vanguard/utils/semver";
 import { err, ok, Result } from "neverthrow";
 import * as z from "zod";
 
+const distObjectSchema = z.looseObject({
+  tarball: z.url(),
+  shasum: z.string().optional(),
+  integrity: z.string().optional(),
+});
+export type DistObject = z.infer<typeof distObjectSchema>;
+
 export const PackageMetadataSchema = z.looseObject({
   name: NpmPackageNameSchema,
   versions: z.record(
@@ -22,11 +29,7 @@ export const PackageMetadataSchema = z.looseObject({
     z.looseObject({
       name: NpmPackageNameSchema,
       version: SemverSchema,
-      dist: z.looseObject({
-        tarball: z.url(),
-        shasum: z.string().optional(),
-        integrity: z.string().optional(),
-      }),
+      dist: distObjectSchema,
       _hasShrinkwrap: z.boolean().optional(),
       hasInstallScript: z.boolean().optional(),
     })
