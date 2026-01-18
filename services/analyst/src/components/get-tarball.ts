@@ -1,10 +1,19 @@
 import { betterFetch } from "@better-fetch/fetch";
-import { serializeUnknown } from "@es-vanguard/telemetry/errors/serialize-unknown";
-import { err, ok } from "neverthrow";
+import {
+  serializeUnknown,
+  type SerializedFallback,
+} from "@es-vanguard/telemetry/errors/serialize-unknown";
+import { err, ok, Result } from "neverthrow";
+import * as z from "zod";
 
-export async function getTarball({ tarballURL }: { tarballURL: string }) {
+export async function getTarball({
+  tarballURL,
+}: {
+  tarballURL: string;
+}): Promise<Result<Blob, Error | SerializedFallback>> {
   try {
-    const data = await betterFetch<Blob>(tarballURL, {
+    const data = await betterFetch(tarballURL, {
+      output: z.instanceof(Blob),
       throw: true,
       timeout: 5000, // 5 seconds
       retry: {
