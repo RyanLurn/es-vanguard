@@ -153,6 +153,7 @@
         "@es-vanguard/safe-fetch": "workspace:*",
         "@es-vanguard/telemetry": "workspace:*",
         "@es-vanguard/utils": "workspace:*",
+        "diff": "^8.0.3",
         "neverthrow": "catalog:",
         "serialize-error": "catalog:",
         "zod": "catalog:",
@@ -403,6 +404,8 @@
     "define-lazy-prop": ["define-lazy-prop@3.0.0", "", {}, "sha512-N+MeXYoqr3pOgn8xfyRPREN7gHakLYjhsHhWGT3fWAiL4IkAt0iDw14QiiEm2bE30c5XX5q0FtAA3CK5f9/BUg=="],
 
     "detect-libc": ["detect-libc@2.0.2", "", {}, "sha512-UX6sGumvvqSaXgdKGUsgZWqcUyIXZ/vZTrlRT/iobiKhGL0zL4d3osHj3uqllWJK+i+sixDS/3COVEOFbupFyw=="],
+
+    "diff": ["diff@8.0.3", "", {}, "sha512-qejHi7bcSD4hQAZE0tNAawRK1ZtafHDmMTMkrrIGgSLl7hTnQHmKCeB45xAcbfTqK2zowkM3j3bHt/4b/ARbYQ=="],
 
     "drizzle-kit": ["drizzle-kit@1.0.0-beta.8-734e789", "", { "dependencies": { "@drizzle-team/brocli": "^0.11.0", "@js-temporal/polyfill": "^0.5.1", "esbuild": "^0.25.10", "esbuild-register": "^3.6.0" }, "bin": { "drizzle-kit": "bin.cjs" } }, "sha512-rwsBKJsdPI38sUA/uOkb7ePpntOL40EWGJk7YmCALl+EJPtzc/kqYbzXSuxGoE9Ff+lo4oEsglSvBB12NvV8Fg=="],
 

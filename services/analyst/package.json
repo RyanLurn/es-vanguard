@@ -13,6 +13,7 @@
     "@es-vanguard/telemetry": "workspace:*",
     "@es-vanguard/utils": "workspace:*",
     "@better-fetch/fetch": "catalog:",
+    "diff": "^8.0.3",
     "neverthrow": "catalog:",
     "serialize-error": "catalog:",
     "zod": "catalog:"

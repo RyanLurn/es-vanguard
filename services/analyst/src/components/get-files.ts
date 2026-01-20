@@ -7,10 +7,8 @@ import { err, ok, Result } from "neverthrow";
 
 export async function getFiles({
   tarball,
-  prefix,
 }: {
   tarball: VerifiedTarball;
-  prefix: "a" | "b";
 }): Promise<Result<Map<string, File>, Error | SerializedFallback>> {
   try {
     const archive = new Bun.Archive(tarball);
@@ -19,7 +17,7 @@ export async function getFiles({
     const files = new Map<string, File>();
     for (const [rawPath, file] of archiveFiles) {
       const cleanPath = rawPath.replace(/^[^/]+\//, "");
-      files.set(`${prefix}/${cleanPath}`, file);
+      files.set(cleanPath, file);
     }
 
     return ok(files);
