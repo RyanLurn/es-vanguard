@@ -43,7 +43,7 @@ export async function getPackageMetadata({
   packageName: NpmPackageName;
 }): Promise<Result<PackageMetadata, Error | SerializedFallback>> {
   try {
-    const url = `${NPM_REGISTRY_URL}/${encodeURIComponent(packageName)}`;
+    const url = `${NPM_REGISTRY_URL}/${packageName}`;
     const data = await betterFetch(url, {
       method: "GET",
       headers: {

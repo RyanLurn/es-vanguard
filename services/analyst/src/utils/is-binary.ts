@@ -5,7 +5,7 @@ import {
 import { err, ok, Result } from "neverthrow";
 import { basename, extname } from "node:path";
 
-const binaryExtensions = [
+export const binaryExtensions = [
   "3dm",
   "3ds",
   "3g2",
