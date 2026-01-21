@@ -1,9 +1,3 @@
-import { isBinary } from "#utils/is-binary";
+const file = new File(["Hello world"], "hello.txt", { type: "text/plain" });
 
-const filePath = "dist/lib/with-promise-cache.d.ts";
-const binaryCheckResult = isBinary({ filePath });
-if (binaryCheckResult.isErr()) {
-  console.error(binaryCheckResult.error);
-  process.exit(1);
-}
-console.log(binaryCheckResult.value);
+console.log(Bun.hash.xxHash3(await file.arrayBuffer()));

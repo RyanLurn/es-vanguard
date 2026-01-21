@@ -1,8 +1,3 @@
-import {
-  serializeUnknown,
-  type SerializedFallback,
-} from "@es-vanguard/telemetry/errors/serialize-unknown";
-import { err, ok, Result } from "neverthrow";
 import { basename, extname } from "node:path";
 
 export const binaryExtensions = [
@@ -270,26 +265,13 @@ export const binaryExtensions = [
   "zipx",
 ];
 
-export function isBinary({
-  filePath,
-}: {
-  filePath: string;
-}): Result<boolean, Error | SerializedFallback> {
-  try {
-    const fileName = basename(filePath);
-    const extension = (
-      fileName.startsWith(".") ? fileName : extname(fileName)
-    ).slice(1);
+export function isBinary({ filePath }: { filePath: string }) {
+  const fileName = basename(filePath);
+  const extension = (
+    fileName.startsWith(".") ? fileName : extname(fileName)
+  ).slice(1);
 
-    const isBinary = binaryExtensions.includes(extension);
+  const isBinary = binaryExtensions.includes(extension);
 
-    return ok(isBinary);
-  } catch (error) {
-    if (error instanceof Error) {
-      return err(error);
-    }
-
-    const fallbackError = serializeUnknown(error);
-    return err(fallbackError);
-  }
+  return isBinary;
 }
