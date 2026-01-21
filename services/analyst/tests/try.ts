@@ -8,8 +8,8 @@ import type { NpmPackageName } from "@es-vanguard/utils/npm-package-name";
 import type { Semver } from "@es-vanguard/utils/semver";
 
 const packageName = "next" as NpmPackageName;
-const targetVersion = "16.1.4" as Semver;
-const baseVersion = "16.1.3" as Semver;
+const targetVersion = "16.0.0" as Semver;
+const baseVersion = "15.0.0" as Semver;
 
 console.log("Fetching package metadata...");
 const getPackageMetadataStartTime = Bun.nanoseconds();
@@ -86,11 +86,17 @@ console.log(
 );
 
 console.log("Generating diff...");
+const generateDiffStartTime = Bun.nanoseconds();
 const diff = await generateDiff({
   targetVersion,
   baseVersion,
   targetFiles,
   baseFiles,
 });
+const generateDiffEndTime = Bun.nanoseconds();
+console.log(
+  `Diff generated in ${(generateDiffEndTime - generateDiffStartTime) / 1_000_000_000} seconds`
+);
+
 await Bun.write("diff.txt", diff);
 console.log("Done.");

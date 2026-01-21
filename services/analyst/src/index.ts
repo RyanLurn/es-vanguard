@@ -1,3 +1,7 @@
-const file = new File(["Hello world"], "hello.txt", { type: "text/plain" });
+const filePath = "json-worker.js";
 
-console.log(Bun.hash.xxHash3(await file.arrayBuffer()));
+if (/-[a-zA-Z0-9]{8,20}\.js$/.test(filePath)) {
+  console.log("true");
+} else {
+  console.log("false");
+}
