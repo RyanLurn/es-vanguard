@@ -18,6 +18,7 @@
     "heat": "bun run scripts/dataset/heat.ts"
   },
   "dependencies": {
+    "@better-fetch/fetch": "catalog:",
     "neverthrow": "catalog:",
     "zod": "catalog:"
   },

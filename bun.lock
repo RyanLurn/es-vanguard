@@ -103,6 +103,7 @@
     "packages/test-utilities": {
       "name": "@es-vanguard/test-utilities",
       "dependencies": {
+        "@better-fetch/fetch": "catalog:",
         "neverthrow": "catalog:",
         "zod": "catalog:",
       },
