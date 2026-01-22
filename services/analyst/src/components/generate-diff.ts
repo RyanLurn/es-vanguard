@@ -32,18 +32,18 @@ export async function generateDiff({
     const baseFile = baseFiles.get(filePath);
 
     // ---------------------------------------------------------
-    // OPTIMIZATION 1: Path Check (Fail Fast, No I/O, No Memory)
+    // OPTIMIZATION 1: Binary Check (Fail Fast)
     // ---------------------------------------------------------
-    if (isBuildOutputPath(filePath)) {
-      skippedStats.push({ path: filePath, reason: "build_output_path" });
+    if (isBinary({ filePath })) {
+      skippedStats.push({ path: filePath, reason: "binary" });
       continue;
     }
 
     // ---------------------------------------------------------
-    // OPTIMIZATION 2: Binary Check (Fail Fast)
+    // OPTIMIZATION 2: Path Check (Fail Fast)
     // ---------------------------------------------------------
-    if (isBinary({ filePath })) {
-      skippedStats.push({ path: filePath, reason: "binary" });
+    if (isBuildOutputPath(filePath)) {
+      skippedStats.push({ path: filePath, reason: "build_output_path" });
       continue;
     }
 
@@ -53,16 +53,23 @@ export async function generateDiff({
     // ---------------------------------------------------------
     // LOAD CONTENT (The Memory Cost)
     // ---------------------------------------------------------
-    const targetFileContent = targetFile ? await targetFile.text() : "";
-    const baseFileContent = baseFile ? await baseFile.text() : "";
+    const targetFileContent = targetFile
+      ? (await targetFile.text()).trim()
+      : "";
+    const baseFileContent = baseFile ? (await baseFile.text()).trim() : "";
 
     // ---------------------------------------------------------
     // OPTIMIZATION 3: Content Check (Fail Slow)
     // ---------------------------------------------------------
     if (
-      isBuildOutputContent(targetFileContent) ||
-      isBuildOutputContent(baseFileContent)
+      isBuildOutputContent(targetFileContent).reason !== "none" ||
+      isBuildOutputContent(baseFileContent).reason !== "none"
     ) {
+      console.log(
+        `Skipping ${filePath} because it is a build output file (by content analysis)`
+      );
+      console.log(`Reason: ${isBuildOutputContent(targetFileContent).reason}`);
+      console.log(`Reason: ${isBuildOutputContent(baseFileContent).reason}`);
       skippedStats.push({ path: filePath, reason: "build_output_content" });
       continue;
     }
@@ -109,27 +116,36 @@ export async function generateDiff({
   // APPEND SUMMARY
   // ---------------------------------------------------------
   if (skippedStats.length > 0) {
-    const binCount = skippedStats.filter(
+    const binFiles = skippedStats.filter(
       (skippedFile) => skippedFile.reason === "binary"
-    ).length;
-    const buildOutputPathCount = skippedStats.filter(
+    );
+    const buildOutputPathFiles = skippedStats.filter(
       (skippedFile) => skippedFile.reason === "build_output_path"
-    ).length;
-    const buildOutputContentCount = skippedStats.filter(
+    );
+    const buildOutputContentFiles = skippedStats.filter(
       (skippedFile) => skippedFile.reason === "build_output_content"
-    ).length;
+    );
+
+    const binCount = binFiles.length;
+    const buildOutputPathCount = buildOutputPathFiles.length;
+    const buildOutputContentCount = buildOutputContentFiles.length;
 
     diff += `\n------------------------------------------------------------\n`;
     diff += ` Diff Summary (Files Skipped for Clarity)\n`;
     diff += `------------------------------------------------------------\n`;
+    if (binCount > 0) {
+      diff += `>> Skipped ${binCount} binary files\n`;
+      diff += binFiles.map((file) => `  > ${file.path}\n`).join("");
+    }
     if (buildOutputPathCount > 0) {
-      diff += `> Skipped ${buildOutputPathCount} build artifacts (by filename)\n`;
+      diff += `>> Skipped ${buildOutputPathCount} generated files (by file path)\n`;
+      diff += buildOutputPathFiles.map((file) => `  > ${file.path}\n`).join("");
     }
     if (buildOutputContentCount > 0) {
-      diff += `> Skipped ${buildOutputContentCount} generated files (by content analysis)\n`;
-    }
-    if (binCount > 0) {
-      diff += `> Skipped ${binCount} binary files\n`;
+      diff += `>> Skipped ${buildOutputContentCount} generated files (by content analysis)\n`;
+      diff += buildOutputContentFiles
+        .map((file) => `  > ${file.path}\n`)
+        .join("");
     }
   }
 

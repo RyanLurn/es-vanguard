@@ -7,9 +7,9 @@ import { verifyTarball } from "#components/verify-tarball";
 import type { NpmPackageName } from "@es-vanguard/utils/npm-package-name";
 import type { Semver } from "@es-vanguard/utils/semver";
 
-const packageName = "next" as NpmPackageName;
-const targetVersion = "16.0.0" as Semver;
-const baseVersion = "15.0.0" as Semver;
+const packageName = "svelte" as NpmPackageName;
+const targetVersion = "5.47.1" as Semver;
+const baseVersion = "5.47.0" as Semver;
 
 console.log("Fetching package metadata...");
 const getPackageMetadataStartTime = Bun.nanoseconds();
