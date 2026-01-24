@@ -21,14 +21,8 @@ const tarballCase: GetCachePathOptions = {
 
 const testCases: GetCachePathOptions[] = [jsonCase, yamlCase, tarballCase];
 
-async function clearAllCaches() {
-  for (const testCase of testCases) {
-    await clearCache(testCase);
-  }
-}
-
 beforeAll(async () => {
-  await clearAllCaches();
+  await clearCache(testCases);
 });
 
 describe("getResource function", () => {
@@ -188,5 +182,5 @@ describe("getResource function", () => {
 });
 
 afterAll(async () => {
-  await clearAllCaches();
+  await clearCache(testCases);
 });
