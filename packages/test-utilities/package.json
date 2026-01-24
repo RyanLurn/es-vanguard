@@ -11,7 +11,9 @@
     "./fetch-github-content": "./src/fetch-github-content.ts",
     "./get-github-content": "./src/get-github-content.ts",
     "./get-cache-path": "./src/get-cache-path.ts",
-    "./get-resource": "./src/get-resource.ts"
+    "./get-resource": "./src/get-resource.ts",
+    "./get-package-metadata": "./src/npm/get-package-metadata.ts",
+    "./get-package-tarball": "./src/npm/get-package-tarball.ts"
   },
   "scripts": {
     "start": "bun run src/index.ts",
