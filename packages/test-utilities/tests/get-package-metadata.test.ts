@@ -20,6 +20,7 @@ describe("getPackageMetadata function", () => {
   test("should fetch metadata for valid npm package", async () => {
     const result = await getPackageMetadata({
       packageName: "neverthrow" as NpmPackageName,
+      prefix: rightCase.prefix,
     });
     expect(result.isOk()).toBe(true);
 

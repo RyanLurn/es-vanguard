@@ -35,8 +35,10 @@ export type PackageMetadata = z.infer<typeof PackageMetadataSchema>;
 
 export async function getPackageMetadata({
   packageName,
+  prefix,
 }: {
   packageName: NpmPackageName;
+  prefix?: string;
 }): Promise<Result<PackageMetadata, unknown>> {
   const url = `${NPM_REGISTRY_URL}/${packageName}`;
   const getResourceResult = await getResource({
@@ -46,6 +48,7 @@ export async function getPackageMetadata({
     headers: {
       Accept: ABBREVIATED_METADATA_ACCEPT_HEADER,
     },
+    prefix,
   });
 
   if (getResourceResult.isErr()) {

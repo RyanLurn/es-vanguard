@@ -7,12 +7,15 @@ import { err, ok, Result } from "neverthrow";
 export async function getPackageTarball({
   packageName,
   version,
+  prefix,
 }: {
   packageName: NpmPackageName;
   version: Semver;
+  prefix?: string;
 }): Promise<Result<Blob, unknown>> {
   const getPackageMetadataResult = await getPackageMetadata({
     packageName,
+    prefix,
   });
 
   if (getPackageMetadataResult.isErr()) {
@@ -33,6 +36,7 @@ export async function getPackageTarball({
     url: tarballURL,
     responseType: "blob",
     fileExtension: "tar.gz",
+    prefix,
   });
 
   if (tarballResult.isErr()) {
