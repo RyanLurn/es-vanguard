@@ -1,45 +1,34 @@
-import { getCachePath } from "#get-cache-path.ts";
 import { getResource } from "#get-resource.ts";
 import { beforeAll, describe, test, expect, afterAll } from "bun:test";
+import { clearCache } from "./clear-cache";
+import type { GetCachePathOptions } from "#get-cache-path.ts";
 
-const jsonCase = {
+const jsonCase: GetCachePathOptions = {
   url: "https://registry.npmjs.org/ofetch/1.5.1",
   fileExtension: "json",
   prefix: "test",
 };
-const yamlCase = {
+const yamlCase: GetCachePathOptions = {
   url: "https://raw.githubusercontent.com/unjs/ofetch/main/pnpm-lock.yaml",
   fileExtension: "yaml",
   prefix: "test",
 };
-const tarballCase = {
+const tarballCase: GetCachePathOptions = {
   url: "https://registry.npmjs.org/ofetch/-/ofetch-1.5.1.tgz",
   fileExtension: "tar.gz",
   prefix: "test",
 };
 
-async function clearCache() {
-  const jsonCachePath = getCachePath(jsonCase);
-  const jsonCacheFile = Bun.file(jsonCachePath);
-  if (await jsonCacheFile.exists()) {
-    await jsonCacheFile.delete();
-  }
+const testCases: GetCachePathOptions[] = [jsonCase, yamlCase, tarballCase];
 
-  const yamlCachePath = getCachePath(yamlCase);
-  const yamlCacheFile = Bun.file(yamlCachePath);
-  if (await yamlCacheFile.exists()) {
-    await yamlCacheFile.delete();
-  }
-
-  const tarballCachePath = getCachePath(tarballCase);
-  const tarballCacheFile = Bun.file(tarballCachePath);
-  if (await tarballCacheFile.exists()) {
-    await tarballCacheFile.delete();
+async function clearAllCaches() {
+  for (const testCase of testCases) {
+    await clearCache(testCase);
   }
 }
 
 beforeAll(async () => {
-  await clearCache();
+  await clearAllCaches();
 });
 
 describe("getResource function", () => {
@@ -199,5 +188,5 @@ describe("getResource function", () => {
 });
 
 afterAll(async () => {
-  await clearCache();
+  await clearAllCaches();
 });
