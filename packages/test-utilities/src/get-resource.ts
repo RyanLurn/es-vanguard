@@ -1,30 +1,51 @@
 import { CACHE_DIR } from "#constants.ts";
-import { $fetch } from "#lib/fetch.ts";
 import { err, ok, type Result } from "neverthrow";
 import { join } from "node:path";
+import { ofetch } from "ofetch";
 
-export async function getResource<TData = unknown>({
+export async function getResource({
   url,
+  responseType = "json",
+  fileExtension,
+  forceRefresh = false,
 }: {
   url: string;
-}): Promise<Result<TData, unknown>> {
+  responseType?: "text" | "json" | "arrayBuffer" | "blob" | "stream";
+  fileExtension?: string;
+  forceRefresh?: boolean;
+}) {
   try {
     const hasher = new Bun.CryptoHasher("sha256");
     hasher.update(url);
     const hash = hasher.digest("hex");
-    const cacheFilePath = join(CACHE_DIR, `${hash}.txt`);
+    const cacheFilePath = join(CACHE_DIR, `${hash}.${fileExtension ?? "txt"}`);
 
     const cachedFile = Bun.file(cacheFilePath);
-    if (await cachedFile.exists()) {
-      const content = await cachedFile.text();
-      // return ok(content);
+    if (!forceRefresh && (await cachedFile.exists())) {
+      if (responseType === "blob") {
+        return ok(cachedFile);
+      }
+
+      const content = await cachedFile[responseType]();
+      return ok(content);
     }
 
-    const { data, error } = await $fetch<TData>(url);
-    if (error) {
-      return err(error);
+    const response = await ofetch.raw(url, {
+      responseType,
+      retry: 3,
+      retryDelay: 500,
+    });
+
+    try {
+      await Bun.write(cacheFilePath, response);
+    } catch (error) {
+      console.warn(
+        `Failed to cache resource at "${url}" to "${cacheFilePath}":\n`,
+        error
+      );
     }
-    return ok(data);
+
+    return ok(response._data);
   } catch (error) {
     return err(error);
   }
