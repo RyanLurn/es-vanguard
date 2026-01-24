@@ -1,24 +1,22 @@
-import { CACHE_DIR } from "#constants.ts";
+import { getCachePath } from "#get-cache-path.ts";
 import { err, ok, type Result } from "neverthrow";
-import { join } from "node:path";
 import { ofetch } from "ofetch";
 
 export async function getResource({
   url,
   responseType = "json",
   fileExtension,
+  cacheDir,
   forceRefresh = false,
 }: {
   url: string;
   responseType?: "text" | "json" | "arrayBuffer" | "blob" | "stream";
   fileExtension?: string;
+  cacheDir?: string;
   forceRefresh?: boolean;
-}) {
+}): Promise<Result<any, unknown>> {
   try {
-    const hasher = new Bun.CryptoHasher("sha256");
-    hasher.update(url);
-    const hash = hasher.digest("hex");
-    const cacheFilePath = join(CACHE_DIR, `${hash}.${fileExtension ?? "txt"}`);
+    const cacheFilePath = getCachePath({ url, fileExtension, cacheDir });
 
     const cachedFile = Bun.file(cacheFilePath);
     if (!forceRefresh && (await cachedFile.exists())) {
