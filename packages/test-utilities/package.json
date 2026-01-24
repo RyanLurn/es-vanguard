@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@better-fetch/fetch": "catalog:",
+    "@es-vanguard/utils": "workspace:*",
     "neverthrow": "catalog:",
     "zod": "catalog:"
   },
