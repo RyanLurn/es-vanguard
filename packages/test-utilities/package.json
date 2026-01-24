@@ -18,9 +18,9 @@
     "heat": "bun run scripts/dataset/heat.ts"
   },
   "dependencies": {
-    "@better-fetch/fetch": "catalog:",
     "@es-vanguard/utils": "workspace:*",
     "neverthrow": "catalog:",
+    "ofetch": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
