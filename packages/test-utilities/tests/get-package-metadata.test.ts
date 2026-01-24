@@ -3,9 +3,12 @@ import type { GetCachePathOptions } from "#get-cache-path.ts";
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { getPackageMetadata } from "#npm/get-package-metadata.ts";
 import type { NpmPackageName } from "@es-vanguard/utils/npm-package-name";
+import { NPM_REGISTRY_URL } from "@es-vanguard/utils/npm-constants";
+
+const packageName = "neverthrow" as NpmPackageName;
 
 const rightCase: GetCachePathOptions = {
-  url: "https://registry.npmjs.org/neverthrow",
+  url: `${NPM_REGISTRY_URL}/${packageName}`,
   fileExtension: "json",
   prefix: "test",
 };
@@ -17,9 +20,9 @@ beforeAll(async () => {
 });
 
 describe("getPackageMetadata function", () => {
-  test("should fetch metadata for valid npm package", async () => {
+  test("should get metadata for valid npm package", async () => {
     const result = await getPackageMetadata({
-      packageName: "neverthrow" as NpmPackageName,
+      packageName,
       prefix: rightCase.prefix,
     });
     expect(result.isOk()).toBe(true);
@@ -28,7 +31,7 @@ describe("getPackageMetadata function", () => {
       throw result.error;
     }
 
-    expect(result.value.name).toBe("neverthrow" as NpmPackageName);
+    expect(result.value.name).toBe(packageName);
   });
 });
 
