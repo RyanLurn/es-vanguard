@@ -9,7 +9,9 @@
     "./datasets/*": "./src/datasets/*",
     "./constants": "./src/constants.ts",
     "./fetch-github-content": "./src/fetch-github-content.ts",
-    "./get-github-content": "./src/get-github-content.ts"
+    "./get-github-content": "./src/get-github-content.ts",
+    "./get-cache-path": "./src/get-cache-path.ts",
+    "./get-resource": "./src/get-resource.ts"
   },
   "scripts": {
     "start": "bun run src/index.ts",
