@@ -11,6 +11,7 @@ export async function getResource({
   forceRefresh = false,
   headers,
   enableLogging = false,
+  prefix,
 }: {
   url: string;
   responseType?: "text" | "json" | "arrayBuffer" | "blob" | "stream";
@@ -19,9 +20,15 @@ export async function getResource({
   forceRefresh?: boolean;
   headers?: HeadersInit;
   enableLogging?: boolean;
+  prefix?: string;
 }): Promise<Result<{ data: any; cache: "hit" | "miss" }, unknown>> {
   try {
-    const cacheFilePath = getCachePath({ url, fileExtension, cacheDir });
+    const cacheFilePath = getCachePath({
+      url,
+      fileExtension,
+      cacheDir,
+      prefix,
+    });
 
     const cachedFile = Bun.file(cacheFilePath);
     if (!forceRefresh && (await cachedFile.exists())) {

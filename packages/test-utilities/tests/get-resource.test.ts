@@ -2,20 +2,39 @@ import { getCachePath } from "#get-cache-path.ts";
 import { getResource } from "#get-resource.ts";
 import { beforeAll, describe, test, expect, afterAll } from "bun:test";
 
-const jsonURL = "https://registry.npmjs.org/ofetch/1.5.1";
-const tarURL = "https://registry.npmjs.org/ofetch/-/ofetch-1.5.1.tgz";
+const jsonCase = {
+  url: "https://registry.npmjs.org/ofetch/1.5.1",
+  fileExtension: "json",
+  prefix: "test",
+};
+const yamlCase = {
+  url: "https://raw.githubusercontent.com/unjs/ofetch/main/pnpm-lock.yaml",
+  fileExtension: "yaml",
+  prefix: "test",
+};
+const tarballCase = {
+  url: "https://registry.npmjs.org/ofetch/-/ofetch-1.5.1.tgz",
+  fileExtension: "tar.gz",
+  prefix: "test",
+};
 
 async function clearCache() {
-  const jsonCachePath = getCachePath({ url: jsonURL, fileExtension: "json" });
+  const jsonCachePath = getCachePath(jsonCase);
   const jsonCacheFile = Bun.file(jsonCachePath);
   if (await jsonCacheFile.exists()) {
     await jsonCacheFile.delete();
   }
 
-  const tarCachePath = getCachePath({ url: tarURL, fileExtension: "tar.gz" });
-  const tarCacheFile = Bun.file(tarCachePath);
-  if (await tarCacheFile.exists()) {
-    await tarCacheFile.delete();
+  const yamlCachePath = getCachePath(yamlCase);
+  const yamlCacheFile = Bun.file(yamlCachePath);
+  if (await yamlCacheFile.exists()) {
+    await yamlCacheFile.delete();
+  }
+
+  const tarballCachePath = getCachePath(tarballCase);
+  const tarballCacheFile = Bun.file(tarballCachePath);
+  if (await tarballCacheFile.exists()) {
+    await tarballCacheFile.delete();
   }
 }
 
@@ -26,9 +45,8 @@ beforeAll(async () => {
 describe("getResource function", () => {
   test("should fetch new JSON resource", async () => {
     const result = await getResource({
-      url: jsonURL,
+      ...jsonCase,
       responseType: "json",
-      fileExtension: "json",
     });
     expect(result.isOk()).toBe(true);
 
@@ -46,9 +64,8 @@ describe("getResource function", () => {
 
   test("should get cached JSON resource", async () => {
     const result = await getResource({
-      url: jsonURL,
+      ...jsonCase,
       responseType: "json",
-      fileExtension: "json",
     });
     expect(result.isOk()).toBe(true);
 
@@ -64,11 +81,54 @@ describe("getResource function", () => {
     expect(data.version).toBe("1.5.1");
   });
 
-  test("should fetch new tarball", async () => {
+  test("should fetch new YAML resource", async () => {
     const result = await getResource({
-      url: tarURL,
+      ...yamlCase,
+      responseType: "text",
+    });
+    expect(result.isOk()).toBe(true);
+
+    if (result.isErr()) {
+      throw result.error;
+    }
+
+    const { data, cache } = result.value;
+
+    expect(cache).toBe("miss");
+    expect(typeof data).toBe("string");
+
+    const dataObject = Bun.YAML.parse(data);
+    expect(dataObject).toBeInstanceOf(Object);
+    // @ts-expect-error - for testing
+    expect(dataObject.lockfileVersion).toBe("9.0");
+  });
+
+  test("should get cached YAML resource", async () => {
+    const result = await getResource({
+      ...yamlCase,
+      responseType: "text",
+    });
+    expect(result.isOk()).toBe(true);
+
+    if (result.isErr()) {
+      throw result.error;
+    }
+
+    const { data, cache } = result.value;
+
+    expect(cache).toBe("hit");
+    expect(typeof data).toBe("string");
+
+    const dataObject = Bun.YAML.parse(data);
+    expect(dataObject).toBeInstanceOf(Object);
+    // @ts-expect-error - for testing
+    expect(dataObject.lockfileVersion).toBe("9.0");
+  });
+
+  test("should fetch new tarball resource", async () => {
+    const result = await getResource({
+      ...tarballCase,
       responseType: "blob",
-      fileExtension: "tar.gz",
     });
     expect(result.isOk()).toBe(true);
 
@@ -101,11 +161,10 @@ describe("getResource function", () => {
     expect(packageJSONContent.version).toBe("1.5.1");
   });
 
-  test("should get cached tarball", async () => {
+  test("should get cached tarball resource", async () => {
     const result = await getResource({
-      url: tarURL,
+      ...tarballCase,
       responseType: "blob",
-      fileExtension: "tar.gz",
     });
     expect(result.isOk()).toBe(true);
 
