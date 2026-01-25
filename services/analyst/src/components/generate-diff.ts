@@ -77,20 +77,21 @@ export async function generateDiff({
     // ---------------------------------------------------------
     // OPTIMIZATION 4: Content Check (Fail Slow)
     // ---------------------------------------------------------
-    if (
-      isBuildOutputContent(targetFileContent).reason !== "none" ||
-      isBuildOutputContent(baseFileContent).reason !== "none"
-    ) {
-      console.log(
-        `Skipping ${filePath} because it is a build output file (by content analysis)`
-      );
-      console.log(`Reason: ${isBuildOutputContent(targetFileContent).reason}`);
-      console.log(`Reason: ${isBuildOutputContent(baseFileContent).reason}`);
-      skippedStats.push({
-        path: filePath,
-        category: "build_output_content",
-        reason: "build_output_content",
-      });
+    const targetFileBuildOutputContentReport = isBuildOutputContent({
+      content: targetFileContent,
+      filePath,
+    });
+    if (targetFileBuildOutputContentReport) {
+      skippedStats.push(targetFileBuildOutputContentReport);
+      continue;
+    }
+
+    const baseFileBuildOutputContentReport = isBuildOutputContent({
+      content: baseFileContent,
+      filePath,
+    });
+    if (baseFileBuildOutputContentReport) {
+      skippedStats.push(baseFileBuildOutputContentReport);
       continue;
     }
 

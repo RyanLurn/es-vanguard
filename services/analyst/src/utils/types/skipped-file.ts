@@ -1,5 +1,8 @@
 import type { binaryExtensions } from "#utils/is-binary";
-import type { buildOutputPathSkipReasons } from "#utils/is-build-output";
+import type {
+  buildOutputContentSkipReasons,
+  buildOutputPathSkipReasons,
+} from "#utils/is-build-output";
 
 export interface SkippedFile {
   path: string;
@@ -27,4 +30,12 @@ export type BuildOutputPathReason = (typeof buildOutputPathSkipReasons)[number];
 export interface SkippedBuildOutputPathFile extends SkippedFile {
   category: "build_output_path";
   reason: BuildOutputPathReason;
+}
+
+export type BuildOutputContentReason =
+  (typeof buildOutputContentSkipReasons)[number];
+
+export interface SkippedBuildOutputContentFile extends SkippedFile {
+  category: "build_output_content";
+  reason: BuildOutputContentReason;
 }
