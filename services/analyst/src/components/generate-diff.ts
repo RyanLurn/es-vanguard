@@ -136,6 +136,7 @@ export async function generateDiff({
       undefined,
       undefined,
       {
+        ignoreWhitespace: true,
         headerOptions: {
           includeIndex: true,
           includeUnderline: false,
