@@ -1,13 +1,10 @@
-import { areDifferent } from "#utils/are-different";
+import { areFilesIdentical, areContentIdentical } from "#utils/are-identical";
 import { isBinaryFile } from "#utils/is-binary";
 import {
   isBuildOutputContent,
   isBuildOutputPath,
 } from "#utils/is-build-output";
-import type {
-  SkippedFile,
-  SkippedIdenticalFile,
-} from "#utils/types/skipped-file";
+import type { SkippedFile } from "#utils/types/skipped-file";
 import type { Semver } from "@es-vanguard/utils/semver";
 import { createTwoFilesPatch } from "diff";
 
@@ -32,34 +29,42 @@ export async function generateDiff({
     const baseFile = baseFiles.get(filePath);
 
     // ---------------------------------------------------------
-    // OPTIMIZATION 1: Identical Check
+    // OPTIMIZATION 1: Binary Check
     // ---------------------------------------------------------
-    const hasChanges = areDifferent({ targetFile, baseFile });
-    if (!hasChanges) {
-      const skippedIdenticalFile: SkippedIdenticalFile = {
-        path: filePath,
-        category: "identical",
-        reason: "identical",
-      };
-      skippedStats.push(skippedIdenticalFile);
+    const binaryReport = isBinaryFile({ filePath });
+    if (binaryReport) {
+      // Identical category is prioritized over binary category
+      const identicalReport = await areFilesIdentical({
+        targetFile,
+        baseFile,
+        filePath,
+      });
+      if (identicalReport) {
+        skippedStats.push(identicalReport);
+        continue;
+      }
+
+      skippedStats.push(binaryReport);
       continue;
     }
 
     // ---------------------------------------------------------
-    // OPTIMIZATION 2: Binary Check
+    // OPTIMIZATION 2: Path Check
     // ---------------------------------------------------------
-    const skippedBinaryFile = isBinaryFile({ filePath });
-    if (skippedBinaryFile) {
-      skippedStats.push(skippedBinaryFile);
-      continue;
-    }
+    const buildOutputPathReport = isBuildOutputPath(filePath);
+    if (buildOutputPathReport) {
+      // Identical category is prioritized over build output path category
+      const identicalReport = await areFilesIdentical({
+        targetFile,
+        baseFile,
+        filePath,
+      });
+      if (identicalReport) {
+        skippedStats.push(identicalReport);
+        continue;
+      }
 
-    // ---------------------------------------------------------
-    // OPTIMIZATION 3: Path Check (Fail Fast)
-    // ---------------------------------------------------------
-    const skippedBuildOutputPathFile = isBuildOutputPath(filePath);
-    if (skippedBuildOutputPathFile) {
-      skippedStats.push(skippedBuildOutputPathFile);
+      skippedStats.push(buildOutputPathReport);
       continue;
     }
 
@@ -67,7 +72,7 @@ export async function generateDiff({
     const baseFileName = baseFile ? `a/${filePath}` : "/dev/null";
 
     // ---------------------------------------------------------
-    // LOAD CONTENT (The Memory Cost)
+    // LOAD CONTENT AS TEXT
     // ---------------------------------------------------------
     const targetFileContent = targetFile
       ? (await targetFile.text()).trim()
@@ -75,7 +80,20 @@ export async function generateDiff({
     const baseFileContent = baseFile ? (await baseFile.text()).trim() : "";
 
     // ---------------------------------------------------------
-    // OPTIMIZATION 4: Content Check (Fail Slow)
+    // OPTIMIZATION 3: Identical Text Content Check
+    // ---------------------------------------------------------
+    const contentIdenticalReport = areContentIdentical({
+      targetFileContent,
+      baseFileContent,
+      filePath,
+    });
+    if (contentIdenticalReport) {
+      skippedStats.push(contentIdenticalReport);
+      continue;
+    }
+
+    // ---------------------------------------------------------
+    // OPTIMIZATION 4: Build Output Content Check
     // ---------------------------------------------------------
     const targetFileBuildOutputContentReport = isBuildOutputContent({
       content: targetFileContent,
@@ -92,11 +110,6 @@ export async function generateDiff({
     });
     if (baseFileBuildOutputContentReport) {
       skippedStats.push(baseFileBuildOutputContentReport);
-      continue;
-    }
-
-    // Identical check
-    if (baseFileContent === targetFileContent) {
       continue;
     }
 
@@ -137,16 +150,20 @@ export async function generateDiff({
   // APPEND SUMMARY
   // ---------------------------------------------------------
   if (skippedStats.length > 0) {
+    const identicalFiles = skippedStats.filter(
+      (skippedFile) => skippedFile.category === "identical"
+    );
     const binFiles = skippedStats.filter(
-      (skippedFile) => skippedFile.reason === "binary"
+      (skippedFile) => skippedFile.category === "binary"
     );
     const buildOutputPathFiles = skippedStats.filter(
-      (skippedFile) => skippedFile.reason === "build_output_path"
+      (skippedFile) => skippedFile.category === "build_output_path"
     );
     const buildOutputContentFiles = skippedStats.filter(
-      (skippedFile) => skippedFile.reason === "build_output_content"
+      (skippedFile) => skippedFile.category === "build_output_content"
     );
 
+    const identicalCount = identicalFiles.length;
     const binCount = binFiles.length;
     const buildOutputPathCount = buildOutputPathFiles.length;
     const buildOutputContentCount = buildOutputContentFiles.length;
@@ -154,18 +171,28 @@ export async function generateDiff({
     diff += `\n------------------------------------------------------------\n`;
     diff += ` Diff Summary (Files Skipped for Clarity)\n`;
     diff += `------------------------------------------------------------\n`;
+    if (identicalCount > 0) {
+      diff += `>> Skipped ${identicalCount} identical files\n`;
+      diff += identicalFiles
+        .map((file) => `  > ${file.path} because of ${file.reason}\n`)
+        .join("");
+    }
     if (binCount > 0) {
       diff += `>> Skipped ${binCount} binary files\n`;
-      diff += binFiles.map((file) => `  > ${file.path}\n`).join("");
+      diff += binFiles
+        .map((file) => `  > ${file.path} because of ${file.reason}\n`)
+        .join("");
     }
     if (buildOutputPathCount > 0) {
       diff += `>> Skipped ${buildOutputPathCount} generated files (by file path)\n`;
-      diff += buildOutputPathFiles.map((file) => `  > ${file.path}\n`).join("");
+      diff += buildOutputPathFiles
+        .map((file) => `  > ${file.path} because of ${file.reason}\n`)
+        .join("");
     }
     if (buildOutputContentCount > 0) {
       diff += `>> Skipped ${buildOutputContentCount} generated files (by content analysis)\n`;
       diff += buildOutputContentFiles
-        .map((file) => `  > ${file.path}\n`)
+        .map((file) => `  > ${file.path} because of ${file.reason}\n`)
         .join("");
     }
   }
