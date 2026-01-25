@@ -9,20 +9,25 @@ export async function areFilesIdentical({
   baseFile: File | undefined;
   filePath: string;
 }): Promise<SkippedIdenticalFile | undefined> {
-  if (targetFile && baseFile) {
-    const targetFileHash = Bun.hash.xxHash3(await targetFile.arrayBuffer());
-    const baseFileHash = Bun.hash.xxHash3(await baseFile.arrayBuffer());
-    if (targetFileHash === baseFileHash) {
-      const report: SkippedIdenticalFile = {
-        path: filePath,
-        category: "identical",
-        reason: "identical hashed content",
-      };
-      return report;
+  try {
+    if (targetFile && baseFile) {
+      const targetFileHash = Bun.hash.xxHash3(await targetFile.arrayBuffer());
+      const baseFileHash = Bun.hash.xxHash3(await baseFile.arrayBuffer());
+      if (targetFileHash === baseFileHash) {
+        const report: SkippedIdenticalFile = {
+          path: filePath,
+          category: "identical",
+          reason: "identical hashed content",
+        };
+        return report;
+      }
     }
-  }
 
-  return undefined;
+    return undefined;
+  } catch (error) {
+    console.warn(`Failed to check if files are identical: ${error}`);
+    return undefined;
+  }
 }
 
 export function areContentIdentical({
