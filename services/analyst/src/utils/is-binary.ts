@@ -1,3 +1,7 @@
+import type {
+  BinaryExtension,
+  SkippedBinaryFile,
+} from "#utils/types/skipped-file";
 import { basename, extname } from "node:path";
 
 export const binaryExtensions = [
@@ -263,15 +267,29 @@ export const binaryExtensions = [
   "z",
   "zip",
   "zipx",
-];
+] as const;
 
-export function isBinary({ filePath }: { filePath: string }) {
+export function isBinaryExtension(value: string): value is BinaryExtension {
+  return (binaryExtensions as readonly string[]).includes(value);
+}
+
+export function isBinaryFile({ filePath }: { filePath: string }) {
   const fileName = basename(filePath);
   const extension = (
     fileName.startsWith(".") ? fileName : extname(fileName)
   ).slice(1);
 
-  const isBinary = binaryExtensions.includes(extension);
+  const isBinary = isBinaryExtension(extension);
 
-  return isBinary;
+  if (isBinary) {
+    const skippedFile: SkippedBinaryFile = {
+      path: filePath,
+      category: "binary",
+      reason: extension,
+    };
+
+    return skippedFile;
+  }
+
+  return undefined;
 }

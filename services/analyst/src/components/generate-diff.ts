@@ -1,15 +1,15 @@
-import { isBinary } from "#utils/is-binary";
+import { areDifferent } from "#utils/are-different";
+import { isBinaryFile } from "#utils/is-binary";
 import {
   isBuildOutputContent,
   isBuildOutputPath,
 } from "#utils/is-build-output";
+import type {
+  SkippedFile,
+  SkippedIdenticalFile,
+} from "#utils/types/skipped-file";
 import type { Semver } from "@es-vanguard/utils/semver";
 import { createTwoFilesPatch } from "diff";
-
-type SkippedFile = {
-  path: string;
-  reason: "binary" | "build_output_path" | "build_output_content";
-};
 
 export async function generateDiff({
   targetVersion,
@@ -32,18 +32,37 @@ export async function generateDiff({
     const baseFile = baseFiles.get(filePath);
 
     // ---------------------------------------------------------
-    // OPTIMIZATION 1: Binary Check (Fail Fast)
+    // OPTIMIZATION 1: Identical Check
     // ---------------------------------------------------------
-    if (isBinary({ filePath })) {
-      skippedStats.push({ path: filePath, reason: "binary" });
+    const hasChanges = areDifferent({ targetFile, baseFile });
+    if (!hasChanges) {
+      const skippedIdenticalFile: SkippedIdenticalFile = {
+        path: filePath,
+        category: "identical",
+        reason: "identical",
+      };
+      skippedStats.push(skippedIdenticalFile);
       continue;
     }
 
     // ---------------------------------------------------------
-    // OPTIMIZATION 2: Path Check (Fail Fast)
+    // OPTIMIZATION 2: Binary Check
+    // ---------------------------------------------------------
+    const skippedBinaryFile = isBinaryFile({ filePath });
+    if (skippedBinaryFile) {
+      skippedStats.push(skippedBinaryFile);
+      continue;
+    }
+
+    // ---------------------------------------------------------
+    // OPTIMIZATION 3: Path Check (Fail Fast)
     // ---------------------------------------------------------
     if (isBuildOutputPath(filePath)) {
-      skippedStats.push({ path: filePath, reason: "build_output_path" });
+      skippedStats.push({
+        path: filePath,
+        category: "build_output_path",
+        reason: "build_output_path",
+      });
       continue;
     }
 
@@ -59,7 +78,7 @@ export async function generateDiff({
     const baseFileContent = baseFile ? (await baseFile.text()).trim() : "";
 
     // ---------------------------------------------------------
-    // OPTIMIZATION 3: Content Check (Fail Slow)
+    // OPTIMIZATION 4: Content Check (Fail Slow)
     // ---------------------------------------------------------
     if (
       isBuildOutputContent(targetFileContent).reason !== "none" ||
@@ -70,7 +89,11 @@ export async function generateDiff({
       );
       console.log(`Reason: ${isBuildOutputContent(targetFileContent).reason}`);
       console.log(`Reason: ${isBuildOutputContent(baseFileContent).reason}`);
-      skippedStats.push({ path: filePath, reason: "build_output_content" });
+      skippedStats.push({
+        path: filePath,
+        category: "build_output_content",
+        reason: "build_output_content",
+      });
       continue;
     }
 
