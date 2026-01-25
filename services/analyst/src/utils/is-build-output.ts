@@ -1,21 +1,51 @@
+import type { SkippedBuildOutputPathFile } from "#utils/types/skipped-file";
+
+export const buildOutputPathSkipReasons = [
+  "minified extension",
+  "bundled extension",
+  "source map",
+  "artifact directory",
+  "test coverage report",
+  "assets directory",
+  "chunks directory",
+  "third-party directory",
+] as const;
+
 /**
  * FAST CHECK: Run this BEFORE loading file content.
  * Checks file extensions and common directory patterns.
  */
-export function isBuildOutputPath(filePath: string): boolean {
+export function isBuildOutputPath(
+  filePath: string
+): SkippedBuildOutputPathFile | undefined {
   // 1. Minified extensions (Standard)
   if (/\.min\.(js|css|html|json)$/i.test(filePath)) {
-    return true;
+    const report: SkippedBuildOutputPathFile = {
+      path: filePath,
+      category: "build_output_path",
+      reason: "minified extension",
+    };
+    return report;
   }
 
   // 2. Bundled extensions (Standard)
   if (/[.-]bundle\.(js|css)$/i.test(filePath)) {
-    return true;
+    const report: SkippedBuildOutputPathFile = {
+      path: filePath,
+      category: "build_output_path",
+      reason: "bundled extension",
+    };
+    return report;
   }
 
   // 3. Source maps (Standard)
   if (/\.map$/i.test(filePath)) {
-    return true;
+    const report: SkippedBuildOutputPathFile = {
+      path: filePath,
+      category: "build_output_path",
+      reason: "source map",
+    };
+    return report;
   }
 
   // 4. Artifact Directories
@@ -23,43 +53,65 @@ export function isBuildOutputPath(filePath: string): boolean {
   // Note: If malware is hidden in 'dist/', we rely on the package.json 'bin'/'main'
   // entry pointing to it to flag suspicious pointers, as we can't scan all dists.
   if (/^dist\//i.test(filePath) || /\/dist\//i.test(filePath)) {
-    return true;
+    const report: SkippedBuildOutputPathFile = {
+      path: filePath,
+      category: "build_output_path",
+      reason: "artifact directory",
+    };
+    return report;
   }
   if (/^build\//i.test(filePath) || /\/build\//i.test(filePath)) {
-    return true;
-  }
-
-  // ".next" or "_next" (Next.js build output)
-  if (/\/?\.?next\//i.test(filePath)) {
-    return true;
+    const report: SkippedBuildOutputPathFile = {
+      path: filePath,
+      category: "build_output_path",
+      reason: "artifact directory",
+    };
+    return report;
   }
 
   // "coverage" (Test coverage reports)
   if (/\/coverage\//i.test(filePath)) {
-    return true;
+    const report: SkippedBuildOutputPathFile = {
+      path: filePath,
+      category: "build_output_path",
+      reason: "test coverage report",
+    };
+    return report;
   }
 
   // "assets" folder is almost always hashed build output or static media
   if (/\/assets\//i.test(filePath)) {
-    return true;
+    const report: SkippedBuildOutputPathFile = {
+      path: filePath,
+      category: "build_output_path",
+      reason: "assets directory",
+    };
+    return report;
   }
 
   // "chunks" folder (Next.js / Webpack)
   if (/\/chunks\//i.test(filePath)) {
-    return true;
+    const report: SkippedBuildOutputPathFile = {
+      path: filePath,
+      category: "build_output_path",
+      reason: "chunks directory",
+    };
+    return report;
   }
 
   // "vendor" or "third_party"
   // We assume these are audited upstream.
   // Scanning them is usually too expensive/noisy.
   if (/\/vendor\//i.test(filePath) || /\/third_party\//i.test(filePath)) {
-    return true;
+    const report: SkippedBuildOutputPathFile = {
+      path: filePath,
+      category: "build_output_path",
+      reason: "third-party directory",
+    };
+    return report;
   }
 
-  // REMOVED: The generic hash regex (Too dangerous for source files)
-  // REMOVED: The .worker.js regex (Hand-written workers should be scanned)
-
-  return false;
+  return undefined;
 }
 
 /**

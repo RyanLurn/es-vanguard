@@ -57,12 +57,9 @@ export async function generateDiff({
     // ---------------------------------------------------------
     // OPTIMIZATION 3: Path Check (Fail Fast)
     // ---------------------------------------------------------
-    if (isBuildOutputPath(filePath)) {
-      skippedStats.push({
-        path: filePath,
-        category: "build_output_path",
-        reason: "build_output_path",
-      });
+    const skippedBuildOutputPathFile = isBuildOutputPath(filePath);
+    if (skippedBuildOutputPathFile) {
+      skippedStats.push(skippedBuildOutputPathFile);
       continue;
     }
 
