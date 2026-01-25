@@ -16,7 +16,7 @@ export async function areFilesIdentical({
       const report: SkippedIdenticalFile = {
         path: filePath,
         category: "identical",
-        reason: "hash",
+        reason: "identical hashed content",
       };
       return report;
     }
@@ -38,7 +38,7 @@ export function areContentIdentical({
     const report: SkippedIdenticalFile = {
       path: filePath,
       category: "identical",
-      reason: "text",
+      reason: "identical text content",
     };
     return report;
   }

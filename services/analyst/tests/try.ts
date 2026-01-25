@@ -1,102 +1,151 @@
-import { findDistObjects } from "#components/find-dist-objects";
 import { generateDiff } from "#components/generate-diff";
 import { getFiles } from "#components/get-files";
-import { getPackageMetadata } from "#components/get-package-metadata";
-import { getTarball } from "#components/get-tarball";
-import { verifyTarball } from "#components/verify-tarball";
+import type { VerifiedTarball } from "#components/verify-tarball";
+import { getPackageTarball } from "@es-vanguard/test-utilities/get-package-tarball";
 import type { NpmPackageName } from "@es-vanguard/utils/npm-package-name";
 import type { Semver } from "@es-vanguard/utils/semver";
 
-const packageName = "svelte" as NpmPackageName;
-const targetVersion = "5.47.1" as Semver;
-const baseVersion = "5.47.0" as Semver;
+const packageName = "react-dom" as NpmPackageName;
+const targetVersion = "19.2.3" as Semver;
+const basePatchVersion = "19.2.2" as Semver;
+const baseMinorVersion = "19.1.0" as Semver;
+const baseMajorVersion = "18.0.0" as Semver;
 
-console.log("Fetching package metadata...");
-const getPackageMetadataStartTime = Bun.nanoseconds();
-const getPackageMetadataResult = await getPackageMetadata({ packageName });
-if (getPackageMetadataResult.isErr()) {
-  throw getPackageMetadataResult.error;
-}
-const packageMetadata = getPackageMetadataResult.value;
-const getPackageMetadataEndTime = Bun.nanoseconds();
-console.log(
-  `Package metadata fetched in ${
-    (getPackageMetadataEndTime - getPackageMetadataStartTime) / 1_000_000_000
-  } seconds`
-);
-
-console.log("Finding dist objects...");
-const findDistObjectsResult = findDistObjects({
-  name: packageName,
-  target: targetVersion,
-  base: baseVersion,
-  packageMetadata,
+// Getting tarballs
+console.log("Getting tarballs...");
+const getTarballsStartTime = Bun.nanoseconds();
+const targetVersionTarballPromise = getPackageTarball({
+  packageName,
+  version: targetVersion,
 });
-if (findDistObjectsResult.isErr()) {
-  throw findDistObjectsResult.error;
-}
-const { targetDist, baseDist } = findDistObjectsResult.value;
-
-console.log("Fetching tarballs...");
-const fetchTarballStartTime = Bun.nanoseconds();
-const [targetTarball, baseTarball] = await Promise.all([
-  fetch(targetDist.tarball).then((response) => response.blob()),
-  fetch(baseDist.tarball).then((response) => response.blob()),
-]);
-const fetchTarballEndTime = Bun.nanoseconds();
-console.log(
-  `Tarballs fetched in ${
-    (fetchTarballEndTime - fetchTarballStartTime) / 1_000_000_000
-  } seconds`
-);
-
-const verifiedTargetTarball = verifyTarball({
-  tarball: targetTarball,
-  distObject: targetDist,
+const basePatchVersionTarballPromise = getPackageTarball({
+  packageName,
+  version: basePatchVersion,
 });
-if (verifiedTargetTarball.isErr()) {
-  throw verifiedTargetTarball.error;
-}
-const verifiedBaseTarball = verifyTarball({
-  tarball: baseTarball,
-  distObject: baseDist,
+const baseMinorVersionTarballPromise = getPackageTarball({
+  packageName,
+  version: baseMinorVersion,
 });
-if (verifiedBaseTarball.isErr()) {
-  throw verifiedBaseTarball.error;
-}
-
-console.log("Extracting files...");
-const untarStartTime = Bun.nanoseconds();
-const [targetFilesResult, baseFilesResult] = await Promise.all([
-  getFiles({ tarball: verifiedTargetTarball.value }),
-  getFiles({ tarball: verifiedBaseTarball.value }),
+const baseMajorVersionTarballPromise = getPackageTarball({
+  packageName,
+  version: baseMajorVersion,
+});
+const [
+  getTargetVersionTarballResult,
+  getBasePatchVersionTarballResult,
+  getBaseMinorVersionTarballResult,
+  getBaseMajorVersionTarballResult,
+] = await Promise.all([
+  targetVersionTarballPromise,
+  basePatchVersionTarballPromise,
+  baseMinorVersionTarballPromise,
+  baseMajorVersionTarballPromise,
 ]);
 
-if (targetFilesResult.isErr()) {
-  throw targetFilesResult.error;
+if (getTargetVersionTarballResult.isErr()) {
+  console.error(getTargetVersionTarballResult.error);
 }
-if (baseFilesResult.isErr()) {
-  throw baseFilesResult.error;
+if (getBasePatchVersionTarballResult.isErr()) {
+  console.error(getBasePatchVersionTarballResult.error);
 }
-const targetFiles = targetFilesResult.value;
-const baseFiles = baseFilesResult.value;
-const untarEndTime = Bun.nanoseconds();
+if (getBaseMinorVersionTarballResult.isErr()) {
+  console.error(getBaseMinorVersionTarballResult.error);
+}
+if (getBaseMajorVersionTarballResult.isErr()) {
+  console.error(getBaseMajorVersionTarballResult.error);
+}
+if (
+  getTargetVersionTarballResult.isErr() ||
+  getBasePatchVersionTarballResult.isErr() ||
+  getBaseMinorVersionTarballResult.isErr() ||
+  getBaseMajorVersionTarballResult.isErr()
+) {
+  process.exit(1);
+}
+
+const targetVersionTarball =
+  getTargetVersionTarballResult.value as VerifiedTarball;
+const basePatchVersionTarball =
+  getBasePatchVersionTarballResult.value as VerifiedTarball;
+const baseMinorVersionTarball =
+  getBaseMinorVersionTarballResult.value as VerifiedTarball;
+const baseMajorVersionTarball =
+  getBaseMajorVersionTarballResult.value as VerifiedTarball;
+const getTarballsEndTime = Bun.nanoseconds();
 console.log(
-  `Files extracted in ${(untarEndTime - untarStartTime) / 1_000_000_000} seconds`
+  `Tarballs loaded in ${(getTarballsEndTime - getTarballsStartTime) / 1_000_000_000} seconds`
 );
 
-console.log("Generating diff...");
+// Getting files
+console.log("Getting files...");
+const getFilesStartTime = Bun.nanoseconds();
+const getTargetVersionFilesResult = await getFiles({
+  tarball: targetVersionTarball,
+});
+if (getTargetVersionFilesResult.isErr()) {
+  console.error(getTargetVersionFilesResult.error);
+  process.exit(1);
+}
+const targetVersionFiles = getTargetVersionFilesResult.value;
+
+const getBasePatchVersionFilesResult = await getFiles({
+  tarball: basePatchVersionTarball,
+});
+if (getBasePatchVersionFilesResult.isErr()) {
+  console.error(getBasePatchVersionFilesResult.error);
+  process.exit(1);
+}
+const basePatchVersionFiles = getBasePatchVersionFilesResult.value;
+
+const getBaseMinorVersionFilesResult = await getFiles({
+  tarball: baseMinorVersionTarball,
+});
+if (getBaseMinorVersionFilesResult.isErr()) {
+  console.error(getBaseMinorVersionFilesResult.error);
+  process.exit(1);
+}
+const baseMinorVersionFiles = getBaseMinorVersionFilesResult.value;
+
+const getBaseMajorVersionFilesResult = await getFiles({
+  tarball: baseMajorVersionTarball,
+});
+if (getBaseMajorVersionFilesResult.isErr()) {
+  console.error(getBaseMajorVersionFilesResult.error);
+  process.exit(1);
+}
+const baseMajorVersionFiles = getBaseMajorVersionFilesResult.value;
+const getFilesEndTime = Bun.nanoseconds();
+console.log(
+  `Files loaded in ${(getFilesEndTime - getFilesStartTime) / 1_000_000_000} seconds`
+);
+
+// Generating diffs
+console.log("Generating diffs...");
 const generateDiffStartTime = Bun.nanoseconds();
-const diff = await generateDiff({
+const targetVSBasePatchDiff = await generateDiff({
   targetVersion,
-  baseVersion,
-  targetFiles,
-  baseFiles,
+  baseVersion: basePatchVersion,
+  targetFiles: targetVersionFiles,
+  baseFiles: basePatchVersionFiles,
 });
+await Bun.write("target-vs-base-patch-diff.txt", targetVSBasePatchDiff);
+
+const targetVSBaseMinorDiff = await generateDiff({
+  targetVersion,
+  baseVersion: baseMinorVersion,
+  targetFiles: targetVersionFiles,
+  baseFiles: baseMinorVersionFiles,
+});
+await Bun.write("target-vs-base-minor-diff.txt", targetVSBaseMinorDiff);
+
+const targetVSBaseMajorDiff = await generateDiff({
+  targetVersion,
+  baseVersion: baseMajorVersion,
+  targetFiles: targetVersionFiles,
+  baseFiles: baseMajorVersionFiles,
+});
+await Bun.write("target-vs-base-major-diff.txt", targetVSBaseMajorDiff);
 const generateDiffEndTime = Bun.nanoseconds();
 console.log(
-  `Diff generated in ${(generateDiffEndTime - generateDiffStartTime) / 1_000_000_000} seconds`
+  `Diffs generated in ${(generateDiffEndTime - generateDiffStartTime) / 1_000_000_000} seconds`
 );
-
-await Bun.write("diff.txt", diff);
-console.log("Done.");

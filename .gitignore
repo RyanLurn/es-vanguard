@@ -36,5 +36,6 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 # SQLite database file
 *.db
 
-# diff.txt
+# generated diff for testing
 **/diff.txt
+**/*diff.txt

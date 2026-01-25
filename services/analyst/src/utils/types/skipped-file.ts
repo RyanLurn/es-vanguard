@@ -15,7 +15,7 @@ export interface SkippedFile {
 }
 export interface SkippedIdenticalFile extends SkippedFile {
   category: "identical";
-  reason: "hash" | "text";
+  reason: "identical hashed content" | "identical text content";
 }
 
 export type BinaryExtension = (typeof binaryExtensions)[number];
