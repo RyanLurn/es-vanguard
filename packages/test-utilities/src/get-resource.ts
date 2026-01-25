@@ -1,7 +1,14 @@
-import { getCachePath } from "#get-cache-path.ts";
+import { getCachePath, type GetCachePathOptions } from "#get-cache-path.ts";
 import type { HeadersInit } from "bun";
 import { err, ok, type Result } from "neverthrow";
 import { ofetch } from "ofetch";
+
+export interface GetResourceOptions extends GetCachePathOptions {
+  responseType?: "text" | "json" | "arrayBuffer" | "blob" | "stream";
+  forceRefresh?: boolean;
+  headers?: HeadersInit;
+  enableLogging?: boolean;
+}
 
 export async function getResource({
   url,
@@ -12,16 +19,9 @@ export async function getResource({
   headers,
   enableLogging = false,
   prefix,
-}: {
-  url: string;
-  responseType?: "text" | "json" | "arrayBuffer" | "blob" | "stream";
-  fileExtension?: string;
-  cacheDir?: string;
-  forceRefresh?: boolean;
-  headers?: HeadersInit;
-  enableLogging?: boolean;
-  prefix?: string;
-}): Promise<Result<{ data: any; cache: "hit" | "miss" }, unknown>> {
+}: GetResourceOptions): Promise<
+  Result<{ data: any; cache: "hit" | "miss" }, unknown>
+> {
   try {
     const cacheFilePath = getCachePath({
       url,
