@@ -50,6 +50,13 @@ export const PackageJsonSchema = z.looseObject({
   browser: z.string().optional(),
   gypfile: z.boolean().optional(),
   overrides: z.looseObject({}).optional(),
+  dependencies: z.record(z.string(), z.string()).optional(),
+  devDependencies: z.record(z.string(), z.string()).optional(),
+  peerDependencies: z.record(z.string(), z.string()).optional(),
+  peerDependenciesMeta: z
+    .record(z.string(), z.object({ optional: z.boolean().optional() }))
+    .optional(),
+  bundleDependencies: z.record(z.string(), z.string()).optional(),
 });
 
 export type PackageJson = z.infer<typeof PackageJsonSchema>;
