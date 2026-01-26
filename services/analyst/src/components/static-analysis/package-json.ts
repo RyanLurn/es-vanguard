@@ -1,5 +1,3 @@
-import { NpmPackageNameSchema } from "@es-vanguard/utils/npm-package-name";
-import { SemverSchema } from "@es-vanguard/utils/semver";
 import * as z from "zod";
 
 export const PackageJsonScriptsSchema = z.looseObject({
@@ -41,8 +39,8 @@ export const PackageJsonExportsSchema = z.union([
 ]);
 
 export const PackageJsonSchema = z.looseObject({
-  name: NpmPackageNameSchema,
-  version: SemverSchema,
+  name: z.string(),
+  version: z.string(),
   scripts: PackageJsonScriptsSchema.optional(),
   bin: PackageJsonBinSchema.optional(),
   files: z.array(z.string()).optional(),
