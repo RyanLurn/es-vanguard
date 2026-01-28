@@ -1,0 +1,26 @@
+{
+  "name": "@es-vanguard/telemetry",
+  "type": "module",
+  "scripts": {
+    "type-check": "tsc --noEmit",
+    "try": "bun run tests/try.ts"
+  },
+  "dependencies": {
+    "@es-vanguard/utils": "workspace:*",
+    "serialize-error": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@es-vanguard/typescript-config": "workspace:*",
+    "@types/bun": "catalog:types",
+    "typescript": "catalog:"
+  },
+  "imports": {
+    "#*": "./src/*.ts"
+  },
+  "exports": {
+    "./errors/classes": "./src/errors/classes.ts",
+    "./errors/serialize-unknown": "./src/errors/serialize-unknown.ts",
+    "./context": "./src/types/context.ts"
+  }
+}

@@ -19,6 +19,7 @@
   "exports": {
     "./constants/*": "./src/core/constants/*.ts",
     "./errors/*": "./src/core/errors/*.ts",
+    "./npm-constants": "./src/npm/constants.ts",
     "./semver": "./src/npm/semver.ts",
     "./npm-package-name": "./src/npm/package-name.ts"
   }

@@ -1,0 +1,30 @@
+{
+  "name": "@es-vanguard/analyst",
+  "type": "module",
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "type-check": "tsc --noEmit",
+    "try": "bun run tests/try.ts",
+    "test:find-dist": "bun test tests/find-dist-objects.test.ts",
+    "bench": "bun run tests/benchmark.ts"
+  },
+  "dependencies": {
+    "@es-vanguard/safe-fetch": "workspace:*",
+    "@es-vanguard/telemetry": "workspace:*",
+    "@es-vanguard/utils": "workspace:*",
+    "@better-fetch/fetch": "catalog:",
+    "diff": "^8.0.3",
+    "neverthrow": "catalog:",
+    "serialize-error": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@es-vanguard/test-utilities": "workspace:*",
+    "@es-vanguard/typescript-config": "workspace:*",
+    "@types/bun": "catalog:types",
+    "typescript": "catalog:"
+  },
+  "imports": {
+    "#*": "./src/*.ts"
+  }
+}

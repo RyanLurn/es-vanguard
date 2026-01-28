@@ -1,53 +1,45 @@
-import type { ZodError } from "zod";
+import { prettifyError, type ZodError } from "zod";
 
-export interface CustomErrorType {
-  code: string;
-  message: string;
-  cause?: unknown;
-  context?: Record<string, unknown>;
-}
-
-export class CustomError extends Error implements CustomErrorType {
-  public readonly code: string;
-  public readonly context?: Record<string, unknown>;
-
-  constructor(options: CustomErrorType) {
-    super(options.message, { cause: options.cause });
-    this.name = this.constructor.name;
-    this.code = options.code;
-    this.context = options.context;
+export class ExpectedError extends Error {
+  constructor(message: string, options?: ErrorOptions) {
+    super(message, options);
+    this.name = "ExpectedError";
   }
 }
 
-export class UnexpectedError extends CustomError {
-  constructor(
-    message: string,
-    options?: { cause?: unknown; context?: Record<string, unknown> }
-  ) {
-    super({
-      code: "UNEXPECTED_ERROR",
-      message: message,
-      cause: options?.cause,
-      context: options?.context,
-    });
+export class ValidationError extends ExpectedError {
+  issues: ZodError["issues"];
+
+  constructor(zodError: ZodError) {
+    super(prettifyError(zodError), { cause: zodError });
+    this.name = "ValidationError";
+    this.issues = zodError.issues;
   }
 }
 
-export class ValidationError extends CustomError {
-  constructor(
-    message: string,
-    options: {
-      cause: ZodError;
-      context: {
-        input: unknown;
-      };
-    }
-  ) {
-    super({
-      code: "VALIDATION_ERROR",
-      message: message,
-      cause: options.cause,
-      context: options.context,
-    });
+interface HttpErrorRequest {
+  original: Request;
+  sentBody?: any;
+}
+
+interface HttpErrorResponse {
+  original: Response;
+  parsedBody?: any;
+}
+
+interface HttpErrorOptions {
+  request: HttpErrorRequest;
+  response: HttpErrorResponse;
+}
+
+export class HttpError extends ExpectedError {
+  request: HttpErrorRequest;
+  response: HttpErrorResponse;
+
+  constructor(message: string, options: HttpErrorOptions) {
+    super(message);
+    this.name = "HttpError";
+    this.request = options.request;
+    this.response = options.response;
   }
 }

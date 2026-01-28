@@ -1,0 +1,40 @@
+{
+  "name": "@es-vanguard/safe-fetch",
+  "type": "module",
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json",
+    "type-check": "tsc --noEmit",
+    "try": "bun run tests/try.ts"
+  },
+  "dependencies": {
+    "@es-vanguard/telemetry": "workspace:*",
+    "neverthrow": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@es-vanguard/typescript-config": "workspace:*",
+    "@types/bun": "catalog:types",
+    "typescript": "catalog:"
+  },
+  "imports": {
+    "#*": "./dist/src/*"
+  },
+  "exports": {
+    ".": {
+      "default": "./dist/src/index.js",
+      "types": "./dist/src/index.d.ts"
+    },
+    "./parse-json-response": {
+      "default": "./dist/src/parse-json-response.js",
+      "types": "./dist/src/parse-json-response.d.ts"
+    },
+    "./get-json-response": {
+      "default": "./dist/src/get-json-response.js",
+      "types": "./dist/src/get-json-response.d.ts"
+    },
+    "./errors": {
+      "default": "./dist/src/utils/errors.js",
+      "types": "./dist/src/utils/errors.d.ts"
+    }
+  }
+}
